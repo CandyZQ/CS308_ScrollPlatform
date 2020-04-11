@@ -40,4 +40,6 @@ public interface DataLoaderAPI {
 
     Integer loadInteger(String keyword, String category);
 
+    int loadGameParam(String keyword);
+
 }

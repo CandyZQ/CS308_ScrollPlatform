@@ -147,5 +147,10 @@ public class DataLoader implements ooga.data.DataLoaderAPI {
     return null;
   }
 
+  @Override
+  public int loadGameParam(String keyword) {
+    return 0;
+  }
+
 
 }
