@@ -8,8 +8,6 @@ import ooga.view.engine.utils.cyberpunk3d.Text3DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
 
 // mesh for each tile or shared mesh
-//
-//
 
 public class Map3DView extends MapView {
   private static final Vector3f MAP_SCALE_MODEL = new Vector3f(1.0f, 1.0f, 1.0f);
