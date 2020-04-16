@@ -24,7 +24,9 @@ public class Text3DMapReader {
       String type = mapContent[idx++];
       int rotation = Integer.parseInt(mapContent[idx++]);
       boolean newLine = (Integer.parseInt(mapContent[idx++]) != 0);
-      tiles[i] = new TitleDataHolder(id, type, rotation, newLine);
+      int pos_delta_x = Integer.parseInt(mapContent[idx++]);
+      int pos_delta_y = Integer.parseInt(mapContent[idx++]);
+      tiles[i] = new TitleDataHolder(id, type, rotation, pos_delta_x, pos_delta_y, newLine);
     }
   }
 
@@ -43,6 +45,10 @@ public class Text3DMapReader {
   public boolean isTiLeNewline(int index){
     return tiles[index].isNewLine();
   }
+
+  public Vector3f getTilePosDelta(int index) {return tiles[index].getPositionAdjustment();}
+
+  public Vector3f getMaxShape(int index) {return tiles[index].getMaxShape();}
 
 
 }

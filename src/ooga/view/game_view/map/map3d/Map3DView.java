@@ -29,20 +29,21 @@ public class Map3DView extends MapView {
     for (int i=0; i<mapReader.getTileAmounts(); i++){
       String type = mapReader.getTileType(i);
       Vector3f rot = mapReader.getTileRotation(i);
-      Vector3f pos = getTilePos(mapReader.isTiLeNewline(i));
+      Vector3f pos = getTilePos(mapReader.isTiLeNewline(i), mapReader.getTilePosDelta(i), mapReader.getMaxShape(i));
       tiles[i] = new Tile3DView(type, rot, pos, MAP_SCALE_MODEL);
     }
 
   }
 
-  private Vector3f getTilePos(boolean isNewline){
-    Vector3f res = new Vector3f(currentPosition.getX(), currentPosition.getY(), currentPosition.getY());
+  private Vector3f getTilePos(boolean isNewline, Vector3f delta, Vector3f shape){
+    Vector3f res = Vector3f.add(currentPosition, delta);
+    currentPosition = new Vector3f(res.getX(), res.getY(), res.getZ());
     if (isNewline){
       currentPosition.setX(INITIAL_X_POS);
-      //unfinished
+      currentPosition.setY(currentPosition.getY() + shape.getY());
     }
     else{
-      //unfinished
+      currentPosition.setX(currentPosition.getX() + shape.getX());
     }
     return res;
   }
