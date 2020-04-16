@@ -14,7 +14,7 @@ public class LoadCyberpunkModels {
   private static String PATH_MAP_L_MODEL = "SciFiCorridorsL.obj";
   private static String PATH_MAP_I_MODEL = "SciFiCorridorsNormal.obj";
   private static String PATH_MAP_T_MODEL = "SciFiCorridorsT.obj";
-  private static String MAP_TEXTURE_PATH = "resources/view/models/3d/map/EnvironmentPack/Models/plain-white.png";
+  private static String MAP_TEXTURE_PATH = "/view/models/3d/map/EnvironmentPack/Models/plain-white.png";
 
   private static String DIR_WHITE_BOT_WALK_PATH = "resources/view/models/3d/npc/whitebot/walk/";
   private static String DIR_WHITE_BOT_ATTACK_PATH = "resources/view/models/3d/npc/whitebot/attack/";

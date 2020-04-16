@@ -32,7 +32,7 @@ public class Material {
 	 */
 	public void createTexture() {
 		try {
-			//System.out.println(path);
+			System.out.println(path);
 			texture = TextureLoader.getTexture(path.split("[.]")[1], Material.class.getResourceAsStream(path), GL11.GL_NEAREST);
 			width = texture.getWidth();
 			height = texture.getHeight();
