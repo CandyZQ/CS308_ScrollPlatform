@@ -14,9 +14,9 @@ import ooga.view.engine.maths.Vector3f;
 import org.lwjgl.opengl.GL30;
 
 public class Window {
-	private static final float fov = 70.0f;
+	private static final float fov = 80.0f;
 	private static final float near_plane = 0.1f;
-	private static final float far_plane = 10000.0f;
+	private static final float far_plane = 20000.0f;
 	private int width, height;
 	private String title;
 	private long window;

@@ -1,5 +1,6 @@
 package ooga.view.engine.utils.cyberpunk3d;
 
+import ooga.view.engine.graphics.assets.Asset3D;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.utils.FileUtils;
 
@@ -22,11 +23,13 @@ public class Text3DMapReader {
     for (int i=0; i<tileAmounts; i++){
       int id = Integer.parseInt(mapContent[idx++]);
       String type = mapContent[idx++];
-      int rotation = Integer.parseInt(mapContent[idx++]);
       boolean newLine = (Integer.parseInt(mapContent[idx++]) != 0);
       int pos_delta_x = Integer.parseInt(mapContent[idx++]);
       int pos_delta_y = Integer.parseInt(mapContent[idx++]);
-      tiles[i] = new TitleDataHolder(id, type, rotation, pos_delta_x, pos_delta_y, newLine);
+      int rot_x = Integer.parseInt(mapContent[idx++]);
+      int rot_y = Integer.parseInt(mapContent[idx++]);
+      int rot_z = Integer.parseInt(mapContent[idx++]);
+      tiles[i] = new TitleDataHolder(id, type, Asset3D.getRot(rot_x, rot_y, rot_z), pos_delta_x, pos_delta_y, newLine);
     }
   }
 

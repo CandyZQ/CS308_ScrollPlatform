@@ -16,7 +16,7 @@ public class Map3DView extends MapView {
   private static final float INITIAL_X_POS = 0f;
   private static final float INITIAL_Y_POS = 0f;
   private static final float INITIAL_Z_POS = 0f;
-  private static final float SCALE = 1f;
+  private static final float SCALE = 0.35f;
   private static Vector3f currentPosition = new Vector3f(INITIAL_X_POS, INITIAL_Y_POS, INITIAL_Z_POS);
   private Text3DMapReader mapReader;
   private Tile3DView[] tiles;

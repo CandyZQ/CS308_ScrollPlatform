@@ -12,28 +12,16 @@ public class TitleDataHolder {
   private boolean newLine;
   private Vector3f maxShape;
 
-  public TitleDataHolder(int id, String type, int rotation, int pos_delta_x, int pos_delta_y,
+  public TitleDataHolder(int id, String type, Vector3f rotation, int pos_delta_x, int pos_delta_y,
       boolean newLine) {
     this.id = id;
     this.type = type;
-    this.rotation = factoryRotation(rotation);
+    this.rotation = rotation;
     this.position_adjustment = new Vector3f(pos_delta_x, pos_delta_y, 0f);
     this.newLine = newLine;
     this.maxShape = MeasureMapModel.getTileMeasurement(type);
   }
 
-  private Vector3f factoryRotation(int rotation) {
-    if (rotation == 1) {
-      return Asset3D.RightOnceRot;
-    }
-    if (rotation == 2) {
-      return Asset3D.RightTwiceRot;
-    }
-    if (rotation == 3) {
-      return Asset3D.RightThirdRot;
-    }
-    return Asset3D.RightFourthRot;
-  }
 
   public String getType() {
     return type;

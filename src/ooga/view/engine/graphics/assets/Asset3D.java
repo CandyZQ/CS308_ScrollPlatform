@@ -6,13 +6,7 @@ public class Asset3D {
 
   //Right-handed Rotation
 
-  public static Vector3f RightOnceRot = new Vector3f(90.0f, 0.0f, 0.0f);
-
-  public static Vector3f RightTwiceRot =  new Vector3f(180.0f, 0.0f, 0.0f);
-
-  public static Vector3f RightThirdRot = new Vector3f(0f, 180.0f, 0.0f);
-
-  public static Vector3f RightFourthRot = new Vector3f(0.0f, 0.0f, 0.0f);
+  public static Vector3f getRot(int x, int y, int z){return new Vector3f(x*90.0f, y*90.0f, z*90.0f);}
 
 
 
