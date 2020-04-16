@@ -10,7 +10,7 @@ public class Asset3D {
 
   public static Vector3f RightTwiceRot =  new Vector3f(180.0f, 0.0f, 0.0f);
 
-  public static Vector3f RightThirdRot = new Vector3f(270.0f, 0.0f, 0.0f);
+  public static Vector3f RightThirdRot = new Vector3f(270.0f, 0f, 0.0f);
 
   public static Vector3f RightFourthRot = new Vector3f(0.0f, 0.0f, 0.0f);
 

@@ -7,12 +7,36 @@ import ooga.view.engine.maths.Vector3f;
 
 public class Camera {
 	private Vector3f position, rotation;
-	private float moveSpeed = 0.05f, mouseSensitivity = 0.15f, distance = 2.0f, horizontalAngle = 0, verticalAngle = 0;
+	private float moveSpeed = 0.05f, mouseSensitivity = 0.15f, distance = 20.0f, horizontalAngle = 0, verticalAngle = 0;
 	private double oldMouseX = 0, oldMouseY = 0, newMouseX, newMouseY;
 
 	public Camera(Vector3f position, Vector3f rotation) {
 		this.position = position;
 		this.rotation = rotation;
+	}
+
+	public void moveXForward(){
+		position.setX(position.getX()+moveSpeed*200);
+	}
+
+	public void moveYForward(){
+		position.setY(position.getY()+moveSpeed*200);
+	}
+
+	public void moveZForward(){
+		position.setZ(position.getZ()+moveSpeed*200);
+	}
+
+	public void moveXBackward(){
+		position.setX(position.getX()-moveSpeed*200);
+	}
+
+	public void moveYBackward(){
+		position.setY(position.getY()-moveSpeed*200);
+	}
+
+	public void moveZBackward(){
+		position.setZ(position.getZ()-moveSpeed*200);
 	}
 	
 	public void update() {
