@@ -128,6 +128,10 @@ public class Mesh {
 		return getMaxY() - getMinY();
 	}
 
+	public float getMaxDepth(){
+		return getMaxZ() - getMinZ();
+	}
+
 	private float getMaxX(){
 		float maxX = vertices[0].getPosition().getX();
 		for (Vertex v:vertices){
@@ -158,6 +162,22 @@ public class Mesh {
 			minY = (Math.min(minY, v.getPosition().getY()));
 		}
 		return minY;
+	}
+
+	private float getMaxZ(){
+		float maxZ = vertices[0].getPosition().getZ();
+		for (Vertex v:vertices){
+			maxZ = (Math.max(maxZ, v.getPosition().getZ()));
+		}
+		return maxZ;
+	}
+
+	private float getMinZ(){
+		float minZ = vertices[0].getPosition().getZ();
+		for (Vertex v:vertices){
+			minZ = (Math.min(minZ, v.getPosition().getZ()));
+		}
+		return minZ;
 	}
 
 	private FloatBuffer getPositionalBuffer(){
