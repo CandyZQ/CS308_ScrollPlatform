@@ -53,7 +53,7 @@ public class GameState2DView extends GameStateView {
     window.create();
     //window.setFullscreen(true);
 
-    map = new Map2DView(mapPath, WIDTH, HEIGHT);
+    map = new Map2DView(mapPath);
     for(int i=0; i<numPlayers; i++){
       players.add(new Agent2DView());
       players.get(i).createMesh();

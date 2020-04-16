@@ -120,6 +120,46 @@ public class Mesh {
 		this.material = material;
 	}
 
+	public float getMaxWidth(){
+		return getMaxX() - getMinX();
+	}
+
+	public float getMaxHeight(){
+		return getMaxY() - getMinY();
+	}
+
+	private float getMaxX(){
+		float maxX = vertices[0].getPosition().getX();
+		for (Vertex v:vertices){
+			maxX = (Math.max(maxX, v.getPosition().getX()));
+		}
+		return maxX;
+	}
+
+	private float getMaxY(){
+		float maxY = vertices[0].getPosition().getY();
+		for (Vertex v:vertices){
+			maxY = (Math.max(maxY, v.getPosition().getY()));
+		}
+		return maxY;
+	}
+
+	private float getMinX(){
+		float minX = vertices[0].getPosition().getX();
+		for (Vertex v:vertices){
+			minX = (Math.min(minX, v.getPosition().getX()));
+		}
+		return minX;
+	}
+
+	private float getMinY(){
+		float minY = vertices[0].getPosition().getY();
+		for (Vertex v:vertices){
+			minY = (Math.min(minY, v.getPosition().getY()));
+		}
+		return minY;
+	}
+
 	private FloatBuffer getPositionalBuffer(){
 		FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
 		float[] positionData = new float[vertices.length * 3];

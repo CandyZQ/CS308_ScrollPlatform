@@ -33,7 +33,7 @@ public class testAgentMap implements Runnable {
     renderer = new Renderer2D(shader);
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    mapView = new Map2DView(mapPath, WIDTH, HEIGHT);
+    mapView = new Map2DView(mapPath);
     agentView = new Agent2DView();
     agentView.createMesh();
     mapView.createMesh();

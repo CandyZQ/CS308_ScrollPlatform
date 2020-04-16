@@ -1,5 +1,7 @@
 package ooga.view.game_view.map.map3d;
 
-public class Tile3DController {
+import ooga.view.game_view.map.interfaces.TileController;
+
+public class Tile3DController extends TileController {
 
 }

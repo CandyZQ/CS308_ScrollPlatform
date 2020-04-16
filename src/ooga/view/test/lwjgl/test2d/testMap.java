@@ -34,7 +34,7 @@ public class testMap implements Runnable {
     //GenerateMergedSprites mergeit = new GenerateMergedSprites();
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    mapView = new Map2DView(mapPath,WIDTH, HEIGHT);
+    mapView = new Map2DView(mapPath);
     mapView.createMesh();
     shader.create();
   }
