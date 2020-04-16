@@ -18,7 +18,8 @@ public class Animation3D extends Animation {
   }
 
   public Mesh getAnimatedFrames(){
-    return  animatedFrames[updateFramePointer(is2D)];
+    int framePointer = updateFramePointer(is2D);
+    return framePointer==-1?null: animatedFrames[framePointer];
   }
 
 

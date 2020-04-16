@@ -24,7 +24,7 @@ public class Map2DView extends MapView {
     int idx = 0;
     for (int i=0; i<mapReader.getMapHeight(); i++){
       for (int j=0; j<mapReader.getMapWidth(); j++){
-        titles[idx++] = new Tile2DView((int) title_x*i, (int) title_y*j, i, j, scale_x, scale_y, mapReader);
+        titles[idx++] = new Tile2DView(i, j, mapReader);
       }
     }
 

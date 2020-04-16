@@ -49,7 +49,8 @@ public class Animation2D extends Animation{
   }
 
   public Material getCurrentFrame(){
-    return animatedFrames[updateFramePointer(is2D)];
+    int framePointer = updateFramePointer(is2D);
+    return framePointer==-1?null: animatedFrames[framePointer];
   }
 
 

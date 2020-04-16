@@ -2,7 +2,7 @@ package ooga.view.engine.graphics.assets;
 
 import ooga.view.engine.maths.Vector3f;
 
-public class Assest3D {
+public class Asset3D {
 
   //Right-handed Rotation
 

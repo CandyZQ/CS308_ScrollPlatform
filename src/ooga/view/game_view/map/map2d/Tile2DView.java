@@ -8,25 +8,17 @@ import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.GameObject;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
+import ooga.view.game_view.map.interfaces.TileView;
 
-public class Tile2DView {
-  private int map_x;
-  private int map_y;
-  private GameObject object;
+public class Tile2DView extends TileView {
+  private static final float delta = 17;
   private Tile2DController controller;
-  private float delta = 17;
-
-  private Mesh mesh;
 
   private Vertex[] vertices;
   private int[] indices;
 
-  private Material material;
-
-  public Tile2DView(int window_pos_x, int window_pos_y, int map_x, int map_y, float scale_x, float scale_y, Text2DMapReader mapReader)
+  public Tile2DView(int map_x, int map_y, Text2DMapReader mapReader)
       throws IOException {
-    this.map_x = map_x;
-    this.map_y = map_y;
     this.vertices = Asset2D.getTileVertices();
     this.indices = Asset2D.getTileIndices();
 
@@ -44,11 +36,6 @@ public class Tile2DView {
     }
   }
 
-  public void createMesh(){mesh.create();}
-
-  public void destroyMesh(){mesh.destroy();}
-
-  public GameObject getGameObject() {return object;}
 
   public boolean isWalkable(){return controller.isWalkable();}
 
