@@ -6,7 +6,7 @@ public class Asset3D {
 
   //Right-handed Rotation
 
-  public static Vector3f getRot(int x, int y, int z){return new Vector3f(x*90.0f, y*90.0f, z*90.0f);}
+  public static Vector3f getRotationVector(int x, int y, int z){return new Vector3f(x*90.0f, y*90.0f, z*90.0f);}
 
 
 

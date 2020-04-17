@@ -42,7 +42,7 @@ public class ModelLoader {
 			
 			vertexList[i] = new Vertex(meshVertex, meshNormal, meshTextureCoord);
 		}
-		
+
 		int faceCount = mesh.mNumFaces();
 		AIFace.Buffer indices = mesh.mFaces();
 		int[] indicesList = new int[faceCount * 3];
@@ -54,6 +54,8 @@ public class ModelLoader {
 			indicesList[i * 3 + 2] = face.mIndices().get(2);
 		}
 		
-		return new Mesh(vertexList, indicesList, new Material(texturePath));
+		return Mesh.normalize(new Mesh(vertexList, indicesList, new Material(texturePath)));
 	}
+
+
 }

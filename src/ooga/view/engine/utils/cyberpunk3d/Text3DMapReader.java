@@ -29,7 +29,7 @@ public class Text3DMapReader {
       int rot_x = Integer.parseInt(mapContent[idx++]);
       int rot_y = Integer.parseInt(mapContent[idx++]);
       int rot_z = Integer.parseInt(mapContent[idx++]);
-      tiles[i] = new TitleDataHolder(id, type, Asset3D.getRot(rot_x, rot_y, rot_z), pos_delta_x, pos_delta_y, newLine);
+      tiles[i] = new TitleDataHolder(id, type, Asset3D.getRotationVector(rot_x, rot_y, rot_z), pos_delta_x, pos_delta_y, newLine);
     }
   }
 

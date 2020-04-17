@@ -21,6 +21,19 @@ public class Mesh {
 		this.indices = indices;
 		this.material = material;
 	}
+
+	public Mesh(Mesh mesh, Vector3f rotation){
+		this.vertices = mesh.vertices.clone();
+		this.indices = mesh.getIndices();
+		this.material = mesh.getMaterial();
+		rotateVertices(rotation);
+	}
+
+	public void rotateVertices(Vector3f rotation){
+		for(int i=0; i<vertices.length; i++){
+			vertices[i].rotate(rotation);
+		}
+	}
 	
 	public void create() {
 		material.createTexture();
@@ -190,6 +203,30 @@ public class Mesh {
 		}
 		positionBuffer.put(positionData).flip();
 		return positionBuffer;
+	}
+
+	public static Mesh normalize(Mesh mesh){
+		float deltaX = mesh.getVertices()[0].getPosition().getX();
+		float deltaY = mesh.getVertices()[0].getPosition().getY();
+		float deltaZ = mesh.getVertices()[0].getPosition().getZ();
+
+		for (Vertex v:mesh.getVertices()){
+			if (deltaX>v.getPosition().getX() ){
+				deltaX = v.getPosition().getX();
+			}
+			if (deltaY>v.getPosition().getY() ){
+				deltaY = v.getPosition().getY();
+			}
+			if (deltaZ>v.getPosition().getZ() ){
+				deltaZ = v.getPosition().getZ();
+			}
+		}
+
+		for(Vertex v:mesh.getVertices()){
+			v.setPosition(new Vector3f(v.getPosition().getX() - deltaX, v.getPosition().getY() - deltaY, v.getPosition().getZ() - deltaZ));
+		}
+
+		return mesh;
 	}
 
 }

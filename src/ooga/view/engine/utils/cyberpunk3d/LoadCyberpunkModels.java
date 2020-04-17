@@ -2,9 +2,12 @@ package ooga.view.engine.utils.cyberpunk3d;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.util.Pair;
 import ooga.view.engine.graphics.Mesh;
 import ooga.view.engine.graphics.animation.Animation3D;
+import ooga.view.engine.graphics.assets.Asset3D;
 import ooga.view.engine.io.ModelLoader;
+import ooga.view.engine.maths.Vector3f;
 
 public class LoadCyberpunkModels {
 
@@ -31,6 +34,7 @@ public class LoadCyberpunkModels {
   private static int WHITE_BOT_DEATH_AMOUNT = 180;
 
   private static Map<String, Mesh> tileDict;
+  private static Map<Pair<String, Vector3f>, Mesh> tileRotationalDict;
   private static Map<String, Animation3D> whiteBotAnimationDict;
 
   public static void loadTileDict() {
@@ -48,9 +52,79 @@ public class LoadCyberpunkModels {
     tileDict.put("T", ModelLoader
         .loadModel(String.format("%s%s", DIR_MAP_PATH, PATH_MAP_T_MODEL), MAP_TEXTURE_PATH));
 
+    loadTileRotDict();
+  }
+
+  private static void loadTileRotDict(){
+    String type;
+    tileRotationalDict = new HashMap<>();
+
+    type = "4E";
+
+    for (int rotX=0; rotX<4; rotX++){
+      for (int rotY=0; rotY<4; rotY++){
+        for (int rotZ=0; rotZ<4; rotZ++){
+          Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
+          tileRotationalDict.put(new Pair<>(type, rot), Mesh.normalize(new Mesh(tileDict.get(type), rot)));
+        }
+      }
+    }
+
+    type = "E";
+
+    for (int rotX=0; rotX<4; rotX++){
+      for (int rotY=0; rotY<4; rotY++){
+        for (int rotZ=0; rotZ<4; rotZ++){
+          Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
+          tileRotationalDict.put(new Pair<>(type, rot), Mesh.normalize(new Mesh(tileDict.get(type), rot)));
+        }
+      }
+    }
+
+    type = "I";
+
+    for (int rotX=0; rotX<4; rotX++){
+      for (int rotY=0; rotY<4; rotY++){
+        for (int rotZ=0; rotZ<4; rotZ++){
+          Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
+          tileRotationalDict.put(new Pair<>(type, rot), Mesh.normalize(new Mesh(tileDict.get(type), rot)));
+        }
+      }
+    }
+
+    type = "T";
+
+    for (int rotX=0; rotX<4; rotX++){
+      for (int rotY=0; rotY<4; rotY++){
+        for (int rotZ=0; rotZ<4; rotZ++){
+          Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
+          tileRotationalDict.put(new Pair<>(type, rot), Mesh.normalize(new Mesh(tileDict.get(type), rot)));
+        }
+      }
+    }
+
+    type = "L";
+
+    for (int rotX=0; rotX<4; rotX++){
+      for (int rotY=0; rotY<4; rotY++){
+        for (int rotZ=0; rotZ<4; rotZ++){
+          Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
+          tileRotationalDict.put(new Pair<>(type, rot), Mesh.normalize(new Mesh(tileDict.get(type), rot)));
+        }
+      }
+    }
+
   }
 
   public static Mesh getTileMesh(String type){return tileDict.get(type);}
+
+  public static Mesh getRotationalTileMesh(String type, int rotX, int rotY, int rotZ){
+    return tileRotationalDict.get(new Pair<>(type, Asset3D.getRotationVector(rotX, rotY, rotZ)));
+  }
+
+  public static Mesh getRotationalTileMesh(String type, Vector3f rotation){
+    return tileRotationalDict.get(new Pair<>(type, rotation));
+  }
 
   public static void createAllTileMeshes(){
     for (String key:tileDict.keySet()){

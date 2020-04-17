@@ -8,7 +8,7 @@ import ooga.view.game_view.map.interfaces.TileView;
 public class Tile3DView extends TileView {
 
   public Tile3DView(String type, Vector3f rot, Vector3f pos, Vector3f scale){
-    this.mesh = LoadCyberpunkModels.getTileMesh(type);
+    this.mesh = LoadCyberpunkModels.getRotationalTileMesh(type, rot);
     this.object = new GameObject(pos, rot, scale, mesh);
   }
 
