@@ -44,18 +44,7 @@ public class Map3DView extends MapView {
     else{
       currentPosition.setX(currentPosition.getX() + shape.getX()*SCALE);
     }
-
     return currentPosition;
-  }
-
-  private Vector3f adjustRot(Vector3f pos, Vector3f shape){
-    Vector3f res = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
-    if (pos.getX() > 0){ res.setY(res.getY() - shape.getY());}
-    if (pos.getY() > 0){res.setX(res.getX() - shape.getX());}
-    if (pos.getZ() == 1) {res.setY(res.getY() - shape.getY());}
-    else if (pos.getZ() == 2){res.setY(res.getY() - shape.getY()); res.setX(res.getX() + shape.getX());}
-    else if (pos.getZ() == 3){res.setY(res.getY() + shape.getY() - shape.getX()); res.setX(res.getX() + shape.getX());}
-    return res;
   }
 
   public void renderMesh(Renderer3D renderer, Camera camera) {
@@ -72,6 +61,16 @@ public class Map3DView extends MapView {
   @Override
   public void destroyMesh() {
     LoadCyberpunkModels.destroyUsedRotationalTileMeshes();
+  }
+
+  private Vector3f adjustRot(Vector3f pos, Vector3f shape){
+    Vector3f res = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
+    if (pos.getX() > 0){ res.setY(res.getY() - shape.getY());}
+    if (pos.getY() > 0){res.setX(res.getX() - shape.getX());}
+    if (pos.getZ() == 1) {res.setY(res.getY() - shape.getY());}
+    else if (pos.getZ() == 2){res.setY(res.getY() - shape.getY()); res.setX(res.getX() + shape.getX());}
+    else if (pos.getZ() == 3){res.setY(res.getY() + shape.getY() - shape.getX()); res.setX(res.getX() + shape.getX());}
+    return res;
   }
 
   private void printVector3f(Vector3f vec){

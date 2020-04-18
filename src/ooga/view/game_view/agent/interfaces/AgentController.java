@@ -13,8 +13,8 @@ abstract public class AgentController {
 
   public abstract void setCurrentAnimation(String direction, String action);
 
-  public abstract Material getMaterial();
+  //public abstract Material getCurrentAnimatedMaterial();
 
-  public abstract void move(String direction, Mesh mesh);
+  //public abstract void move(String direction, Mesh mesh);
 
 }

@@ -1,12 +1,23 @@
 package ooga.view.game_view.animation.interfaces;
 
-import ooga.view.engine.graphics.animation.Animation2D;
-
 abstract public class AnimationDict {
+  protected String direction;
+  protected String previousAction;
+  protected String currentAction;
 
-  public AnimationDict(){}
+  public AnimationDict(String initialDirection, String initialAction){
+    this.previousAction = initialAction;
+    this.currentAction = initialAction;
+    this.direction = initialDirection;
+  }
 
-  abstract public void setInUseAnimation (String direction, String action);
+  public void setInUseAnimation (String direction, String action){
+    this.direction = direction;
+    this.previousAction = this.currentAction;
+    this.currentAction = action;
+    resetAnimationDict();
+  }
 
-  //abstract public Animation2D getAnimation();
+  abstract protected void resetAnimationDict();
+
 }

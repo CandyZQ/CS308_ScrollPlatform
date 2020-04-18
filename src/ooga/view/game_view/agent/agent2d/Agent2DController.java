@@ -6,20 +6,20 @@ import ooga.view.engine.graphics.Material;
 import ooga.view.engine.graphics.Mesh;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.game_view.agent.interfaces.AgentController;
-import ooga.view.game_view.animation.dict2d.Animation2dDict;
+import ooga.view.game_view.animation.dict2d.Animation2DDict;
 
 public class Agent2DController extends AgentController {
 
   //TODO: should remove from hardcoded!
   private String INITIAL_DIRECTION = "E";
   private String INITIAL_ACTION = "IDLE";
-  private Animation2dDict agentAnimationDict;
+  private Animation2DDict agentAnimationDict;
 
   public Agent2DController() throws IOException {
     super();
-    agentAnimationDict = new Animation2dDict();
     direction = INITIAL_DIRECTION;
     action = INITIAL_ACTION;
+    agentAnimationDict = new Animation2DDict(direction, action);
     this.setCurrentAnimation(direction, action);
   }
 
@@ -30,8 +30,7 @@ public class Agent2DController extends AgentController {
     agentAnimationDict.setInUseAnimation(direction, action);
   }
 
-  @Override
-  public Material getMaterial(){
+  public Material getCurrentAnimatedMaterial(){
     Material frame = agentAnimationDict.getAnimation().getCurrentFrame();
     if (frame == null){
       setCurrentAnimation(direction, DEFAULT_ACTION);
@@ -42,7 +41,6 @@ public class Agent2DController extends AgentController {
     }
   }
 
-  @Override
   public void move(String direction, Mesh mesh) {
     for (int i=0;i<mesh.getVertices().length;i++){
       mesh.setVerticesPosition(i, Vector3f.add(mesh.getVertices()[i].getPosition(), Asset2D.convertDirectionalSpeed(direction)));

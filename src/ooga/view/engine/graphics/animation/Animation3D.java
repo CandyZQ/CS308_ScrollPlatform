@@ -13,11 +13,11 @@ public class Animation3D extends Animation {
     animatedFrames = new Mesh[cnt];
   }
 
-  public void setAnimatedFrames(int idx, Mesh frame){
+  public void setAnimatedFrame(int idx, Mesh frame){
     animatedFrames[idx] = frame;
   }
 
-  public Mesh getAnimatedFrames(){
+  public Mesh getCurrentFrame(){
     int framePointer = updateFramePointer(is2D);
     return framePointer==-1?null: animatedFrames[framePointer];
   }

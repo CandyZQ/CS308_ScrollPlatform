@@ -22,7 +22,7 @@ public class testMap implements Runnable {
 
   public Map3DView mapView;
   public String mapPath = "/view/data/3d/map_test.txt";
-  public Camera camera = new Camera(new Vector3f(100, 100, 100), new Vector3f(0, 0, 0));
+  public Camera camera = new Camera(new Vector3f(1640.0f, 880.0f, 40.0f), new Vector3f(0, 0, 0));
 
   public void start() {
     game = new Thread(this, "game");
