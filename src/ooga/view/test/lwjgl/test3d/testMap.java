@@ -21,7 +21,7 @@ public class testMap implements Runnable {
   public final int WIDTH = 1580, HEIGHT = 1080;
 
   public Map3DView mapView;
-  public String mapPath = "/view/data/3d/map_test2.txt";
+  public String mapPath = "/view/data/3d/map_test.txt";
   public Camera camera = new Camera(new Vector3f(100, 100, 100), new Vector3f(0, 0, 0));
 
   public void start() {
@@ -80,8 +80,8 @@ public class testMap implements Runnable {
     //object.update();
     camera.update();
     printVector3f(camera.getPosition());
-    //for (GameObject object:mapView.getTileObjects()){
-     // camera.update(object);
+   // for (GameObject object:mapView.getTileObjects()){
+    //  camera.update(object);
     //}
     if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
       System.out.println("X: " + Input.getScrollX() + ", Y: " + Input.getScrollY());

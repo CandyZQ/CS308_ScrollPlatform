@@ -19,7 +19,7 @@ public class TitleDataHolder {
     this.rotation = rotation;
     this.position_adjustment = new Vector3f(pos_delta_x, pos_delta_y, 0f);
     this.newLine = newLine;
-    this.maxShape = MeasureMapModel.getTileMeasurement(type);
+    this.maxShape = MeasureMapModel.getTileMeasurement(type, rotation);
   }
 
 

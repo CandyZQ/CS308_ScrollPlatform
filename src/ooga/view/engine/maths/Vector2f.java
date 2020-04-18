@@ -7,6 +7,11 @@ public class Vector2f {
 		this.x = x;
 		this.y = y;
 	}
+
+	public Vector2f(Vector2f other) {
+		this.x = other.x;
+		this.y = other.y;
+	}
 	
 	public static Vector2f add(Vector2f vector1, Vector2f vector2) {
 		return new Vector2f(vector1.getX() + vector2.getX(), vector1.getY() + vector2.getY());

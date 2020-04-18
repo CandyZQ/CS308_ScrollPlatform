@@ -54,7 +54,7 @@ public class ModelLoader {
 			indicesList[i * 3 + 2] = face.mIndices().get(2);
 		}
 		
-		return Mesh.normalize(new Mesh(vertexList, indicesList, new Material(texturePath)));
+		return new Mesh(vertexList, indicesList, new Material(texturePath));
 	}
 
 

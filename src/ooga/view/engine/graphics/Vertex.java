@@ -4,6 +4,7 @@ import ooga.view.engine.maths.Matrix4f;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.maths.Vector4f;
+import ooga.view.engine.utils.Test;
 import org.lwjglx.util.vector.Vector;
 
 public class Vertex {
@@ -17,8 +18,16 @@ public class Vertex {
     this.textureCoord = textureCoord;
   }
 
+  public Vertex(Vertex other) {
+    this.position = new Vector3f(other.position);
+    this.normal = new Vector3f(other.normal);
+    this.textureCoord = new Vector2f(other.textureCoord);
+  }
+
   public void rotate(Vector3f rotation){
+    //Test.printVector3f(position);
     this.position = Vector4f.reduceDim(Vector4f.multiply(Matrix4f.rotateAllAxis(rotation), Vector4f.increaseDim(position)));
+    //Test.printVector3f(position);
   }
 
   public Vector3f getPosition() {

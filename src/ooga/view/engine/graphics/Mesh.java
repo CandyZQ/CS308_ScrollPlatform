@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import ooga.view.engine.maths.Vector3f;
+import ooga.view.engine.utils.Test;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -20,19 +21,37 @@ public class Mesh {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
+		Mesh.normalize(this);
 	}
 
 	public Mesh(Mesh mesh, Vector3f rotation){
-		this.vertices = mesh.vertices.clone();
-		this.indices = mesh.getIndices();
+		//System.out.println("before rotating mesh");
+		//Test.printThreeMeshVertices(mesh);
+		this.vertices = verticesCopy(mesh.vertices);
+		this.indices = mesh.getIndices().clone();
 		this.material = mesh.getMaterial();
 		rotateVertices(rotation);
+		//System.out.println("after rotating mesh");
+		//Test.printThreeMeshVertices(mesh);
+		Mesh.normalize(this);
+		//System.out.println("after normalizing mesh");
+		//Test.printThreeMeshVertices(mesh);
+	}
+
+	private Vertex[] verticesCopy(Vertex[] v) {
+		Vertex[] ret = new Vertex[v.length];
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = new Vertex(v[i]);
+		}
+		return ret;
 	}
 
 	public void rotateVertices(Vector3f rotation){
-		for(int i=0; i<vertices.length; i++){
-			vertices[i].rotate(rotation);
+		//Test.printVector3f(rotation);
+		for(int i=0; i<this.vertices.length; i++){
+			this.vertices[i].rotate(rotation);
 		}
+		//Test.printVector3f(vertices[0].getPosition());
 	}
 	
 	public void create() {
@@ -228,5 +247,13 @@ public class Mesh {
 
 		return mesh;
 	}
+
+	/*
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Mesh cloned = (Mesh)super.clone();
+		cloned.
+		return
+	}*/
 
 }

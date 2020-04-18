@@ -1,7 +1,6 @@
 package ooga.view.game_view.map.map3d;
 
 import ooga.view.engine.graphics.render.Renderer3D;
-import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.Camera;
 import ooga.view.engine.objects.GameObject;
@@ -26,15 +25,21 @@ public class Map3DView extends MapView {
     LoadCyberpunkModels.loadTileDict();
     mapReader = new Text3DMapReader(path);
     tiles = new Tile3DView[mapReader.getTileAmounts()];
-
+    System.out.println("this happens after right loading");
+    LoadCyberpunkModels.printRotationalTileDict();
+    System.out.println("this finished after right loading");
     for (int i=0; i<mapReader.getTileAmounts(); i++){
       String type = mapReader.getTileType(i);
       Vector3f rot = mapReader.getTileRotation(i);
       Vector3f shape = (i==0?new Vector3f(0,0,0):mapReader.getMaxShape(i-1));
-      boolean isNewline = (i==0?false:mapReader.isTiLeNewline(i-1));
+      boolean isNewline = (i != 0 && mapReader.isTiLeNewline(i - 1));
       Vector3f pos = getTilePos(isNewline, mapReader.getTilePosDelta(i), shape, rot);
       tiles[i] = new Tile3DView(type, rot, pos, MAP_SCALE_MODEL);
     }
+
+    System.out.println("this happens after right tile construction");
+    LoadCyberpunkModels.printRotationalTileDict();
+    System.out.println("this finished before tile construction");
 
   }
 
@@ -47,8 +52,8 @@ public class Map3DView extends MapView {
     else{
       currentPosition.setX(currentPosition.getX() + shape.getX()*SCALE);
     }
-    System.out.println();
-    printVector3f(currentPosition);
+    //System.out.println();
+    //printVector3f(currentPosition);
     //return adjustRot(currentPosition, shape);
     return currentPosition;
   }
@@ -71,12 +76,13 @@ public class Map3DView extends MapView {
 
   @Override
   public void createMesh() {
-    LoadCyberpunkModels.createAllTileMeshes();
+    LoadCyberpunkModels.createUsedRotationalTileMeshes();
+    //LoadCyberpunkModels.createAllTileMeshes();
   }
 
   @Override
   public void destroyMesh() {
-    LoadCyberpunkModels.destroyAllTileMeshes();
+    LoadCyberpunkModels.destroyUsedRotationalTileMeshes();
   }
 
   private void printVector3f(Vector3f vec){
