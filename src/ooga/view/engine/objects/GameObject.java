@@ -1,13 +1,11 @@
 package ooga.view.engine.objects;
 
 import ooga.view.engine.graphics.Mesh;
-import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.maths.Vector3f;
 
 public class GameObject {
 	private Vector3f position, rotation, scale;
 	private Mesh mesh;
-	private Renderer2D renderer;
 	
 	public GameObject(Vector3f position, Vector3f rotation, Vector3f scale, Mesh mesh) {
 		this.position = position;

@@ -8,7 +8,6 @@ import ooga.view.engine.utils.cyberpunk3d.LoadCyberpunkModels;
 import ooga.view.engine.utils.cyberpunk3d.Text3DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
 
-// mesh for each tile or shared mesh
 
 public class Map3DView extends MapView {
   private static final Vector3f MAP_SCALE_MODEL = new Vector3f(1.0f, 1.0f, 1.0f);
@@ -25,25 +24,18 @@ public class Map3DView extends MapView {
     LoadCyberpunkModels.loadTileDict();
     mapReader = new Text3DMapReader(path);
     tiles = new Tile3DView[mapReader.getTileAmounts()];
-    //System.out.println("this happens after right loading");
-    //LoadCyberpunkModels.printRotationalTileDict();
-    //System.out.println("this finished after right loading");
     for (int i=0; i<mapReader.getTileAmounts(); i++){
       String type = mapReader.getTileType(i);
       Vector3f rot = mapReader.getTileRotation(i);
       Vector3f shape = (i==0?new Vector3f(0,0,0):mapReader.getMaxShape(i-1));
       boolean isNewline = (i != 0 && mapReader.isTiLeNewline(i - 1));
-      Vector3f pos = getTilePos(isNewline, mapReader.getTilePosDelta(i), shape, rot);
+      Vector3f pos = getTilePos(isNewline, mapReader.getTilePosDelta(i), shape);
       tiles[i] = new Tile3DView(type, rot, pos, MAP_SCALE_MODEL);
     }
 
-    //System.out.println("this happens after right tile construction");
-    //LoadCyberpunkModels.printRotationalTileDict();
-   // System.out.println("this finished before tile construction");
-
   }
 
-  private Vector3f getTilePos(boolean isNewline, Vector3f delta, Vector3f shape, Vector3f rot){
+  private Vector3f getTilePos(boolean isNewline, Vector3f delta, Vector3f shape){
     currentPosition = Vector3f.add(currentPosition, new Vector3f(delta.getX()*SCALE, delta.getY()*SCALE, delta.getZ()*SCALE));
     if (isNewline){
       currentPosition.setX(INITIAL_X_POS);
@@ -52,13 +44,11 @@ public class Map3DView extends MapView {
     else{
       currentPosition.setX(currentPosition.getX() + shape.getX()*SCALE);
     }
-    //System.out.println();
-    //printVector3f(currentPosition);
-    //return adjustRot(currentPosition, shape);
+
     return currentPosition;
   }
 
-  /*private Vector3f adjustRot(Vector3f pos, Vector3f shape){
+  private Vector3f adjustRot(Vector3f pos, Vector3f shape){
     Vector3f res = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
     if (pos.getX() > 0){ res.setY(res.getY() - shape.getY());}
     if (pos.getY() > 0){res.setX(res.getX() - shape.getX());}
@@ -66,7 +56,7 @@ public class Map3DView extends MapView {
     else if (pos.getZ() == 2){res.setY(res.getY() - shape.getY()); res.setX(res.getX() + shape.getX());}
     else if (pos.getZ() == 3){res.setY(res.getY() + shape.getY() - shape.getX()); res.setX(res.getX() + shape.getX());}
     return res;
-  }*/
+  }
 
   public void renderMesh(Renderer3D renderer, Camera camera) {
     for (int i=0; i<mapReader.getTileAmounts(); i++){
@@ -77,7 +67,6 @@ public class Map3DView extends MapView {
   @Override
   public void createMesh() {
     LoadCyberpunkModels.createUsedRotationalTileMeshes();
-    //LoadCyberpunkModels.createAllTileMeshes();
   }
 
   @Override

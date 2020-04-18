@@ -25,9 +25,7 @@ public class Vertex {
   }
 
   public void rotate(Vector3f rotation){
-    //Test.printVector3f(position);
     this.position = Vector4f.reduceDim(Vector4f.multiply(Matrix4f.rotateAllAxis(rotation), Vector4f.increaseDim(position)));
-    //Test.printVector3f(position);
   }
 
   public Vector3f getPosition() {

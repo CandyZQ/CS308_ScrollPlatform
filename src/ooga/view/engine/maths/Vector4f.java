@@ -1,7 +1,5 @@
 package ooga.view.engine.maths;
 
-import org.lwjglx.util.vector.Vector;
-
 public class Vector4f {
   public static final int SIZE = 4;
   private float[] elements = new float[SIZE];

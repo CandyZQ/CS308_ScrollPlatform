@@ -1,6 +1,5 @@
 package ooga.view.engine.utils.cyberpunk3d;
 
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.util.Pair;
@@ -73,27 +72,13 @@ public class LoadCyberpunkModels {
           for (int rotZ = 0; rotZ < 4; rotZ++) {
             Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
             Pair<String, Vector3f> key = new Pair<>(type, rot);
-            //Test.printRotationalTileDict(key);
-            //System.out.println(convertPairKey2String(key));
             Mesh mesh = new Mesh(tileDict.get(type), rot);
-            //Test.printThreeMeshVertices(mesh);
-
             tileRotationalDict.put(convertPairKey2String(key), mesh);
             tileRotationalUsedDict.put(convertPairKey2String(key), false);
-          //  System.out.println(convertPairKey2String(new Pair<>("L", new Vector3f(180f,0f,0f))));
-            //printL180();
-           // printRotTableEntry(key);
-
-           // System.out.println(tileRotationalDict.get(convertPairKey2String(key)) ==
-             //   tileRotationalDict.get(convertPairKey2String(new Pair("L", new Vector3f(180f,0f,0f)))));
           }
         }
       }
     }
-    //System.out.println("during the loading method in loadcyberpunkmodel");
-    //printRotationalTileDict();
-    //printL180();
-    //System.out.println("after the loading method in loadcyberpunkmodel");
   }
 
   public static Mesh getTileMesh(String type) {
@@ -105,49 +90,18 @@ public class LoadCyberpunkModels {
   }
 
   public static Mesh getRotationalTileMesh(String type, Vector3f rotation) {
-    //System.out.println("print this fucking rational tile mesh during getting rational tile mesh");
     tileRotationalUsedDict.replace(convertPairKey2String(new Pair<>(type, rotation)), true);
-    //Test.printRotationalTileDict(new Pair<>(type, rotation));
     Mesh mesh = tileRotationalDict.get(convertPairKey2String(new Pair<>(type, rotation)));
-    //Test.printThreeMeshVertices(mesh);
-    //printL180();
-    //System.out.println("done| print this fucking rational tile mesh during getting rational tile mesh");
     return mesh;
   }
 
-  public static void createAllRotationalTileMeshes() {
-
-    for (String key : tileRotationalDict.keySet()) {
-      tileRotationalDict.get(key).create();
-    }
-  }
-
-  public static void createAllTileMeshes() {
-
-    for (String key : tileDict.keySet()) {
-      tileDict.get(key).create();
-    }
-  }
-
   public static void createUsedRotationalTileMeshes() {
-    //System.out.println("this happens during create used tile meshaes");
     for (String key : tileRotationalDict.keySet()) {
       if (tileRotationalUsedDict.get(key)) {
-        //System.out.println(key.getKey());
         Mesh mesh = tileRotationalDict.get(key);
-        //printL180();
-        //Test.printRotationalTileDict(key);
-        //System.out.println("before create");
-        //Test.printThreeMeshVertices(mesh);
-        //Test.printVector3f((Vector3f) key.getValue());
         mesh.create();
-        //System.out.println("after create");
-        //Test.printThreeMeshVertices(mesh);
       }
     }
-
-    //printRotationalTileDict();
-
   }
 
   public static void destroyUsedRotationalTileMeshes() {
@@ -155,6 +109,18 @@ public class LoadCyberpunkModels {
       if (tileRotationalUsedDict.get(key)) {
         tileRotationalDict.get(key).destroy();
       }
+    }
+  }
+
+  public static void createAllRotationalTileMeshes() {
+    for (String key : tileRotationalDict.keySet()) {
+      tileRotationalDict.get(key).create();
+    }
+  }
+
+  public static void createAllTileMeshes() {
+    for (String key : tileDict.keySet()) {
+      tileDict.get(key).create();
     }
   }
 
@@ -226,7 +192,6 @@ public class LoadCyberpunkModels {
   public static void printL180(){
     Pair key = new Pair("L", new Vector3f(180.0f, 0f,0f));
     Test.printRotationalTileDict(key);
-    //Test.printVector3f((Vector3f) key.getValue());
     if (tileRotationalDict.containsKey(convertPairKey2String(key)))
       Test.printThreeMeshVertices(tileRotationalDict.get(convertPairKey2String(key)));
     else{
@@ -236,7 +201,6 @@ public class LoadCyberpunkModels {
 
   public static void printRotTableEntry(Pair key){
     Test.printRotationalTileDict(key);
-    //Test.printVector3f((Vector3f) key.getValue());
     if (tileRotationalDict.containsKey(convertPairKey2String(key)))
       Test.printThreeMeshVertices(tileRotationalDict.get(convertPairKey2String(key)));
     else{
@@ -246,8 +210,6 @@ public class LoadCyberpunkModels {
 
 
   public static void printRotationalTileDict() {
-    System.out.println("PRINT FUCKING ROTATIONAL DICT");
-    //for (String type : tileTypes) {
     String type = "L";
       for (int rotX = 0; rotX < 4; rotX++) {
         for (int rotY = 0; rotY < 4; rotY++) {
@@ -255,7 +217,6 @@ public class LoadCyberpunkModels {
             Vector3f rot = Asset3D.getRotationVector(rotX, rotY, rotZ);
             Pair key = new Pair(type, rot);
             Test.printRotationalTileDict(key);
-            //Test.printVector3f((Vector3f) key.getValue());
             if (tileRotationalDict.containsKey(convertPairKey2String(key)))
               Test.printThreeMeshVertices(tileRotationalDict.get(convertPairKey2String(key)));
             else{
@@ -264,8 +225,6 @@ public class LoadCyberpunkModels {
           }
         }
       }
-    //
-    System.out.println("PRINT FUCKING ROTATIONAL DICT ENDS");
   }
 
   private static String convertPairKey2String(Pair<String, Vector3f> key){

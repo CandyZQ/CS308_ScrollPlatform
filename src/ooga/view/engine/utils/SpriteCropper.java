@@ -17,7 +17,7 @@ public class SpriteCropper {
   }
 
   public SpriteCropper(String path, int amount, String dir, String tag) {
-    //System.out.println(path);
+
     BufferedImage totalFrames = ImageLoader.loadImage(path.replace('\\', '/'));
     SpriteSheet palette = new SpriteSheet(ImageLoader.loadImage(path.replace('\\', '/')));
 

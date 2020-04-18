@@ -19,7 +19,6 @@ public class PngMerger {
       fullPaths.add(String.format("%s/%s", dir, path));
     }
 
-    //System.out.println(fullPaths.get(0));
     BufferedImage combined = new BufferedImage(ImageLoader.getImageWidth(fullPaths.get(0)), ImageLoader.getImageHeight(fullPaths.get(0)), BufferedImage.TYPE_INT_ARGB);
 
     Graphics g = combined.getGraphics();
@@ -31,7 +30,6 @@ public class PngMerger {
     g.dispose();
 
     String newImagePath = String.format("resources/%s/%s", dir, newpath);
-    //System.out.println(newImagePath);
     File outputfile = new File(newImagePath);
     ImageIO.write(combined, "png", outputfile);
 
@@ -41,9 +39,6 @@ public class PngMerger {
   public static String mergeCanvasPic(String canvasPath, String pic, String newpath)
       throws IOException {
 
-
-
-    //System.out.println(fullPaths.get(0));
     BufferedImage combined = new BufferedImage(ImageLoader.getImageWidth(canvasPath), ImageLoader.getImageHeight(canvasPath), BufferedImage.TYPE_INT_ARGB);
 
     Graphics g = combined.getGraphics();
@@ -57,7 +52,6 @@ public class PngMerger {
     g.dispose();
 
     String newImagePath = String.format("resources/%s", newpath);
-    //System.out.println(newImagePath);
     File outputfile = new File(newImagePath);
     ImageIO.write(combined, "png", outputfile);
 

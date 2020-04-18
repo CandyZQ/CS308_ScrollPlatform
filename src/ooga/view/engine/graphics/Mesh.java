@@ -25,17 +25,11 @@ public class Mesh {
 	}
 
 	public Mesh(Mesh mesh, Vector3f rotation){
-		//System.out.println("before rotating mesh");
-		//Test.printThreeMeshVertices(mesh);
 		this.vertices = verticesCopy(mesh.vertices);
 		this.indices = mesh.getIndices().clone();
 		this.material = mesh.getMaterial();
 		rotateVertices(rotation);
-		//System.out.println("after rotating mesh");
-		//Test.printThreeMeshVertices(mesh);
 		Mesh.normalize(this);
-		//System.out.println("after normalizing mesh");
-		//Test.printThreeMeshVertices(mesh);
 	}
 
 	private Vertex[] verticesCopy(Vertex[] v) {
@@ -47,11 +41,9 @@ public class Mesh {
 	}
 
 	public void rotateVertices(Vector3f rotation){
-		//Test.printVector3f(rotation);
 		for(int i=0; i<this.vertices.length; i++){
 			this.vertices[i].rotate(rotation);
 		}
-		//Test.printVector3f(vertices[0].getPosition());
 	}
 	
 	public void create() {
@@ -247,13 +239,5 @@ public class Mesh {
 
 		return mesh;
 	}
-
-	/*
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		Mesh cloned = (Mesh)super.clone();
-		cloned.
-		return
-	}*/
 
 }

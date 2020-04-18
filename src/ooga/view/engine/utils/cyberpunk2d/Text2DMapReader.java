@@ -29,29 +29,22 @@ public class Text2DMapReader {
     numWalls = Integer.parseInt(mapContent[idx++]);
 
     walls = new int[numWalls];
-    //System.out.println("start");
 
     for (int i=0; i<numWalls; i++){
       int pixel_x = Integer.parseInt(mapContent[idx++]);
       int pixel_y = Integer.parseInt(mapContent[idx++]);
-      //System.out.println(pixel_x);
-      //System.out.println(pixel_y);
+
       walls[i] = pixel_x*paletteWidth + pixel_y - 1;
-      //System.out.println(walls[i]);
     }
 
     mapCells = new int[mapHeight][mapWidth];
     int x=0, y=0;
 
-    //System.out.println("start");
     for (int i=idx; i<mapContent.length; i++){
       mapCells[x][y++] = Integer.parseInt(mapContent[i]);
-      //System.out.println(mapCells[x][y-1]);
       x = y == mapWidth ? x+1:x;
       y = y == mapWidth ? 0:y;
-
     }
-    //System.out.println("end");
 
   }
 

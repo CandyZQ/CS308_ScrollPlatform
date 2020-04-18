@@ -1,6 +1,5 @@
 package ooga.view.game_view.map.map2d;
 
-import java.io.IOException;
 import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
@@ -10,7 +9,7 @@ public class Map2DView extends MapView {
   private Tile2DView[] titles;
   private Map2DController controller;
 
-  public Map2DView(String path) throws IOException {
+  public Map2DView(String path) {
     this.mapReader = new Text2DMapReader(path);
     titles = new Tile2DView[mapReader.getMapWidth()*mapReader.getMapHeight()];
 

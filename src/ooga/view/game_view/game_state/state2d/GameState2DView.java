@@ -33,7 +33,6 @@ public class GameState2DView extends GameStateView {
   //TODO: remove this part!
   String mapPath = "/view/textures/2d/cyberpunk/map/map.txt";
 
-  //private List<>
 
   public GameState2DView(int playerNum) throws IOException {
     this.numPlayers = playerNum;

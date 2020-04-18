@@ -1,6 +1,5 @@
 package ooga.view.engine.utils;
 
-import javafx.scene.layout.Pane;
 import javafx.util.Pair;
 import ooga.view.engine.graphics.Mesh;
 import ooga.view.engine.graphics.Vertex;

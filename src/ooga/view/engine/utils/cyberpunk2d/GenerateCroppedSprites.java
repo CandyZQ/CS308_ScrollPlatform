@@ -1,7 +1,6 @@
 package ooga.view.engine.utils.cyberpunk2d;
 
 import ooga.view.engine.utils.SpriteCropper;
-import org.lwjglx.test.spaceinvaders.Sprite;
 
 public class GenerateCroppedSprites {
 

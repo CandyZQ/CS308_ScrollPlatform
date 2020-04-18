@@ -17,8 +17,7 @@ public class Tile2DView extends TileView {
   private Vertex[] vertices;
   private int[] indices;
 
-  public Tile2DView(int map_x, int map_y, Text2DMapReader mapReader)
-      throws IOException {
+  public Tile2DView(int map_x, int map_y, Text2DMapReader mapReader) {
     this.vertices = Asset2D.getTileVertices();
     this.indices = Asset2D.getTileIndices();
 
