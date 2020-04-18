@@ -7,7 +7,7 @@ public class Text2DMapReader {
   private String separator = ",";
   private int mapWidth;
   private int mapHeight;
-  private int titlePixel;
+  private int tilePixel;
   private int paletteWidth;
   private int paletteHeight;
   private int[][] mapCells;
@@ -23,7 +23,7 @@ public class Text2DMapReader {
 
     mapHeight = Integer.parseInt(mapContent[idx++]);
     mapWidth = Integer.parseInt(mapContent[idx++]);
-    titlePixel = Integer.parseInt(mapContent[idx++]);
+    tilePixel = Integer.parseInt(mapContent[idx++]);
     paletteHeight = Integer.parseInt(mapContent[idx++]);
     paletteWidth = Integer.parseInt(mapContent[idx++]);
     numWalls = Integer.parseInt(mapContent[idx++]);
@@ -63,8 +63,8 @@ public class Text2DMapReader {
     return mapHeight;
   }
 
-  public int getTitlePixel(){
-    return titlePixel;
+  public int getTilePixel(){
+    return tilePixel;
   }
 
   public int getMapCell(int x, int y){

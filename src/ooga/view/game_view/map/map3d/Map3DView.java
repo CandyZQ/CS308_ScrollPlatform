@@ -25,9 +25,9 @@ public class Map3DView extends MapView {
     LoadCyberpunkModels.loadTileDict();
     mapReader = new Text3DMapReader(path);
     tiles = new Tile3DView[mapReader.getTileAmounts()];
-    System.out.println("this happens after right loading");
-    LoadCyberpunkModels.printRotationalTileDict();
-    System.out.println("this finished after right loading");
+    //System.out.println("this happens after right loading");
+    //LoadCyberpunkModels.printRotationalTileDict();
+    //System.out.println("this finished after right loading");
     for (int i=0; i<mapReader.getTileAmounts(); i++){
       String type = mapReader.getTileType(i);
       Vector3f rot = mapReader.getTileRotation(i);
@@ -37,9 +37,9 @@ public class Map3DView extends MapView {
       tiles[i] = new Tile3DView(type, rot, pos, MAP_SCALE_MODEL);
     }
 
-    System.out.println("this happens after right tile construction");
-    LoadCyberpunkModels.printRotationalTileDict();
-    System.out.println("this finished before tile construction");
+    //System.out.println("this happens after right tile construction");
+    //LoadCyberpunkModels.printRotationalTileDict();
+   // System.out.println("this finished before tile construction");
 
   }
 

@@ -10,7 +10,7 @@ import org.lwjgl.system.CallbackI.S;
 public class Tile3DView extends TileView {
 
   public Tile3DView(String type, Vector3f rot, Vector3f pos, Vector3f scale){
-    System.out.println("rot");
+    //System.out.println("rot");
     //Test.printVector3f(rot);
     this.mesh = LoadCyberpunkModels.getRotationalTileMesh(type, rot);
     //this.mesh = LoadCyberpunkModels.getTileMesh(type);

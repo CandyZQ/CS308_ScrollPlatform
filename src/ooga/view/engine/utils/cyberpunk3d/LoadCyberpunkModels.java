@@ -90,10 +90,10 @@ public class LoadCyberpunkModels {
         }
       }
     }
-    System.out.println("during the loading method in loadcyberpunkmodel");
+    //System.out.println("during the loading method in loadcyberpunkmodel");
     //printRotationalTileDict();
-    printL180();
-    System.out.println("after the loading method in loadcyberpunkmodel");
+    //printL180();
+    //System.out.println("after the loading method in loadcyberpunkmodel");
   }
 
   public static Mesh getTileMesh(String type) {
@@ -105,13 +105,13 @@ public class LoadCyberpunkModels {
   }
 
   public static Mesh getRotationalTileMesh(String type, Vector3f rotation) {
-    System.out.println("print this fucking rational tile mesh during getting rational tile mesh");
+    //System.out.println("print this fucking rational tile mesh during getting rational tile mesh");
     tileRotationalUsedDict.replace(convertPairKey2String(new Pair<>(type, rotation)), true);
     //Test.printRotationalTileDict(new Pair<>(type, rotation));
     Mesh mesh = tileRotationalDict.get(convertPairKey2String(new Pair<>(type, rotation)));
     //Test.printThreeMeshVertices(mesh);
-    printL180();
-    System.out.println("done| print this fucking rational tile mesh during getting rational tile mesh");
+    //printL180();
+    //System.out.println("done| print this fucking rational tile mesh during getting rational tile mesh");
     return mesh;
   }
 
@@ -130,12 +130,12 @@ public class LoadCyberpunkModels {
   }
 
   public static void createUsedRotationalTileMeshes() {
-    System.out.println("this happens during create used tile meshaes");
+    //System.out.println("this happens during create used tile meshaes");
     for (String key : tileRotationalDict.keySet()) {
       if (tileRotationalUsedDict.get(key)) {
         //System.out.println(key.getKey());
         Mesh mesh = tileRotationalDict.get(key);
-        printL180();
+        //printL180();
         //Test.printRotationalTileDict(key);
         //System.out.println("before create");
         //Test.printThreeMeshVertices(mesh);
