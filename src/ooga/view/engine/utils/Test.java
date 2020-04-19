@@ -34,4 +34,20 @@ public class Test {
     Test.printVector3f(key.getValue());
   }
 
+  public static void printMapLoadingMessage(){
+    System.out.println("Loading Map Models Complete");
+  }
+
+  public static void printAgentLoadingMessage(){
+    System.out.println("Loading Character Models Complete");
+  }
+
+  public static void printMapCreateMessage(){
+    System.out.println("Creating Map Meshes Complete");
+  }
+
+  public static void printAgentCreateMessage(){
+    System.out.println("Creating Character Meshes and Animation Complete");
+  }
+
 }

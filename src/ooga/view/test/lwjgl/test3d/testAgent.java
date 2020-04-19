@@ -36,8 +36,6 @@ public class testAgent implements Runnable {
     renderer = new Renderer3D(window, shader);
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    //mapView = new Map3DView(mapPath);
-    //mapView.createMesh();
     agentView = new Agent3DView();
     agentView.createMesh();
     shader.create();
@@ -92,12 +90,8 @@ public class testAgent implements Runnable {
       agentView.update(direction, "DEATH");
     }
 
-
     camera.update();
-    //printVector3f(camera.getPosition());
-    // for (GameObject object:mapView.getTileObjects()){
-    //  camera.update(object);
-    //}
+
     Test.printVector3f(camera.getPosition());
     if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
       System.out.println("X: " + Input.getScrollX() + ", Y: " + Input.getScrollY());

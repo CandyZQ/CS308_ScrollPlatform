@@ -240,4 +240,12 @@ public class Mesh {
 		return mesh;
 	}
 
+	public static Vector3f getAgentBackViewpoint(Mesh agentMesh){
+		return null;
+	}
+
+	public static Vector3f getAgentFront(Mesh agentMesh){
+		return null;
+	}
+
 }

@@ -32,4 +32,8 @@ public class Asset3D {
     return new Vector3f(100.0f, 100.0f, 100.0f);
   }
 
+  public static Vector3f getThirdPersonCameraDelta(){
+    return new Vector3f(0f,-0.5f,-5.0f);
+  }
+
 }

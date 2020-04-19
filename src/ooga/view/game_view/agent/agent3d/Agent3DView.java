@@ -30,4 +30,6 @@ public class Agent3DView extends AgentView {
   public void update(String direction, String action) {
     controller.setCurrentAnimation(direction, action);
   }
+
+  public GameObject getObject(){return object;}
 }

@@ -15,7 +15,9 @@ public class Agent3DController extends AgentController {
   private Animation3DDict dict;
 
   private Vector3f position = Vector3f.zeros();
-  private Vector3f rotation = Vector3f.zeros();
+  //private Vector3f position = new Vector3f(40.0f, -4.0f, 0.0f);
+  //private Vector3f rotation = Vector3f.zeros();
+  private Vector3f rotation = new Vector3f(0f, 0f, 0f);
   private Vector3f scale = Asset3D.getWhiteBotScale();
 
   public Agent3DController(String moveAction, String initialAction, String initialDirection, String defaultAction){

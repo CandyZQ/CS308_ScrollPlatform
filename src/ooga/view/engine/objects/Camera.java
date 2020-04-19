@@ -61,8 +61,18 @@ public class Camera {
 		oldMouseX = newMouseX;
 		oldMouseY = newMouseY;
 	}
+
+	public void trackThirdPerson(GameObject object){
+		//put camera behind the back of the person
+		rotation.set(object.getRotation().getX(), object.getRotation().getY(), object.getRotation().getZ());
+
+	}
+
+	public void trackFirstPerson(GameObject object){
+		// put camera in the front of the person
+	}
 	
-	public void update(GameObject object) {
+	public void update(GameObject object, Vector3f translateDelta) {
 		newMouseX = Input.getMouseX();
 		newMouseY = Input.getMouseY();
 		
@@ -88,7 +98,7 @@ public class Camera {
 		float zOffset = (float) (horizontalDistance * Math.cos(Math.toRadians(-horizontalAngle)));
 		
 		position.set(object.getPosition().getX() + xOffset, object.getPosition().getY() - verticalDistance, object.getPosition().getZ() + zOffset);
-	
+		position = Vector3f.add(position, translateDelta);
 		rotation.set(verticalAngle, -horizontalAngle, 0);
 		
 		oldMouseX = newMouseX;
