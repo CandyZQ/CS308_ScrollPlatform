@@ -13,12 +13,15 @@ public class Agent3DView extends AgentView {
   public Agent3DView() {
     super("WALK");
     LoadCyberpunkModels.loadWhiteBotAnimationDict();
-    controller = new Agent3DController();
+    controller = new Agent3DController(MOVE_ACTION, "IDLE", "N", "IDLE");
     mesh = controller.getCurrentAnimatedMaterial();
     object = new GameObject(controller.getPosition(), controller.getRotation(), controller.getScale(), mesh);
   }
 
   public void renderMesh(Renderer3D renderer, Camera camera) {
+    object.getMesh().destroy();
+    controller.move(object);
+    controller.getCurrentAnimatedMaterial().create();
     object.setMesh(controller.getCurrentAnimatedMaterial());
     renderer.renderMesh(object, camera);
   }
@@ -26,6 +29,5 @@ public class Agent3DView extends AgentView {
   @Override
   public void update(String direction, String action) {
     controller.setCurrentAnimation(direction, action);
-    if (action.equals(MOVE_ACTION)) controller.move(direction, object);
   }
 }

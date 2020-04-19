@@ -5,7 +5,7 @@ import ooga.view.engine.graphics.Mesh;
 
 abstract public class AgentController {
 
-  protected static final String DEFAULT_ACTION = "IDLE";
+  protected static String DEFAULT_ACTION;
   protected String direction;
   protected String action;
 

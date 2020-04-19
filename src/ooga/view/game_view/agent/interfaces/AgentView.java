@@ -18,7 +18,7 @@ abstract public class AgentView {
   public AgentView(String moveAction){MOVE_ACTION = moveAction;}
 
   public void createMesh() {
-    mesh.create();
+    object.getMesh().create();
   }
 
   public void destroyMesh() {

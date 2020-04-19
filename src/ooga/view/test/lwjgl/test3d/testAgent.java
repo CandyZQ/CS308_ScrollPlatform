@@ -10,10 +10,11 @@ import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.Camera;
 import ooga.view.engine.objects.GameObject;
 import ooga.view.engine.utils.Test;
+import ooga.view.game_view.agent.agent3d.Agent3DView;
 import ooga.view.game_view.map.map3d.Map3DView;
 import org.lwjgl.glfw.GLFW;
 
-public class testMap implements Runnable {
+public class testAgent implements Runnable {
 
   public Thread game;
   public Window window;
@@ -21,9 +22,8 @@ public class testMap implements Runnable {
   public Shader shader;
   public final int WIDTH = 1580, HEIGHT = 1080;
 
-  public Map3DView mapView;
-  public String mapPath = "/view/data/3d/map_test.txt";
-  public Camera camera = new Camera(new Vector3f(1640.0f, 880.0f, 40.0f), new Vector3f(0, 0, 0));
+  public Agent3DView agentView;
+  public Camera camera = new Camera(new Vector3f(-290.0f, 340.0f, 590.0f), new Vector3f(0, 0, 0));
 
   public void start() {
     game = new Thread(this, "game");
@@ -36,8 +36,10 @@ public class testMap implements Runnable {
     renderer = new Renderer3D(window, shader);
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    mapView = new Map3DView(mapPath);
-    mapView.createMesh();
+    //mapView = new Map3DView(mapPath);
+    //mapView.createMesh();
+    agentView = new Agent3DView();
+    agentView.createMesh();
     shader.create();
   }
 
@@ -79,9 +81,21 @@ public class testMap implements Runnable {
   private void update() {
     window.update();
     //object.update();
+    String direction = "E";
+    if (Input.isKeyDown(GLFW.GLFW_KEY_A)){
+      agentView.update(direction, "WALK");
+    }
+    if (Input.isKeyDown(GLFW.GLFW_KEY_E)){
+      agentView.update(direction, "ATTACK");
+    }
+    if (Input.isKeyDown(GLFW.GLFW_KEY_D)){
+      agentView.update(direction, "DEATH");
+    }
+
+
     camera.update();
-    //Test.printVector3f(camera.getPosition());
-   // for (GameObject object:mapView.getTileObjects()){
+    //printVector3f(camera.getPosition());
+    // for (GameObject object:mapView.getTileObjects()){
     //  camera.update(object);
     //}
     Test.printVector3f(camera.getPosition());
@@ -91,19 +105,18 @@ public class testMap implements Runnable {
   }
 
   private void render() {
-    mapView.renderMesh(renderer, camera);
+    agentView.renderMesh(renderer, camera);
     window.swapBuffers();
   }
 
   private void close() {
     window.destroy();
-    mapView.destroyMesh();
+    agentView.destroyMesh();
     shader.destroy();
   }
 
   public static void main(String[] args) {
-    new testMap().start();
+    new testAgent().start();
   }
-
 
 }

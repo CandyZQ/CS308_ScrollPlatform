@@ -13,13 +13,14 @@ public class Agent2DController extends AgentController {
   //TODO: should remove from hardcoded!
   private String INITIAL_DIRECTION = "E";
   private String INITIAL_ACTION = "IDLE";
-  private Animation2DDict agentAnimationDict;
+  private Animation2DDict dict;
 
   public Agent2DController() throws IOException {
     super();
+    DEFAULT_ACTION = "IDLE";
     direction = INITIAL_DIRECTION;
     action = INITIAL_ACTION;
-    agentAnimationDict = new Animation2DDict(direction, action);
+    dict = new Animation2DDict(direction, action);
     this.setCurrentAnimation(direction, action);
   }
 
@@ -27,14 +28,14 @@ public class Agent2DController extends AgentController {
   public void setCurrentAnimation(String direction, String action){
     this.direction = direction;
     this.action = action;
-    agentAnimationDict.setInUseAnimation(direction, action);
+    dict.setInUseAnimation(direction, action);
   }
 
   public Material getCurrentAnimatedMaterial(){
-    Material frame = agentAnimationDict.getAnimation().getCurrentFrame();
+    Material frame = dict.getAnimation().getCurrentFrame();
     if (frame == null){
       setCurrentAnimation(direction, DEFAULT_ACTION);
-      return agentAnimationDict.getAnimation().getCurrentFrame();
+      return dict.getAnimation().getCurrentFrame();
     }
     else{
       return frame;

@@ -23,7 +23,8 @@ public class LoadCyberpunkModels {
   private static String DIR_WHITE_BOT_WALK_PATH = "resources/view/models/3d/npc/whitebot/walk/";
   private static String DIR_WHITE_BOT_ATTACK_PATH = "resources/view/models/3d/npc/whitebot/attack/";
   private static String DIR_WHITE_BOT_DEATH_PATH = "resources/view/models/3d/npc/whitebot/death/";
-  private static String WHITE_BOT_TEXTURE = "resources/view/models/3d/npc/whitebot/whitebot_texture.png";
+  private static String DIR_WHITE_BOT_IDLE_PATH = "resources/view/models/3d/npc/whitebot/idle/";
+  private static String WHITE_BOT_TEXTURE = "/view/models/3d/npc/whitebot/whitebot_texture.png";
 
   private static int WHITE_BOT_WALK_ST_ID = 1;
   private static int WHITE_BOT_WALK_AMOUNT = 100;
@@ -33,6 +34,9 @@ public class LoadCyberpunkModels {
 
   private static int WHITE_BOT_DEATH_ST_ID = 181;
   private static int WHITE_BOT_DEATH_AMOUNT = 180;
+
+  private static int WHITE_BOT_IDLE_ST_ID = 361;
+  private static int WHITE_BOT_IDLE_AMOUNT = 1;
 
   private static String[] tileTypes = {"4E", "E", "L", "I", "T"};
 
@@ -137,6 +141,7 @@ public class LoadCyberpunkModels {
     Animation3D walk = new Animation3D(WHITE_BOT_WALK_AMOUNT, 23);
     Animation3D attack = new Animation3D(WHITE_BOT_ATTACK_AMOUNT, 23);
     Animation3D death = new Animation3D(WHITE_BOT_DEATH_AMOUNT, 23);
+    Animation3D idle = new Animation3D(WHITE_BOT_IDLE_AMOUNT, 23);
 
     for (int i = 0; i < WHITE_BOT_WALK_AMOUNT; i++) {
       walk.setAnimatedFrame(i,
@@ -153,9 +158,15 @@ public class LoadCyberpunkModels {
           ModelLoader.loadModel(getWhiteBotModelPath("DEATH", i), WHITE_BOT_TEXTURE));
     }
 
+    for (int i=0; i < WHITE_BOT_IDLE_AMOUNT; i++){
+      idle.setAnimatedFrame(i,
+          ModelLoader.loadModel(getWhiteBotModelPath("IDLE", i), WHITE_BOT_TEXTURE));
+    }
+
     whiteBotAnimationDict.put("ATTACK", attack);
     whiteBotAnimationDict.put("WALK", walk);
     whiteBotAnimationDict.put("DEATH", death);
+    whiteBotAnimationDict.put("IDLE", idle);
 
     return whiteBotAnimationDict;
   }
@@ -174,7 +185,11 @@ public class LoadCyberpunkModels {
     } else if (action.equals("DEATH")) {
       return String.format("%sMOVE_%s.obj", DIR_WHITE_BOT_DEATH_PATH,
           getWhiteBotStrID(id + WHITE_BOT_DEATH_ST_ID));
-    } else {
+    }
+    else if (action.equals("IDLE")){
+      return String.format("%sMOVE_%s.obj", DIR_WHITE_BOT_IDLE_PATH,
+          getWhiteBotStrID(id+WHITE_BOT_IDLE_ST_ID));
+    }else {
       System.out.println("Unknown animation mode for white bot");
       return null;
     }

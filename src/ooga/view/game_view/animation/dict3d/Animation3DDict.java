@@ -23,6 +23,8 @@ public class Animation3DDict extends AnimationDict {
   }
 
   public Animation3D getAnimation(){
-     return dict.get(currentAction);
+    System.out.println(currentAction);
+    System.out.println(dict.containsKey(currentAction));
+    return dict.get(currentAction);
   }
 }
