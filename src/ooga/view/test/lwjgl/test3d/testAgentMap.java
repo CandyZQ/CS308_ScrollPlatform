@@ -40,12 +40,12 @@ public class testAgentMap implements Runnable {
     mapView = new Map3DView(mapPath);
     Test.printMapLoadingMessage();
 
-    agentView = new Agent3DView();
-    Test.printAgentLoadingMessage();
+    //agentView = new Agent3DView();
+    //Test.printAgentLoadingMessage();
 
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    agentView.createMesh();
+    //agentView.createMesh();
     mapView.createMesh();
     shader.create();
   }
@@ -88,6 +88,7 @@ public class testAgentMap implements Runnable {
   private void update() {
     window.update();
     //object.update();
+    /*
     String direction = "E";
     if (Input.isKeyDown(GLFW.GLFW_KEY_A)){
       agentView.update(direction, "WALK");
@@ -97,7 +98,7 @@ public class testAgentMap implements Runnable {
     }
     if (Input.isKeyDown(GLFW.GLFW_KEY_D)){
       agentView.update(direction, "DEATH");
-    }
+    }*/
     camera.update();
     Test.printVector3f(camera.getPosition());
     if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
@@ -106,7 +107,7 @@ public class testAgentMap implements Runnable {
   }
 
   private void render() {
-    agentView.renderMesh(renderer, camera);
+//    agentView.renderMesh(renderer, camera);
     mapView.renderMesh(renderer, camera);
     window.swapBuffers();
   }
