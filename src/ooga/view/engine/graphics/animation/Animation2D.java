@@ -18,6 +18,17 @@ public class Animation2D extends Animation{
     }
   }
 
+  public Animation2D(int cnt, int fps, String dir, String action) {
+    super(cnt,fps);
+    this.animatedFrames = new Material[cnt];
+
+    for(int i=0; i<cnt;i++){
+      String spritePath = String.format("%s%s%s.png", dir, action.toLowerCase(), i);
+      this.animatedFrames[i] = new Material(spritePath);
+      this.animatedFrames[i].createTexture();
+    }
+  }
+
   public Animation2D(int cnt, int fps) {
     super(cnt, fps);
     this.animatedFrames = new Material[cnt];

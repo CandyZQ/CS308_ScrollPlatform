@@ -1,11 +1,11 @@
-package ooga.view.engine.utils.cyberpunk2d;
+package ooga.view.engine.utils.cyberpunk2d.animtions;
 
 import com.google.gson.internal.LinkedHashTreeMap;
 import java.io.IOException;
 import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
 
-public class LoadCyberpunkAnimations {
+public class LoadMeleeBotAnimations {
 
   private static int fps = 18;
   private static LinkedHashTreeMap<String, Animation2D> meleeDict;
@@ -59,15 +59,15 @@ public class LoadCyberpunkAnimations {
   private static String DIR_SE_PRESPRINT = "\\view\\textures\\2d\\cyberpunk\\playable\\MELEE ROBOT\\SE_spritesheet\\PRE-SPRINT_7frames";
   private static String DIR_SE_SPRINT = "\\view\\textures\\2d\\cyberpunk\\playable\\MELEE ROBOT\\SE_spritesheet\\SPRINT_6frames";
 
-  public LoadCyberpunkAnimations(){
-    meleeDict = new LinkedHashTreeMap();
+  public LoadMeleeBotAnimations(){
+    meleeDict = new LinkedHashTreeMap<String, Animation2D>();
   }
 
   //Key: DIR_ACTION
-  public static Map<String, Animation2D> loadMeleeRobotAnimations() throws IOException {
+  public static Map<String, Animation2D> loadAnimations() throws IOException {
 
     String mapKey;
-    meleeDict = new LinkedHashTreeMap();
+    meleeDict = new LinkedHashTreeMap<>();
 
     //load E animations
     mapKey = "E_ATTACK1";

@@ -10,17 +10,14 @@ import ooga.view.game_view.animation.dict2d.Animation2DDict;
 
 public class Agent2DController extends AgentController {
 
-  //TODO: should remove from hardcoded!
-  private String INITIAL_DIRECTION = "E";
-  private String INITIAL_ACTION = "IDLE";
   private Animation2DDict dict;
 
-  public Agent2DController() throws IOException {
+  public Agent2DController(Agent2DDataHolder data) throws IOException {
     super();
-    DEFAULT_ACTION = "IDLE";
-    direction = INITIAL_DIRECTION;
-    action = INITIAL_ACTION;
-    dict = new Animation2DDict(direction, action);
+    DEFAULT_ACTION = data.getDefaultAction();
+    direction = data.getInitialDirection();
+    action = data.getInitialAction();
+    dict = data.getAgentAnimationDict();
     this.setCurrentAnimation(direction, action);
   }
 

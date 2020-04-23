@@ -1,7 +1,9 @@
 package ooga.view.test.lwjgl.test3d;
 
 import ooga.view.engine.maths.Vector3f;
+import ooga.view.engine.utils.SpriteCropper;
 import ooga.view.engine.utils.cyberpunk3d.MeasureMapModel;
+import org.lwjglx.test.spaceinvaders.Sprite;
 
 public class measureTiles implements Runnable {
 

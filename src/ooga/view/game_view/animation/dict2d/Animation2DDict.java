@@ -3,16 +3,16 @@ package ooga.view.game_view.animation.dict2d;
 import java.io.IOException;
 import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
-import ooga.view.engine.utils.cyberpunk2d.LoadCyberpunkAnimations;
 import ooga.view.game_view.animation.interfaces.AnimationDict;
 
 public class Animation2DDict extends AnimationDict {
 
   private Map<String, Animation2D> dict;
 
-  public Animation2DDict(String initialDirection, String initialAction) throws IOException {
+  public Animation2DDict(String initialDirection, String initialAction, Map<String, Animation2D> dict) throws IOException {
     super(initialDirection, initialAction);
-    dict = LoadCyberpunkAnimations.loadMeleeRobotAnimations();
+    //dict = LoadCyberpunkAnimations.loadMeleeRobotAnimations();
+    this.dict = dict;
   }
 
   @Override

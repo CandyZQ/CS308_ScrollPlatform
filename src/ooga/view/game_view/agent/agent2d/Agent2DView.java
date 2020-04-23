@@ -16,15 +16,13 @@ public class Agent2DView extends AgentView {
 
   protected Agent2DController controller;
 
-  public Agent2DView() throws IOException {
-    super("SPRINT");
-    vertices = Asset2D.getAgentVertices();
-    indices = Asset2D.getAgentIndices();
-    controller = new Agent2DController();
+  public Agent2DView(Agent2DDataHolder data) throws IOException {
+    super(data.getMoveAction());
+    vertices = data.getVertices();
+    indices = data.getIndices();
+    controller = new Agent2DController(data);
     mesh = new Mesh(vertices, indices, controller.getCurrentAnimatedMaterial());
-    object = new GameObject(Asset2D.getPlayerPosition(), Asset2D.getPlayerRotation(),
-        Asset2D.getPlayerScale(), mesh);
-
+    object = new GameObject(data.getPosition(), data.getRotation(), data.getScale(), mesh);
   }
 
   public void renderMesh(Renderer2D renderer) {

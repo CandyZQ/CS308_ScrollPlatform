@@ -47,7 +47,7 @@ public class Material {
 	 */
 	public void createTitledTexture(int x, int y, int textureWidth, int textureHeight) {
 		//SpriteSheet palette = new SpriteSheet(ImageLoader.loadImage(path));
-		String imageName = String.format("%s/%s_%s.png", path, String.valueOf(y), String.valueOf(x));
+		String imageName = String.format("%s/%s_%s.png", path, y, x);
 
 		try{
 				//System.out.println(imageName);
