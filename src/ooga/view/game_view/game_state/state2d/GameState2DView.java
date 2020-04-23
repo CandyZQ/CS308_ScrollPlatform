@@ -31,6 +31,11 @@ public class GameState2DView extends GameStateView {
 
 
   //TODO: remove this part!
+  //TODO: loop through a list of agents to update its alive status/ adding new
+  //      how much to move :set in Asset2D
+  //TODO: COLLISION DETECT:
+  //TODO:   0) whether the movement is valid (check before move)
+  //        1) whether the attack is made (1. a method to calc the distance between two objects or with wall)
   String mapPath = "/view/textures/2d/cyberpunk/map/map.txt";
 
 
