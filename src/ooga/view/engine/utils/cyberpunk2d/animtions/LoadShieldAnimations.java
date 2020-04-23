@@ -37,7 +37,7 @@ public class LoadShieldAnimations {
     shieldDict.put(mapKey, new Animation2D(6, fps, DIR_PATH, HURT));
     mapKey = "E_IDLE";
     shieldDict.put(mapKey, new Animation2D(6, fps, DIR_PATH, IDLE));
-    mapKey = "E_JUMPING";
+    mapKey = "E_JUMP";
     shieldDict.put(mapKey, new Animation2D(6, fps, DIR_PATH, JUMPING));
     mapKey = "E_SHIELD_HURT";
     shieldDict.put(mapKey, new Animation2D(6, fps, DIR_PATH, SHIELD_HURT));

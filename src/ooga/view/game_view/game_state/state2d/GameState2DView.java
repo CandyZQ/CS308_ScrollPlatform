@@ -54,7 +54,7 @@ public class GameState2DView extends GameStateView {
 
     map = new Map2DView(mapPath);
     for(int i=0; i<numPlayers; i++){
-      players.add(new Agent2DView());
+      players.add(new Agent2DView()); // added data holder
       players.get(i).createMesh();
     }
 

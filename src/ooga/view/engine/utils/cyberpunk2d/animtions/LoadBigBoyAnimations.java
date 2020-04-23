@@ -18,7 +18,7 @@ public class LoadBigBoyAnimations {
   final private static String IDLE = "IDLE";
   final private static String WALK = "WALK";
 
-  public static Map<String, Animation2D> loadBigBoyAnimations(){
+  public static Map<String, Animation2D> loadAnimations(){
     String mapKey;
     LinkedHashTreeMap<String, Animation2D> bigBoyDict = new LinkedHashTreeMap<>();
 

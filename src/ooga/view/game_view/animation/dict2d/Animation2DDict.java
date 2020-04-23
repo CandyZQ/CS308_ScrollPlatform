@@ -1,45 +1,45 @@
 package ooga.view.game_view.animation.dict2d;
 
-import java.io.IOException;
 import java.util.Map;
+import javafx.util.Pair;
 import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.game_view.animation.interfaces.AnimationDict;
 
 public class Animation2DDict extends AnimationDict {
 
-  private Map<String, Animation2D> dict;
+  private Map<String, Animation2D> animationDict;
+  private Map<Pair<Pair<String, Boolean>, String>, String> prevDict;
 
-  public Animation2DDict(String initialDirection, String initialAction, Map<String, Animation2D> dict) throws IOException {
+  public Animation2DDict(String initialDirection, String initialAction,
+      Map<String, Animation2D> animationDict,
+      Map<Pair<Pair<String, Boolean>, String>, String> prevDict) {
     super(initialDirection, initialAction);
-    //dict = LoadCyberpunkAnimations.loadMeleeRobotAnimations();
-    this.dict = dict;
+    this.animationDict = animationDict;
+    this.prevDict = prevDict;
   }
 
   @Override
   protected void resetAnimationDict(){
-    for(String key:dict.keySet()){
-      dict.get(key).resetAnimation();
+    for(String key: animationDict.keySet()){
+      animationDict.get(key).resetAnimation();
     }
   }
 
   public Animation2D getAnimation(){
 
-    //TODO: should remove from hardcoded!
-    if (!previousAction.equals("SPRINT") && currentAction.equals("SPRINT")){
-      return getAnimationMap(direction, "PRESPRINT");
+    for (Pair<Pair<String, Boolean>, String> key: prevDict.keySet()){
+      if (currentAction.equals(key.getValue()) && (
+          key.getKey().getValue() && previousAction.equals(key.getKey().getKey())) ||
+          (!key.getKey().getValue() && !previousAction.equals(key.getKey().getKey()))){
+        return getAnimationMap(direction, prevDict.get(key));
+      }
     }
 
-    if (!previousAction.equals("ATTACK1") && currentAction.equals("ATTACK3")){
-
-      return getAnimationMap(direction, "ATTACKCOMBO");
-    }
-
-
-    return getAnimationMap(direction, currentAction);
+    return  getAnimationMap(direction, currentAction);
   }
 
   private Animation2D getAnimationMap(String direction, String action){
-    return dict.get(String.format("%s_%s", direction, action));
+    return animationDict.get(String.format("%s_%s", direction, action));
   }
 
 }

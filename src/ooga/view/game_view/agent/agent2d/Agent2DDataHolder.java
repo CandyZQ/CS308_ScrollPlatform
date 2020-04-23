@@ -1,6 +1,8 @@
 package ooga.view.game_view.agent.agent2d;
 
 import java.util.Map;
+import javafx.util.Pair;
+import com.google.gson.internal.LinkedHashTreeMap;
 import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.maths.Vector3f;
@@ -12,12 +14,17 @@ public class Agent2DDataHolder {
   private String initialAction = "IDLE";
   private String defaultAction = "IDLE";
   private String moveAction = "SPRINT";
-  private Map<String, String> comboDict; // should be inside animation dict
-  private Map<String, Agent2DDataHolder> triggeredObjectDict;
+  private boolean shouldConsumed = false;
+  private Map<String, String> nextDict = new LinkedHashTreeMap<>();
+  private Map<Pair<Pair<String, Boolean>, String>, String> prevDict = new LinkedHashTreeMap<>();
+    // what would come next to the current animation
+    // if returns null -> default, no need to notify backend
+    // if not, notifies backend
+  private Map<String, Agent2DDataHolder> spawnerDict = new LinkedHashTreeMap<>();
   private Animation2DDict agentAnimationDict;
 
+  private Vector3f rotation = Asset2D.getPlayerRotation();
   private Vector3f position;
-  private Vector3f rotation;
   private Vector3f scale;
 
   private Vertex[] vertices = Asset2D.getAgentVertices();
@@ -55,13 +62,51 @@ public class Agent2DDataHolder {
     this.moveAction = action;
   }
 
+  public void setShouldConsumed(boolean shouldConsumed) {
+    this.shouldConsumed = shouldConsumed;
+  }
+
+  public boolean shouldConsumed() {
+    return shouldConsumed;
+  }
+
+  public Animation2DDict getAgentAnimationDict() {
+    return agentAnimationDict;
+  }
+
   public void setAgentAnimationDict(
       Animation2DDict agentAnimationDict) {
     this.agentAnimationDict = agentAnimationDict;
   }
 
-  public Animation2DDict getAgentAnimationDict() {
-    return agentAnimationDict;
+  public Map<String, Agent2DDataHolder> getSpawnerDict() {
+    return spawnerDict;
+  }
+
+  public void setSpawnerDict(
+      Map<String, Agent2DDataHolder> spawnerDict) {
+    this.spawnerDict = spawnerDict;
+  }
+
+  public void setNextDict(Map<String, String> nextDict) {
+    this.nextDict = nextDict;
+  }
+
+  public Map<String, String> getNextDict() {
+    return nextDict;
+  }
+
+  public void setPrevDict(
+      Map<Pair<Pair<String, Boolean>, String>, String> prevDict) {
+    this.prevDict = prevDict;
+  }
+
+  public Map<Pair<Pair<String, Boolean>, String>, String> getPrevDict() {
+    return prevDict;
+  }
+
+  public void setVertices(Vertex[] vertices) {
+    this.vertices = vertices;
   }
 
   public Vector3f getScale() {
@@ -80,17 +125,19 @@ public class Agent2DDataHolder {
     this.rotation = rotation;
   }
 
-  public void setPosition(Vector3f position) {
-    this.position = position;
-  }
-
   public Vector3f getPosition() {
     return position;
+  }
+
+  public void setPosition(Vector3f position) {
+    this.position = position;
   }
 
   public Vertex[] getVertices() {
     return vertices;
   }
+
+  public void setIndices(int[] indices){this.indices = indices;}
 
   public int[] getIndices() {
     return indices;

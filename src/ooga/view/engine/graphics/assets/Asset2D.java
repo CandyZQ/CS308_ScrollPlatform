@@ -67,6 +67,10 @@ public class Asset2D {
     return new Vector3f(0.8f, 0.8f, 0.8f);
   }
 
+  public static Vector3f getNonPlayerScale(){
+    return new Vector3f(0.8f, 0.8f, 0.8f);
+  }
+
   public static Vector3f convertDirectionalSpeed(String direction){
     if (direction.equals("E")){
       return new Vector3f(SPEED_MELEE_SPRINT, 0, 0);

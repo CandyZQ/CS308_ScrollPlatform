@@ -20,7 +20,7 @@ public class LoadEngineerBotAnimations {
   final private static String JUMP = "JUMP";
   final private static String FALL = "FALL";
 
-  final private static String SUMMON = "SUMMON";
+  final private static String SUMMON = "SUMMON"; // "SUMMON_BIGBOY", "SUMMON_TURRET", "SUMMON_WATCHER"
 
 
   public static Map<String, Animation2D> loadAnimations(){
@@ -42,7 +42,11 @@ public class LoadEngineerBotAnimations {
     engineerDict.put(mapKey, new Animation2D(6, fps, DIR_PATH, JUMP));
     mapKey = "E_FALL";
     engineerDict.put(mapKey, new Animation2D(4, fps, DIR_PATH, FALL));
-    mapKey = "E_SUMMON";
+    mapKey = "E_SUMMON_BIGBOY";
+    engineerDict.put(mapKey, new Animation2D(13, fps, DIR_PATH, SUMMON));
+    mapKey = "E_SUMMON_TURRET";
+    engineerDict.put(mapKey, new Animation2D(13, fps, DIR_PATH, SUMMON));
+    mapKey = "E_SUMMON_WATCHER";
     engineerDict.put(mapKey, new Animation2D(13, fps, DIR_PATH, SUMMON));
 
     return engineerDict;
