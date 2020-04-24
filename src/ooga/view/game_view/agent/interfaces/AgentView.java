@@ -10,6 +10,7 @@ abstract public class AgentView {
 
   protected static String MOVE_ACTION;
 
+  protected int id;
   protected Vertex[] vertices;
   protected int[] indices;
   protected Mesh mesh;

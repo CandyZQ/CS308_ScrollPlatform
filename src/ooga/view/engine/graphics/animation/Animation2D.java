@@ -23,7 +23,7 @@ public class Animation2D extends Animation{
     this.animatedFrames = new Material[cnt];
 
     for(int i=0; i<cnt;i++){
-      String spritePath = String.format("%s%s%s.png", dir, action.toLowerCase(), i);
+      String spritePath = String.format("%s%s%s.png", dir, action.toLowerCase(), i+1);
       this.animatedFrames[i] = new Material(spritePath);
       this.animatedFrames[i].createTexture();
     }

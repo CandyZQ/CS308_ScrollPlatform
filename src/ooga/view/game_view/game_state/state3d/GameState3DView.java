@@ -11,12 +11,12 @@ public class GameState3DView extends GameStateView {
   }
 
   @Override
-  public void updatePlayer(int index, String direction, String state) {
+  public void updateAgent(int index, String direction, String state) {
 
   }
 
   @Override
-  public void updateNPC(int index, String direction, String state) {
+  public void deleteAgent(int id) {
 
   }
 
@@ -31,14 +31,10 @@ public class GameState3DView extends GameStateView {
   }
 
   @Override
-  public void renderPlayers() {
+  public void renderAgents() {
 
   }
 
-  @Override
-  public void renderNPCs() {
-
-  }
 
   @Override
   public void renderMap() {

@@ -2,10 +2,14 @@ package ooga.view.test.lwjgl.test2d;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.graphics.Shader;
 import ooga.view.engine.io.Input;
 import ooga.view.engine.io.Window;
+import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
+import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.agent.agent2d.Agent2DView;
 import ooga.view.game_view.map.map2d.Map2DView;
 import org.lwjgl.glfw.GLFW;
@@ -34,7 +38,9 @@ public class testAgentMap implements Runnable {
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
     mapView = new Map2DView(mapPath);
-    agentView = new Agent2DView();
+    Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
+    dataHolderMap.put(0, GenerateAgentsData.createSoldier(0f, 0f));
+    agentView = new Agent2DView(0, dataHolderMap.get(0));
     agentView.createMesh();
     mapView.createMesh();
     shader.create();

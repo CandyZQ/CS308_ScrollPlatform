@@ -2,10 +2,14 @@ package ooga.view.test.lwjgl.test2d;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.graphics.Shader;
 import ooga.view.engine.io.Input;
 import ooga.view.engine.io.Window;
+import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
+import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.agent.agent2d.Agent2DView;
 import org.lwjgl.glfw.GLFW;
 
@@ -33,7 +37,9 @@ public class testAgent implements Runnable {
     renderer = new Renderer2D(shader);
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
-    agentView = new Agent2DView();
+    Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
+    dataHolderMap.put(0, GenerateAgentsData.createSoldier(0f, 0f));
+    agentView = new Agent2DView(0, dataHolderMap.get(0));
     agentView.createMesh();
     shader.create();
   }
@@ -57,14 +63,16 @@ public class testAgent implements Runnable {
   private void update() {
     window.update();
     //agentView.update();
+    System.out.println(agentView.getCenterPosition().getX());
+    System.out.println(agentView.getCenterPosition().getY());
     if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
       System.out.println("X: " + Input.getScrollX() + ", Y: " + Input.getScrollY());
     }
     if (Input.isKeyDown(GLFW.GLFW_KEY_Q)){
-      agentView.update("E","ATTACK1");
+      agentView.update("E","ATTACK");
     }
     if (Input.isKeyDown(GLFW.GLFW_KEY_W)){
-      agentView.update("E","ATTACK3");
+      agentView.update("E","WALK");
     }
     if (Input.isKeyDown(GLFW.GLFW_KEY_D)){
       agentView.update("E","DEATH");

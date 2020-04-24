@@ -2,13 +2,11 @@ package ooga.view.test.lwjgl.test2d;
 
 
 import java.io.IOException;
-import ooga.view.engine.graphics.render.Renderer2D;
-import ooga.view.engine.graphics.Shader;
-import ooga.view.engine.io.Input;
-import ooga.view.engine.io.Window;
-import ooga.view.game_view.agent.agent2d.Agent2DView;
+import java.util.HashMap;
+import java.util.Map;
+import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
+import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.game_state.state2d.GameState2DView;
-import ooga.view.game_view.map.map2d.Map2DView;
 import org.lwjgl.glfw.GLFW;
 
 public class testMainView implements Runnable {
@@ -22,7 +20,9 @@ public class testMainView implements Runnable {
   }
 
   public void init() throws IOException {
-   view = new GameState2DView(1);
+    Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
+    dataHolderMap.put(0, GenerateAgentsData.createSoldier(0f, 0f));
+   view = new GameState2DView(dataHolderMap);
    view.createWindow();
   }
 
@@ -42,9 +42,8 @@ public class testMainView implements Runnable {
   private void update() {
     view.updateWindow();
     view.updateMap(); //empty method
-    view.renderNPCs(); // empty method
     if (view.isKeyDown(GLFW.GLFW_KEY_S)){
-      view.updatePlayer(0,"E","SPRINT");}
+      view.updateAgent(0,"E","SPRINT");}
   }
 
   private void render() {

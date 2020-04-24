@@ -8,9 +8,9 @@ abstract public class GameStateView {
 
   abstract public void createWindow() throws IOException;
 
-  abstract public void updatePlayer(int index, String direction, String state);
+  abstract public void updateAgent(int id, String direction, String state) throws IOException;
 
-  abstract public void updateNPC(int index, String direction, String state);
+  abstract public void deleteAgent(int id);
 
   abstract public void updateMap();
 
@@ -18,14 +18,11 @@ abstract public class GameStateView {
 
   public void renderAll(){
     renderMap();
-    renderPlayers();
-    renderNPCs();
+    renderAgents();
     renderWindow();
   }
 
-  abstract public void renderPlayers();
-
-  abstract public void renderNPCs();
+  abstract public void renderAgents();
 
   abstract public void renderMap();
 

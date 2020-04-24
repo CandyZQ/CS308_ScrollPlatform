@@ -71,30 +71,30 @@ public class Asset2D {
     return new Vector3f(0.8f, 0.8f, 0.8f);
   }
 
-  public static Vector3f convertDirectionalSpeed(String direction){
+  public static Vector3f convertDirectionalSpeed(String direction, float speed_scale){
     if (direction.equals("E")){
-      return new Vector3f(SPEED_MELEE_SPRINT, 0, 0);
+      return new Vector3f(SPEED_MELEE_SPRINT*speed_scale, 0, 0);
     }
     if (direction.equals("N")){
-      return new Vector3f(0, SPEED_MELEE_SPRINT, 0);
+      return new Vector3f(0, SPEED_MELEE_SPRINT*speed_scale, 0);
     }
     if (direction.equals("S")){
-      return new Vector3f(0, -SPEED_MELEE_SPRINT, 0);
+      return new Vector3f(0, -SPEED_MELEE_SPRINT*speed_scale, 0);
     }
     if (direction.equals("W")){
-      return new Vector3f(-SPEED_MELEE_SPRINT, 0, 0);
+      return new Vector3f(-SPEED_MELEE_SPRINT*speed_scale, 0, 0);
     }
     if (direction.equals("NE")){
-      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2), SPEED_MELEE_SPRINT*(float)Math.sqrt(2), 0);
+      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, 0);
     }
     if (direction.equals("SE")){
-      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2), SPEED_MELEE_SPRINT*(float)Math.sqrt(2), 0);
+      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, 0);
     }
     if (direction.equals("NW")){
-      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2), SPEED_MELEE_SPRINT*(float)Math.sqrt(2), 0);
+      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, 0);
     }
     if (direction.equals("SW")){
-      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2), SPEED_MELEE_SPRINT*(float)Math.sqrt(2), 0);
+      return new Vector3f(SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, SPEED_MELEE_SPRINT*(float)Math.sqrt(2)*speed_scale, 0);
     }
     System.err.println(String.format("Location not found: %s",direction));
     return new Vector3f(SPEED_MELEE_SPRINT, 0, 0);

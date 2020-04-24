@@ -26,9 +26,11 @@ public class GenerateAgentsData {
   final static private float Y_PLACEHOLDER = -550f;
   final static private String DIR_PLACEHOLDER = "P";
 
-  public static void loadAgentData(){
+  public static float getXPlaceholder(){return X_PLACEHOLDER;}
 
-  }
+  public static float getYPlaceholder(){return Y_PLACEHOLDER;}
+
+  public static String getDirectionPlaceholder(){return DIR_PLACEHOLDER;}
 
   public static Agent2DDataHolder createBigBoy(float x, float y, String initialDirection) throws IOException {
     Agent2DDataHolder data = new Agent2DDataHolder();
@@ -56,6 +58,8 @@ public class GenerateAgentsData {
   public static Agent2DDataHolder createBullet(float x, float y, String initialDirection)
       throws IOException {
     Agent2DDataHolder data = new Agent2DDataHolder();
+
+    data.setSpeedScale(5.0f);
 
     // create initial params
     data.setInitialAction("MOVE");
@@ -108,6 +112,8 @@ public class GenerateAgentsData {
 
   public static Agent2DDataHolder createTurretBullet(float x, float y, String initialDirection)throws IOException {
     Agent2DDataHolder data = new Agent2DDataHolder();
+
+    data.setSpeedScale(5.0f);
 
     // create initial params
     data.setInitialAction("MOVE");

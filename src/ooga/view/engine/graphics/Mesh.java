@@ -3,6 +3,7 @@ package ooga.view.engine.graphics;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.utils.Test;
 import org.lwjgl.opengl.GL11;
@@ -154,6 +155,10 @@ public class Mesh {
 
 	public float getMaxDepth(){
 		return getMaxZ() - getMinZ();
+	}
+
+	public Vector2f getCenter(){
+		return new Vector2f(getMinX() + (getMaxX()-getMaxX())/2.0f, getMinY() + (getMaxY() - getMinY()));
 	}
 
 	private float getMaxX(){

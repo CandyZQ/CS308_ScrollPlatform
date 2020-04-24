@@ -18,6 +18,12 @@ public class Animation2DDict extends AnimationDict {
     this.prevDict = prevDict;
   }
 
+  public Animation2DDict(Animation2DDict other){
+    super(other.initialDirection, other.initialAction);
+    this.animationDict = Map.copyOf(other.animationDict);
+    this.prevDict = Map.copyOf(other.prevDict);
+  }
+
   @Override
   protected void resetAnimationDict(){
     for(String key: animationDict.keySet()){

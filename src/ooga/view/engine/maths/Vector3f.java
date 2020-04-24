@@ -1,11 +1,19 @@
 package ooga.view.engine.maths;
 
+import org.lwjglx.util.vector.Vector;
+
 public class Vector3f {
 	private float x, y, z;
 	
 	public Vector3f(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
+		this.z = z;
+	}
+
+	public Vector3f(Vector2f other, float z){
+		this.x = other.getX();
+		this.y = other.getY();
 		this.z = z;
 	}
 
