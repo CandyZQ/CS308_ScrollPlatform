@@ -38,7 +38,7 @@ public class testAgent implements Runnable {
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
     Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
-    dataHolderMap.put(0, GenerateAgentsData.createSoldier(0f, 0f));
+    dataHolderMap.put(0, GenerateAgentsData.createSoldier(-3f, 0f));
     agentView = new Agent2DView(0, dataHolderMap.get(0));
     agentView.createMesh();
     shader.create();

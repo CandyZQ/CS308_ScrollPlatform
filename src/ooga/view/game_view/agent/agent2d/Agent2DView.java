@@ -22,7 +22,7 @@ public class Agent2DView extends AgentView {
     indices = data.getIndices();
     controller = new Agent2DController(data);
     mesh = new Mesh(vertices, indices, controller.getCurrentAnimatedMaterial());
-    object = new GameObject(data.getPosition(), data.getRotation(), data.getScale(), mesh);
+    object = new GameObject(Vector3f.zeros(), data.getRotation(), data.getScale(), mesh);
     controller.setObject(object);
   }
 
