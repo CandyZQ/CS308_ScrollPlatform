@@ -1,6 +1,7 @@
 package ooga.view.game_view.map.map2d;
 
 import ooga.view.engine.graphics.render.Renderer2D;
+import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.utils.Test;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
@@ -78,4 +79,6 @@ public class Map2DView extends MapView {
   public float getNegY(int i, int j){return titles[getIndex(i,j)].getGameObject().getMesh().getVertices()[1].getPosition().getY();}
 
   private int getIndex(int i, int j){return i*mapReader.getMapHeight()+j;}
+
+  public Vector2f idontcare(int idx){return new Vector2f(idx/mapReader.getMapWidth(), idx%mapReader.getMapWidth());}
 }

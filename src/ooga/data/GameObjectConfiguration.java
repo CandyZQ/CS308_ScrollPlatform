@@ -1,15 +1,11 @@
 package ooga.data;
 
+import static ooga.data.DataLoader.JSON_POSTFIX;
+import static ooga.game.GameMain.HEIGHT;
+import static ooga.game.GameMain.WIDTH;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import ooga.model.characters.ZeldaCharacter;
-import ooga.model.enums.ImageCategory;
-import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerParam;
-import ooga.model.interfaces.gameMap.Cell;
-import ooga.view.engine.graphics.animation.Animation2D;
-import ooga.view.engine.io.Window;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,11 +16,19 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-
-import static ooga.data.DataLoader.JSON_POSTFIX;
-import static ooga.game.GameMain.HEIGHT;
-import static ooga.game.GameMain.WIDTH;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.TextCategory;
+import ooga.model.enums.backend.PlayerParam;
+import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
+import ooga.view.engine.io.Window;
 
 /**
  * this is the man, the object storing EVERY piece of info!
@@ -103,19 +107,27 @@ public class GameObjectConfiguration {
       } catch (Exception e) {
         field.set(this, new HashMap<>());
       }
-      for (File child : directoryListing) {
-        if (type.equals(LIST_KEYWORD)) {
-          loadFilesUnderDirectoryForList(directoryPath, child.getName(), field, Class.forName(instanceClass), type);
-        } else if (type.equals(MAP_KEYWORD)) {
-          loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field, Class.forName(instanceClass), type);
-        } else {
-          Type type2 = new TypeToken<Map<String, Animation2D>>(){}.getType();
 
-          Map<String, Animation2D> tempAgent = loadJson(directoryPath + child.getName(), type2);
-          createTextureToAnimation(tempAgent);
-          animationMap.put(child.getName(), tempAgent);
+      try {
+        for (File child : directoryListing) {
+          if (type.equals("List")) {
+            loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
+                Class.forName(instanceClass), type);
+          } else if (type.equals("Map")) {
+            loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
+                Class.forName(instanceClass), type);
+          } else {
+            Type type2 = new TypeToken<Map<String, Animation2D>>() {
+            }.getType();
+
+            Map<String, Animation2D> tempAgent = loadJson(directoryPath + child.getName(), type2);
+            createTextureToAnimation(tempAgent);
+            animationMap.put(child.getName(), tempAgent);
+
+          }
+
         }
-      }
+      } catch (Exception e) { }
     }
     window.destroy();
   }

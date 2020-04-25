@@ -35,6 +35,7 @@ public class Text2DMapReader {
       int pixel_y = Integer.parseInt(mapContent[idx++]);
 
       walls[i] = pixel_x*paletteWidth + pixel_y - 1;
+      System.out.println(walls[i]);
     }
 
     mapCells = new int[mapHeight][mapWidth];

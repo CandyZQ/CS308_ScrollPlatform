@@ -152,4 +152,5 @@ public interface DataLoaderAPI {
      * @return
      */
     Map<String, Animation2D> loadAnimation(AnimationType animationType);
+
 }
