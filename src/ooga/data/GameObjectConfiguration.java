@@ -125,7 +125,9 @@ public class GameObjectConfiguration {
           }
 
         }
-      } catch (Exception e) { }
+      } catch (Exception e) {
+        //this catch is used because some teammate's computer will run into errors without it. However, this problem is not displayed when I am running the program.
+      }
     }
     window.destroy();
   }
