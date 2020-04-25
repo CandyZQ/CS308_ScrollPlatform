@@ -119,9 +119,7 @@ public class GameObjectConfiguration {
           }
 
         }
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception e) { }
     }
     window.destroy();
   }
