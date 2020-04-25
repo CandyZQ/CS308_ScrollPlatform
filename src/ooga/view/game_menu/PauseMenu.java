@@ -116,7 +116,7 @@ public class PauseMenu implements MenuView {
     public void updateLife(Map<Integer, Integer> list) {
         String s = "";
         for(int i:list.keySet()){
-            s+= "Player "+i+" score: "+list.get(i)+"; \n";
+            s+= "Player "+i+" life: "+list.get(i)+"; \n";
         }
         s+="\n\n";
         life.setText(s);
