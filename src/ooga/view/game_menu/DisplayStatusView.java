@@ -34,7 +34,7 @@ public class DisplayStatusView implements MenuView {
         life = new Label();
         life.setFont(Font.font("Ariel", 18));
         setUpVBox();
-        myScene = new Scene(vBox, 400, 400);
+        myScene = new Scene(vBox, 300, 300);
     }
 
     @Override
