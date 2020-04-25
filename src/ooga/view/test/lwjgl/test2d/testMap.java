@@ -1,3 +1,4 @@
+/*
 package ooga.view.test.lwjgl.test2d;
 
 
@@ -77,4 +78,4 @@ public class testMap implements Runnable {
   public static void main(String[] args) {
     new testMap().start();
   }
-}
+}*/

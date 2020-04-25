@@ -43,4 +43,14 @@ public class MainNPCControl implements NPCControlInterface {
   public void attack() {
     myNPCControl.attack();
   }
+
+  @Override
+  public void getHurt() {
+    myNPCControl.getHurt();
+  }
+
+  @Override
+  public boolean isHurt() {
+    return myNPCControl.isHurt();
+  }
 }

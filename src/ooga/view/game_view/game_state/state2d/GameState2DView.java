@@ -28,6 +28,7 @@ public class GameState2DView extends GameStateView {
   private static final String FRAGMENT_SHADER_PATH = "/view/shaders/2d/cyberpunkTitleFragment.glsl";
   private static final int WIDTH = 1080;
   private static final int HEIGHT = 1080;
+  private Map<Integer, Boolean> isHurt;
   public Renderer2D renderer;
   public Shader shader;
   public BoundingBox box;
@@ -38,8 +39,8 @@ public class GameState2DView extends GameStateView {
   private Window window;
   private double lasTimeUpdated = 0;
   private double currentTimeUpdated = 0;
-  private float zLayer = -0.1f;
-  private float Z_INC = -0.1f;
+  private float zLayer = -0.8f;
+  private float Z_INC = -0.01f;
 
   //TODO: remove this part!
   //TODO: loop through a list of agents to update its alive status/ adding new
@@ -53,7 +54,7 @@ public class GameState2DView extends GameStateView {
     this.agentDataHolderMap = agentsData;
     this.bulletMap = new HashMap<>();
     this.agentMap = new HashMap<>();
-    this.box = new BoundingBox(map, agentMap);
+    this.isHurt = new HashMap<>();
   }
 
   public float getCenterPositionX(int id) {
@@ -62,6 +63,17 @@ public class GameState2DView extends GameStateView {
 
   public float getCenterPositionY(int id) {
     return agentMap.get(id).getCenterPosition().getY();
+  }
+
+  public void resetHurtStatus(){
+    for(int id:isHurt.keySet())
+    {
+      isHurt.replace(id, false);
+    }
+  }
+
+  public boolean getHurtStatus(int id){
+    return isHurt.get(id);
   }
 
   @Override
@@ -76,11 +88,12 @@ public class GameState2DView extends GameStateView {
     //window.setFullscreen(true);
 
     map = new Map2DView(mapPath);
+    this.box = new BoundingBox(map, agentMap);
 
     for (int id : agentDataHolderMap.keySet()) {
       setZDepth(agentDataHolderMap.get(id));
       GenerateAgentsData.loadAnimations(agentDataHolderMap.get(id));
-      agentMap.put(id, new Agent2DView(id, agentDataHolderMap.get(id)));
+      agentMap.put(id, new Agent2DView(id, agentDataHolderMap.get(id), box));
       agentMap.get(id).createMesh();
     }
 
@@ -123,14 +136,14 @@ public class GameState2DView extends GameStateView {
 
       if (newAgentData.isBullet()) {
         int newId = getNextBulletId();
-        Agent2DView newAgent = new Agent2DView(newId, newAgentData);
+        Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
         if (box.canMove(false, true, newAgent, newAgentDelta)) {
           bulletMap.put(newId, newAgent);
           bulletMap.get(newId).createMesh();
         }
       } else if (!newAgentData.isBullet()) {
         int newId = getNextAgentId();
-        Agent2DView newAgent = new Agent2DView(newId, newAgentData);
+        Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
         if (box.canMove(true, false, newAgent, newAgentDelta))
         {
           agentDataHolderMap.put(newId, newAgentData);
@@ -140,9 +153,10 @@ public class GameState2DView extends GameStateView {
       }
     }
 
-    if (isAttack) {
-
+    if (isAttack && box.isAttackEffective(agentMap.get(id))!=box.getNonId()) {
+      isHurt.replace(box.isAttackEffective(agentMap.get(id)), true);
     }
+
   }
 
   public void updateBullets() {
@@ -155,6 +169,7 @@ public class GameState2DView extends GameStateView {
       bullet.update(bullet.getCurrentDirection(), "MOVE");
       // System.out.println(String.format("AFTER:key is %d",key));
       //Test.printVector2f(bullet.getCenterPosition());
+      //if(!box.canMove(false, true, bullet, ))
     }
   }
 
@@ -239,7 +254,7 @@ public class GameState2DView extends GameStateView {
 
         setZDepth(newAgentData);
         int newId = getNextAgentId();
-        Agent2DView newAgent = new Agent2DView(newId, newAgentData);
+        Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
 
         if (box.canMove(true, false, newAgent, newAgentDelta)) {
           agentDataHolderMap.put(newId, newAgentData);
@@ -268,7 +283,7 @@ public class GameState2DView extends GameStateView {
 
   @Override
   public void deleteAgent(int id) {
-    System.out.println("delete happened");
+    //System.out.println("delete happened");
     agentMap.get(id).destroyMesh();
     agentMap.remove(id);
   }

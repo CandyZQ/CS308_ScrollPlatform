@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.scene.input.KeyCode;
 import ooga.controller.gamecontrol.PlayerControlInterface;
 import ooga.controller.gamecontrol.playerInterface.AttackerControl;
 import ooga.controller.gamecontrol.playerInterface.MovableControll2D;
@@ -22,9 +21,10 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
 
   private ZeldaPlayer myPlayer;
   private GameZelda2DSingle myView;
-  private Map<KeyCode, String> myKeyCodeMap = new HashMap<>();
   private Map<Integer, String> myGLFWMap = new HashMap<>();
   private int myID;
+
+  private int hurtCount;
 
 
   public ZeldaPlayerControl() {
@@ -66,9 +66,6 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
   public void keyReleased() {
     myPlayer.setState(MovingState.IDLE);
   }
-
-
-
 
   @Override
   public void up() {
@@ -214,4 +211,23 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
     return myPlayer.hasWon();
   }
 
+  @Override
+  public void getHurt() {
+    myPlayer.setState(MovingState.ATTACK1);
+    myPlayer.subtractHP(1);
+  }
+
+  @Override
+  public boolean isHurt() {
+    if (myPlayer.getState() == MovingState.ATTACK1 && hurtCount > 200){
+      myPlayer.setState(MovingState.IDLE);
+      hurtCount = 0;
+      return false;
+    } else if (myPlayer.getState() == MovingState.ATTACK1) {
+      hurtCount ++;
+      return true;
+    }
+//    System.out.println("Hurt: " + hurtCount);
+    return false;
+  }
 }

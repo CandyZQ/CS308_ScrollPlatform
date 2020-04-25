@@ -5,6 +5,7 @@ import static ooga.controller.gamecontrol.player.ZeldaPlayerControl.PROPERTY_STA
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Random;
 import ooga.controller.gamecontrol.NPCControlInterface;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.characters.ZeldaCharacter;
@@ -18,8 +19,9 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
   private int myID;
   private GameZelda2DSingle myView;
   private int attackCounter = 0;
+  private int hurtCount = 0;
 
-  public NPCSubControl(){
+  public NPCSubControl() {
   }
 
   public void setMyNPC(Movable1D myNPC) {
@@ -39,6 +41,25 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
   @Override
   public void attack() {
     myNPC.setState(MovingState.ATTACK);
+  }
+
+  @Override
+  public void getHurt() {
+    myNPC.setState(MovingState.HURT);
+  }
+
+  @Override
+  public boolean isHurt() {
+    if (myNPC.getState() == MovingState.ATTACK && hurtCount > 200) {
+      myNPC.setState(MovingState.IDLE);
+      hurtCount = 0;
+      return false;
+    } else if (myNPC.getState() == MovingState.ATTACK1) {
+      hurtCount++;
+      return true;
+    }
+//    System.out.println("Hurt: " + hurtCount);
+    return false;
   }
 
   public void setView(GameZelda2DSingle view) {
@@ -69,19 +90,41 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
 
   @Override
   public void update() {
-    if (isAttacking() && attackCounter > 500) {
-      myNPC.setState(MovingState.IDLE);
-      attackCounter = 0;
-    } else {
-      attackCounter ++;
-    }
-
+//    System.out.println(myNPC.getId()+ ": " + myNPC.getState());
+//    System.out.println(attackCounter);
     if (!myNPC.isAlive()) {
       myNPC.setState(MovingState.DEATH);
     }
+
+    if (isAttacking()) {
+      if (attackCounter > 500) {
+        myNPC.setState(MovingState.IDLE);
+        attackCounter = 0;
+      } else {
+        attackCounter++;
+      }
+      return;
+    }
+
+    randomMove();
   }
 
-  protected boolean isAttacking() {
-    return myNPC.getState() == MovingState.ATTACK;
+    private void randomMove() {
+      if (myNPC.getState() == MovingState.IDLE) {
+        if (new Random().nextInt(2) == 0) {
+          switch (new Random().nextInt(2)) {
+            case 0:
+              myNPC.setDirection(Direction.E);
+              break;
+            case 1:
+              myNPC.setDirection(Direction.E);
+          }
+          myNPC.setState(MovingState.WALK);
+        }
+      }
+    }
+
+    protected boolean isAttacking () {
+      return myNPC.getState() != MovingState.IDLE;
+    }
   }
-}

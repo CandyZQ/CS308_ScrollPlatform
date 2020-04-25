@@ -230,8 +230,4 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
   public void fire() {
     weaponBase.fire();
   }
-
-  public void initializeNotifier() {
-    notifier = new PropertyChangeNotifier(this);
-  }
 }

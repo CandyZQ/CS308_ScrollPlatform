@@ -1,4 +1,4 @@
-package ooga.view.test.lwjgl.test2d;
+/*package ooga.view.test.lwjgl.test2d;
 
 
 import java.io.IOException;
@@ -104,4 +104,4 @@ public class testAgentMap implements Runnable {
   public static void main(String[] args) {
     new testAgentMap().start();
   }
-}
+}*/

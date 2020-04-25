@@ -1,30 +1,24 @@
 package ooga.data;
 
-import static ooga.data.DataLoader.JSON_POSTFIX;
-import static ooga.data.DataLoader.SubMapPerMap;
-import static ooga.data.PlayerStatus.initLevel;
-import static ooga.data.PlayerStatus.initLife;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.AnimationType;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.gameElements.WeaponBase;
-import ooga.model.interfaces.Inventory;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
+
+import java.io.File;
+import java.util.*;
+
+import static ooga.data.DataLoader.JSON_POSTFIX;
+import static ooga.data.PlayerStatus.initLevel;
+import static ooga.data.PlayerStatus.initLife;
 
 //import ooga.model.gameElements.Weapon;
 
 public class DataStorer implements DataStorerAPI {
-    private Map<String, String> generalLevelFile;
     private com.google.gson.Gson gson;
     private DataLoader dataLoader; //for just tentative measure.
     private GameObjectConfiguration gameObjectConfiguration;
@@ -36,10 +30,6 @@ public class DataStorer implements DataStorerAPI {
         dataLoader = new DataLoader();
         gameObjectConfiguration = dataLoader.getGameObjectConfiguration();
 
-        //delete in the future and move into property files.
-        generalLevelFile = new HashMap<>();
-        generalLevelFile.put("fileName", "level");
-        generalLevelFile.put("map", "MapOfLevel");
     }
 
     //todo: test not done
@@ -55,11 +45,11 @@ public class DataStorer implements DataStorerAPI {
 
     @Override
     public void storeWeapons(int ID, WeaponBase weapon) {
-        System.out.println("store weapons is not implemented");
+        throw new DataLoadingException("store weapons is not implemented");
     }
 
 
-    //@Override
+    @Override
     public void storeCharacter(int characterID, ZeldaCharacter character) {
 
         character.setId(characterID);
@@ -74,19 +64,9 @@ public class DataStorer implements DataStorerAPI {
 //        writeObjectTOJson(character, "data/ZeldaCharacter/" + characterKeyword + characterID + ".json");
     }
 
-    @Override
-    public void StoreInventory(Inventory inventory) {
-        System.out.println("store Inventory is not implemented");
-    }
-    
-//    @Override
-//    public void storePlayerParamToCurrentPlayer(PlayerPara para, int value) {
-//        int playerID = gameObjectConfiguration.getCurrentPlayersID();
-//        setPlayerParam(para, value, playerID);
-//    }
 
     @Override
-    public void setPlayerParam(PlayerPara param, int value, int playerID) {
+    public void setPlayerParam(PlayerParam param, int value, int playerID) {
         PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
         if (tempPlayer == null) {
             System.out.println("Player not created(storer 114)");
@@ -128,18 +108,12 @@ public class DataStorer implements DataStorerAPI {
         Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(imageCategory.toString());
 
         if (imageMap != null) {
-            if (!imageMap.containsKey(imageIDString + ".json")) {
-                imageMap.put(imageIDString, imagePath);
-            } else {
-                imageMap.replace(imageIDString, imagePath);
-            }
+            imageMap = gameObjectConfiguration.insertElementToMap(imageMap, imageIDString + JSON_POSTFIX, imagePath);
         } else {
             imageMap = new HashMap<>();
             imageMap.put(imageIDString, imagePath);
         }
         gameObjectConfiguration.setImageMap(imageMap, imageCategory);
-
-//        writeObjectTOJson(imageMap, filePath);
     }
 
     /**
@@ -148,10 +122,8 @@ public class DataStorer implements DataStorerAPI {
      * @param level
      */
     @Override
-    //todo: testing is not done.
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
-        int subMapID = nextAvailableID(level);
-        storeSubMapForCurrentGame(map, level, subMapID);
+        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
     }
     @Override
     public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
@@ -160,8 +132,7 @@ public class DataStorer implements DataStorerAPI {
     @Override
     public void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) {
         if (map.size() != GameMapGraph.SUBMAP_ROW_NUM * GameMapGraph.SUBMAP_COL_NUM) {
-            System.out.println("map stored didn't fit in dimension");
-            //todo: throw an exception
+            throw new DataLoadingException("map stored didn't fit in dimension");
         }
 
         GameMapGraph mapGraph = new GameMapGraph(level, subMapID, GameMapGraph.SUBMAP_ROW_NUM, GameMapGraph.SUBMAP_COL_NUM, gameID);
@@ -195,49 +166,18 @@ public class DataStorer implements DataStorerAPI {
     @Override
     public void resetPlayerInfo() {
         int currentPlayerID = gameObjectConfiguration.getCurrentPlayer().getPlayerID();
-        setPlayerParam(PlayerPara.CURRENT_LEVEL, initLevel, currentPlayerID);
-        setPlayerParam(PlayerPara.LIFE, initLife, currentPlayerID);
-        setPlayerParam(PlayerPara.CURRENT_SCORE, 0, currentPlayerID);
-//        setPlayerParam(PlayerPara.SCORE_GOAL, initScoreGoal, currentPlayerID);
+        setPlayerParam(PlayerParam.CURRENT_LEVEL, initLevel, currentPlayerID);
+        setPlayerParam(PlayerParam.LIFE, initLife, currentPlayerID);
+        setPlayerParam(PlayerParam.CURRENT_SCORE, 0, currentPlayerID);
     }
 
-    private int nextAvailableID(int level) {
-        Map<String, GameMapGraph> currentGameMapList =  gameObjectConfiguration.getGameMapList();
-        int i = 0;
-        boolean flag = false;
-        while (i < SubMapPerMap) {
-            for (GameMapGraph j :currentGameMapList.values()) {
-                if (j.getSubMapID() == i) {
-                    flag = true;
-                }
-            }
-            if (flag) {
-                i++;
-                flag = false;
-            } else {
-                break;
-            }
-        }
-        if (i >= SubMapPerMap) {
-            System.out.println("not more empty submap to add to! Please use storeSubMap(Collection<Cell> map, int level, int subMapID) method");
-            //todo: throw errors.
-        }
-
-        return i;
-
-    }
 
     /**
      * call this method before program ends and all data will not be stored into disk without calling this method.
      */
     @Override
     public void writeAllDataIntoDisk() {
-        gameObjectConfiguration.storeGameEverything();
-    }
-
-    @Override
-    public void storeMeleeRobotAnimations(Map<String, Animation2D> animations) {
-        gameObjectConfiguration.setMeleeRobotAnimations(animations);
+        gameObjectConfiguration.writeAllDataToDisk();
     }
 
     @Override

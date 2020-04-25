@@ -1,3 +1,4 @@
+/*
 package ooga.view.test.lwjgl.test2d;
 
 
@@ -11,6 +12,7 @@ import ooga.view.engine.io.Window;
 import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
 import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.agent.agent2d.Agent2DView;
+import ooga.view.game_view.game_state.state2d.BoundingBox;
 import org.lwjgl.glfw.GLFW;
 
 public class testAgent implements Runnable {
@@ -37,9 +39,11 @@ public class testAgent implements Runnable {
     renderer = new Renderer2D(shader);
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
+
     Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
     dataHolderMap.put(0, GenerateAgentsData.createSoldier(-3f, 0f));
-    agentView = new Agent2DView(0, dataHolderMap.get(0));
+    //BoundingBox box = new BoundingBox();
+    agentView = new Agent2DView(0, dataHolderMap.get(0), box);
     agentView.createMesh();
     shader.create();
   }
@@ -102,4 +106,4 @@ public class testAgent implements Runnable {
   public static void main(String[] args) {
     new testAgent().start();
   }
-}
+}*/

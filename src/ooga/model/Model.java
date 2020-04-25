@@ -14,7 +14,7 @@ import ooga.game.GameType;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
 import ooga.model.enums.backend.CharacterType;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.gameElements.Element;
 import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.gameMap.GameMap;
@@ -59,11 +59,13 @@ public class Model implements ModelInterface {
     List<PlayerStatus> playerStatuses = dataLoader.getCurrentPlayers();
     for (PlayerStatus p : playerStatuses) {
       ZeldaPlayer current = new ZeldaPlayer(
-          p.getPlayerParam(PlayerPara.LIFE),
+          p.getPlayerParam(PlayerParam.LIFE),
           p.getPlayerID(),
-          p.getPlayerParam(PlayerPara.CURRENT_SCORE),
-          p.getPlayerParam(PlayerPara.SCORE_GOAL),
+          p.getPlayerParam(PlayerParam.CURRENT_SCORE),
+          p.getPlayerParam(PlayerParam.SCORE_GOAL),
           CharacterType.PLAYER);
+      current.setX(-1);
+      current.setY(0);
       players.put(p.getPlayerID(), current);
     }
   }

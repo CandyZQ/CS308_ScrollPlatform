@@ -1,8 +1,6 @@
 package ooga.controller.gamecontrol.player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import javafx.scene.input.KeyCode;
 import ooga.controller.gamecontrol.PlayerControlInterface;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.interfaces.movables.Movable1D;
@@ -76,5 +74,15 @@ public class MainPlayerControl implements PlayerControlInterface {
   @Override
   public boolean hasWon() {
     return myPlayerControl.hasWon();
+  }
+
+  @Override
+  public void getHurt() {
+    myPlayerControl.getHurt();
+  }
+
+  @Override
+  public boolean isHurt() {
+    return myPlayerControl.isHurt();
   }
 }

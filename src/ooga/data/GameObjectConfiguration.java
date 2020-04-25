@@ -1,5 +1,6 @@
 package ooga.data;
 
+import static ooga.data.DataLoader.JSON_POSTFIX;
 import static ooga.game.GameMain.HEIGHT;
 import static ooga.game.GameMain.WIDTH;
 
@@ -9,17 +10,22 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.engine.io.Window;
@@ -28,35 +34,25 @@ import ooga.view.engine.io.Window;
  * this is the man, the object storing EVERY piece of info!
  */
 public class GameObjectConfiguration {
-
-  public static String GameInfoPath = "data/GameInfo/";
-  public static String GameMapPath = "data/GameMap/";
-  public static String imageMapPath = "data/Image/";
-  public static String marioCharacterPath = "data/MarioCharacter/";
-  public static String playerPath = "data/Player/";
-  public static String zeldaCharacterPath = "data/ZeldaCharacter/";
-  public static String textPath = "data/Text/";
-  public static String animationPath = "data/Animation2D/";
+  public static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
   private Map<String, GameMapGraph> gameMapList;
   private Map<String, Map<String, String>> imageMap;
-//  private List<MarioCharacter> marioCharacterList;
   private List<PlayerStatus> playerList;
   private List<ZeldaCharacter> zeldaCharacterList;
   private Map<String, Map<String, String>> textMap; //Map<Category, Map<Keyword, Text>>
   private com.google.gson.Gson gsonLoad;
   private com.google.gson.Gson gsonStore;
+  private ResourceBundle resources;
 
 
-  private Map<String, Animation2D> meleeRobotAnimations;
   private Map<String, Map<String, Animation2D>> animationMap;
   private List<Integer> currentPlayersID;
   private int currentPlayerID = 1;
   private int currentGameID = 1;
 
 
-  private Map<Object, String> fieldToPathMap;
   private static GameObjectConfiguration gameObjectConfiguration;
 
   /**
@@ -76,172 +72,125 @@ public class GameObjectConfiguration {
     gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter("ooga.model.map.GameCell"));
     gsonLoad = gsonBuilder.create();//3 lines above are the same as DataStorer
 
-    gameInfoList = new ArrayList<>();
-    gameMapList = new HashMap<>();
-    imageMap = new HashMap<>();
-//    marioCharacterList = new ArrayList<>();
-    playerList = new ArrayList<>();
-    zeldaCharacterList = new ArrayList<>();
-    textMap = new HashMap<>();
-    meleeRobotAnimations = new HashMap<>(); //delete after multiple agents occur
-    animationMap = new HashMap<>();
-    fieldToPathMap = new HashMap<>();
+    resources = ResourceBundle.getBundle(PARAM_RESOURCES_PACKAGE);
 
-
-
-    loadGameEverything();
-    fieldToPathMap.put(gameInfoList, GameInfoPath);
-    fieldToPathMap.put(gameMapList, GameMapPath);
-    fieldToPathMap.put(imageMap, imageMapPath);
-//    fieldToPathMap.put(marioCharacterList, marioCharacterPath);
-    fieldToPathMap.put(playerList, playerPath);
-    fieldToPathMap.put(zeldaCharacterList, zeldaCharacterPath);
-    fieldToPathMap.put(textMap, textPath);
-    fieldToPathMap.put(meleeRobotAnimations, animationPath);
-    fieldToPathMap.put(animationMap, animationPath);  //multiple agents draft (1,4)
+    try {
+      initiateDataStorageInstanceVariable();
+    } catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException e) {
+      throw new DataLoadingException(e.getMessage(), e);
+    }
   }
 
-  private void loadGameEverything() throws DataLoadingException {
-    loadFilesUnderDirectory(GameInfoPath, GameInfo.class);
-    loadFilesUnderDirectory(GameMapPath, GameMapGraph.class);
-    loadFilesUnderDirectory(imageMapPath, imageMap.getClass());
-//    loadFilesUnderDirectory(marioCharacterPath, MarioCharacter.class);
-    loadFilesUnderDirectory(playerPath, PlayerStatus.class);
-    loadFilesUnderDirectory(zeldaCharacterPath, ZeldaCharacter.class);
-    loadFilesUnderDirectory(textPath, textMap.getClass());
-    loadFilesUnderDirectory(animationPath, meleeRobotAnimations.getClass());
-    loadFilesUnderDirectory(animationPath, animationMap.getClass()); //multiple agents draft (2,4)
-  }
 
-  private void loadFilesUnderDirectory(String myDirectoryPath, Class<?> classType)
-      throws DataLoadingException {
-    File dir = new File(myDirectoryPath);
-    File[] directoryListing = dir.listFiles();
-    if (directoryListing != null) {
-      for (File child : directoryListing) {
-        // Do something with child
-        //TODO: possibly with a Reflection
-        String[] realFileName = myDirectoryPath.split("/");
-        switch (realFileName[1]) {
-          case "GameInfo":
-            gameInfoList.add(loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-          case "GameMap":
-            gameMapList
-                .put(child.getName(),
-                    loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-          case "Image":
-            imageMap.put(child.getName(),
-                loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-//          case "MarioCharacter":
-//            marioCharacterList
-//                .add(loadJson(myDirectoryPath + child.getName(), classType));
-//            break;
-          case "Player":
-            playerList.add(loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-          case "ZeldaCharacter":
-            zeldaCharacterList
-                .add(loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-          case "Text":
-            textMap.put(child.getName(),
-                loadJson(myDirectoryPath + child.getName(), classType));
-            break;
-          case "Animation2D":
-            Window window = new Window(WIDTH, HEIGHT, "Game");
-            window.create();
+  private void initiateDataStorageInstanceVariable() throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+    Window window = new Window(WIDTH, HEIGHT, PARAM_RESOURCES_PACKAGE);
+    window.create();
+    for (String key : Collections.list(resources.getKeys())) {
+      Field field = initializeFieldObject(key);
+      String[] value = resources.getString(key).split(",");
+      String type = value[1];
+      String directoryPath = value[0];
+      String instanceClass = value[2];
 
-            Type type = new TypeToken<Map<String, Animation2D>>(){}.getType();
-            //delete after multiple agents occur
-            meleeRobotAnimations = loadJson(animationPath + child.getName(), type);
-            createTextureToAnimation(meleeRobotAnimations);
+      File dir = new File(directoryPath);
+      File[] directoryListing = dir.listFiles();
+      try {
+        field.set(this, new ArrayList<>());
+      } catch (Exception d) {
+        field.set(this, new HashMap<>());
+      }
 
-            
-            //change to support multiple agents (3,4)
-            Map<String, Animation2D> tempAgent = loadJson(animationPath + child.getName(), type);
+      try {
+        for (File child : directoryListing) {
+          if (type.equals("List")) {
+            loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
+                Class.forName(instanceClass), type);
+          } else if (type.equals("Map")) {
+            loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
+                Class.forName(instanceClass), type);
+          } else {
+            Type type2 = new TypeToken<Map<String, Animation2D>>() {
+            }.getType();
+
+            Map<String, Animation2D> tempAgent = loadJson(directoryPath + child.getName(), type2);
             createTextureToAnimation(tempAgent);
             animationMap.put(child.getName(), tempAgent);
-            window.destroy();
-            break;
-          default:
-            throw new DataLoadingException(
-                "Cannot recognize configuration file name " + child.getPath()
-                    + " or file is not in the correct format.");
+
+          }
 
         }
-      }
-    } else {
-      // Handle the case where dir is not really a directory.
-      // Checking dir.isDirectory() above would not be sufficient
-      // to avoid race conditions with another process that deletes
-      // directories.
+      } catch (Exception e) { }
     }
+    window.destroy();
+  }
+
+  private <T> void loadFilesUnderDirectoryForList (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
+    List<T> tempList = (List<T>) field.get(this);
+    tempList.add(loadJson(myDirectoryPath + fileName, clazz));
+    field.set(this, tempList);
+  }
+  private <T> void loadFilesUnderDirectoryForMap (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
+    Map<String, T> tempMap = (Map<String, T>) field.get(this);
+    tempMap.put(fileName,
+            loadJson(myDirectoryPath + fileName, clazz));
+    field.set(this, tempMap);
   }
 
   private void createTextureToAnimation(Map<String, Animation2D> meleeRobotAnimations) {
     for (Animation2D i : meleeRobotAnimations.values()) {
       for (int j = 0; j < i.getFrameAmount(); j++) {
-//        i.getAnimatedFrames(j).createTexture();
+        i.getAnimatedFrame(j).createTexture();
       }
     }
   }
 
+  public void writeAllDataToDisk() {
+    for (String key : Collections.list(resources.getKeys())) {
 
+      try {
+        Field field = initializeFieldObject(key);
+        String[] value = resources.getString(key).split(",");
+        String type = value[1];
+        String directoryPath = value[0];
 
-  public void storeGameEverything() {
-    for (Map.Entry<Object, String> i : fieldToPathMap.entrySet()) {
-      String path = i.getValue();
-      String[] folderName = path.split("/");
-      switch (folderName[1]) {
-        case "GameInfo":
-          for (GameInfo j : gameInfoList) {
-            writeObjectTOJson(j,
-                path + "Game" + j.getGameType() + "level" + j.getLevelNum() + ".json");
-          }
-          break;
-        case "GameMap":
-          for (String j : gameMapList.keySet()) {
-            writeObjectTOJson(gameMapList.get(j), path + j);
-          }
-
-          break;
-        case "Image":
-          for (String j : imageMap.keySet()) {
-            writeObjectTOJson(imageMap.get(j), path + j);
-          }
-          break;
-        case "MarioCharacter":
-//          System.out.println("MarioCharacter storing is not supported");
-//                    marioCharacterList.add(loadJson(myDirectoryPath + child.getName(), classType));
-          break;
-        case "Player":
-          for (PlayerStatus j : playerList) {
-            writeObjectTOJson(j, path + "player" + j.getPlayerID() + ".json");
-          }
-          break;
-        case "ZeldaCharacter":
-          for (ZeldaCharacter j : zeldaCharacterList) {
-            writeObjectTOJson(j, path + "CharacterData" + j.getId() + ".json");
-          }
-          break;
-        case "Text":
-          for (String j : textMap.keySet()) {
-            writeObjectTOJson(textMap.get(j), path + j);
-          }
-          break;
-        case "Animation2D":
-          //delete after multiple agents
-          writeObjectTOJson(meleeRobotAnimations, path + "MeleeRobotAnimations" + ".json");
-
-          //use after using mulitple agents (4,4)
-          for (String j : animationMap.keySet()) {
-            writeObjectTOJson(animationMap.get(j), path + j);
-          }
+        if (type.equals("List")) {
+          String getfileNameIDMethod = value[3];
+          storeListToDisk(field, directoryPath, getfileNameIDMethod);
+        } else {
+          storeMapToDisk(field, directoryPath);
+        }
+      } catch (IllegalAccessException | NoSuchFieldException e) {
+        throw new DataLoadingException(e.getMessage(), e);
       }
     }
+  }
+  private <T> void storeMapToDisk(Field field, String directoryPath) throws IllegalAccessException {
+    Map<String, T> tempMap = (Map<String, T>) field.get(this);
+    for (String j : tempMap.keySet()) {
+      writeObjectTOJson(tempMap.get(j), directoryPath + j);
+    }
+  }
+  private <E> void storeListToDisk(Field field, String directoryPath, String getfileNameIDMethod) throws IllegalAccessException {
+    List<E> tempList = (List<E>) field.get(this);
+    String[] pathArray = directoryPath.split("/");
+    String folderName = pathArray[pathArray.length - 1];
+
+    for (E j : tempList) {
+      Method methodcall = null;
+      try {
+        methodcall = j.getClass().getDeclaredMethod(getfileNameIDMethod); //getFileNameID method has to be no-arg
+        writeObjectTOJson(j, directoryPath + folderName + methodcall.invoke(j) + JSON_POSTFIX);//naming convention of GameInfo is changed.
+      } catch (NoSuchMethodException | InvocationTargetException e) {
+        throw new DataLoadingException(e.getMessage(), e);
+      }
+    }
+  }
+
+  private Field initializeFieldObject(String key) throws NoSuchFieldException {
+    Class cls = this.getClass();
+    Field field = cls.getDeclaredField(key);
+    field.setAccessible(true);
+    return field;
   }
 
 
@@ -269,14 +218,6 @@ public class GameObjectConfiguration {
     this.imageMap = imageMap;
   }
 
-//  public List<MarioCharacter> getMarioCharacterList() {
-//    return marioCharacterList;
-//  }
-
-//  public void setMarioCharacterList(List<MarioCharacter> marioCharacterList) {
-//    this.marioCharacterList = marioCharacterList;
-//  }
-
   public List<PlayerStatus> getPlayerList() {
     return playerList;
   }
@@ -302,23 +243,13 @@ public class GameObjectConfiguration {
     this.textMap = textMap;
   }
 
-  public <clazz> clazz loadJson(String fileName, Class clazz) {
-    try {
-      Reader reader = Files.newBufferedReader(Paths.get(fileName));
-      return (clazz) gsonLoad.fromJson(reader, clazz);
-    } catch (IOException e) {
-      System.out.println("file at " + fileName + "hasn't been created.");
-    }
-    return null;
-  }
   public <clazz> clazz loadJson(String fileName, Type clazz) {
     try {
       Reader reader = Files.newBufferedReader(Paths.get(fileName));
       return (clazz) gsonLoad.fromJson(reader, clazz);
     } catch (IOException e) {
-      System.out.println("file at " + fileName + "hasn't been created.");
+      throw new DataLoadingException(String.format("file at %s hasn't been created.", fileName), e);
     }
-    return null;
   }
 
 
@@ -329,19 +260,14 @@ public class GameObjectConfiguration {
       Writer1.flush();
       Writer1.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new DataLoadingException(e.getMessage(), e);
       //throw appropriate Exceptions
     }
   }
 
   public void setImageMap(Map<String, String> newImageMap, ImageCategory imageCategory) {
     String newKey = imageCategory.toString();
-    if (imageMap.containsKey(newKey)) {
-      imageMap.replace(newKey, newImageMap);
-    } else {
-      imageMap.put(newKey, newImageMap);
-    }
-
+    insertElementToMap(imageMap, newKey, newImageMap);
   }
 
   public List<Integer> getCurrentPlayersID() {
@@ -382,7 +308,7 @@ public class GameObjectConfiguration {
 
       if (!contains) {
         PlayerStatus temp = new PlayerStatus(currentGameID, id);
-        temp.setPlayerParam(PlayerPara.Game, currentGameID);
+        temp.setPlayerParam(PlayerParam.Game, currentGameID);
         playerStatuses.add(temp);
         setPlayerWithID(id, temp);
       }
@@ -397,11 +323,11 @@ public class GameObjectConfiguration {
       }
     }
 
-      return null;
+    return null;
   }
 
   public List<PlayerStatus> getCurrentPlayers() {
-      return getPlayersWithID(currentPlayersID);
+    return getPlayersWithID(currentPlayersID);
   }
 
   public PlayerStatus getCurrentPlayer() {
@@ -427,19 +353,16 @@ public class GameObjectConfiguration {
   }
 
   public void setTextMap(String text, String keyword, TextCategory category) {
-    Map<String, String> tempTextMap = textMap.get(category);
+    Map<String, String> tempTextMap = textMap.get(category.toString());
     if (tempTextMap == null) {
-      System.out.println("category not found (330 config)");
+      throw new DataLoadingException("text category not found");
     }
-    if (tempTextMap.keySet().contains(keyword)) {
-      tempTextMap.replace(keyword, text);
-    } else {
-      tempTextMap.put(keyword, text);
-    }
+    tempTextMap = insertElementToMap(tempTextMap, keyword, text);
+    textMap.replace(category.toString(), tempTextMap);
   }
 
   public GameInfo getCurrentGameInfo() {
-    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerPara.CURRENT_LEVEL));
+    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerParam.CURRENT_LEVEL));
   }
 
   public GameInfo getGameInfo(int level, int id) {
@@ -451,23 +374,30 @@ public class GameObjectConfiguration {
     return null;
   }
 
-  public Map<String, Animation2D> getMeleeRobotAnimations() {
-    return meleeRobotAnimations;
-  }
-
-  public void setMeleeRobotAnimations(Map<String, Animation2D> meleeRobot) {
-    meleeRobotAnimations = meleeRobot;
-  }
-
   public void setAnimationMap(String agent, Map<String, Animation2D> agentAnimation) {
-    if (animationMap.containsKey(agent)) {
-      animationMap.replace(agent, agentAnimation);
-    } else {
-      animationMap.put(agent, agentAnimation);
-    }
+    insertElementToMap(animationMap, agent, agentAnimation);
   }
 
   public Map<String, Animation2D> getSpecificAgentAnimation(String agent) {
     return animationMap.get(agent);
   }
+
+  public <K, V> Map<K, V> insertElementToMap(Map<K, V> map, K newkey, V newValue) {
+    if (map.containsKey(newkey)) {
+      map.replace(newkey, newValue);
+    } else {
+      map.put(newkey, newValue);
+    }
+    return map;
+  }
+//  public <E> List<E> setelementInListWithID(List<E> list, E element, int ID) {
+//    List<E> tempList = new ArrayList<>();
+//    for (E i : list) {
+//      if (i.getPlayerID() != ID) {
+//        tempList.add(i);
+//      }
+//    }
+//    tempList.add(element);
+//    list = tempList;
+//  }
 }

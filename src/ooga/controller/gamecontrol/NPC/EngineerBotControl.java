@@ -2,7 +2,6 @@ package ooga.controller.gamecontrol.NPC;
 
 import java.beans.PropertyChangeListener;
 import ooga.controller.gamecontrol.NPCControlInterface;
-import ooga.model.enums.backend.MovingState;
 
 public class EngineerBotControl extends NPCSubControl implements NPCControlInterface, PropertyChangeListener {
 
@@ -23,12 +22,4 @@ public class EngineerBotControl extends NPCSubControl implements NPCControlInter
 //        break;
 //    }
 //  }
-
-  @Override
-  protected boolean isAttacking() {
-    return myNPC.getState() == MovingState.ATTACK ||
-        myNPC.getState() == MovingState.SUMMON_BIGBOY ||
-        myNPC.getState() == MovingState.SUMMON_TURRET ||
-        myNPC.getState() == MovingState.SUMMON_WATCHER;
-  }
 }

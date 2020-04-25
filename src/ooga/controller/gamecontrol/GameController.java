@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
-import ooga.controller.*;
+import ooga.controller.FinishControl;
+import ooga.controller.WindowControl;
 import ooga.controller.gamecontrol.NPC.MainNPCControl;
 import ooga.controller.gamecontrol.player.MainPlayerControl;
 import ooga.data.DataLoaderAPI;
@@ -17,7 +18,7 @@ import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.movables.Movable1D;
 import org.lwjgl.glfw.GLFW;
@@ -98,22 +99,42 @@ public class GameController {
   public void update() {
     mydDsplayControl.update(getSScoreList(), getLifeList());
     for (MainNPCControl npc : myNPCControl) {
-      npc.update();
-    }
-    for (MainPlayerControl mpc : myMainPlayerController) {
-      mpc.updateKey();
-      if (!mpc.update()) {
-        finishGame(mpc, false); // this is dead
-        win = false;
+      if (!npc.isHurt()) {
+        npc.update();
       }
-      if (mpc.hasWon()) {
-        finishGame(mpc, true); // this is won
+    }
+
+    for (MainPlayerControl mpc : myMainPlayerController) {
+      if (!mpc.isHurt()) {
+        mpc.updateKey();
+        if (!mpc.update()) {
+          finishGame(mpc, false); // this is dead
+          win = false;
+        }
+        if (mpc.hasWon()) {
+          finishGame(mpc, true); // this is won
+        }
       }
     }
     if (myGameView.getView().isKeyDown(GLFW.GLFW_KEY_P)) {
       pause();
     }
     distanceCheck();
+    attackCheck();
+  }
+
+  private void attackCheck() {
+    for (MainPlayerControl mpc : myMainPlayerController) {
+      if (myGameView.isAttacked(mpc.getID())) {
+        mpc.getHurt();
+      }
+    }
+
+    for (MainNPCControl npc : myNPCControl) {
+      if (myGameView.isAttacked(npc.getID())) {
+        npc.getHurt();
+      }
+    }
   }
 
   private void distanceCheck() {
@@ -217,7 +238,7 @@ public class GameController {
   }
 
   public int getGameID() {
-    return myDataLoader.getCurrentPlayers().get(0).getPlayerParam(PlayerPara.Game);
+    return myDataLoader.getCurrentPlayers().get(0).getPlayerParam(PlayerParam.Game);
   }
 
   public ModelInterface getMyModel() {

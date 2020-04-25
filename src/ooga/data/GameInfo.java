@@ -90,4 +90,7 @@ public class GameInfo {
         this.initialPosition = initialPosition;
     }
 
+    public String fileNameID() {
+        return String.valueOf(gameType) + String.valueOf(levelNum);
+    }
 }

@@ -145,4 +145,9 @@ public class GameZelda2DSingle implements Runnable {
   public float getYPos(int id) {
     return view.getCenterPositionY(id);
   }
+
+  public boolean isAttacked(int id) {
+//    return view.getHurtStatus(id);
+    return false;
+  }
 }

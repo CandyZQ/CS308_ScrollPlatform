@@ -1,13 +1,16 @@
 package ooga.view.game_view.agent.agent2d;
 
+import java.io.IOException;
 import ooga.view.engine.graphics.Material;
 import ooga.view.engine.graphics.Mesh;
-import ooga.view.engine.graphics.Vertex;
+import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.graphics.render.Renderer2D;
+import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.GameObject;
 import ooga.view.game_view.agent.interfaces.AgentView;
+import ooga.view.game_view.game_state.state2d.BoundingBox;
 
 public class Agent2DView extends AgentView {
 
@@ -15,18 +18,30 @@ public class Agent2DView extends AgentView {
 
   protected Agent2DController controller;
   private boolean shouldTerminated = false;
+  private BoundingBox box;
   private Vector2f halfBounds;
+  private Vector3f scale;
 
-  public Agent2DView(int id, Agent2DDataHolder data) {
+  public Agent2DView(int id, Agent2DDataHolder data, BoundingBox box) {
     super(data.getMoveAction());
     this.id = id;
     vertices = data.getVertices();
     indices = data.getIndices();
     halfBounds = data.getHalfBounds();
-    controller = new Agent2DController(data);
+    controller = new Agent2DController(id, data, box);
+    scale = data.getScale();
     mesh = new Mesh(vertices, indices, controller.getCurrentAnimatedMaterial());
     object = new GameObject(Vector3f.zeros(), data.getRotation(), data.getScale(), mesh);
     controller.setObject(object);
+    controller.setAgentView(this);
+  }
+
+  public Vector3f getScale() {
+    return scale;
+  }
+
+  public void setScale(Vector3f scale) {
+    this.scale = scale;
   }
 
   public int getId(){return id;}
@@ -49,7 +64,8 @@ public class Agent2DView extends AgentView {
     return false;
   }
 
-  public Vector2f getCenterPosition(){return object.getMesh().getCenter();}
+  public Vector2f getCenterPosition(){return Vector2f.subtract(object.getMesh().getCenter(),
+      Asset2D.getIHateLife());}
 
   public Vector2f getCenter(){
     float centerX = 0f;
@@ -66,8 +82,8 @@ public class Agent2DView extends AgentView {
 
   public void update(String direction, String action) {
     controller.setCurrentAnimation(direction, action);
-//    System.out.println(MOVE_ACTION);
-//    System.out.println(action);
+    System.out.println(MOVE_ACTION);
+    System.out.println(action);
     if (action.equals(MOVE_ACTION)) controller.move(direction);
   }
 

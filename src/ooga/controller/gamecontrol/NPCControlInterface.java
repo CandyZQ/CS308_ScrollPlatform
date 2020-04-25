@@ -14,4 +14,8 @@ public interface NPCControlInterface extends ZeldaControlInterface {
   int getID();
 
   void attack();
+
+  void getHurt();
+
+  boolean isHurt();
 }

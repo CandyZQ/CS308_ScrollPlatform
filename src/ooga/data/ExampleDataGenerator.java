@@ -89,7 +89,7 @@ public class ExampleDataGenerator {
         System.out.println(cellList.size());
         b.storeSubMap(cellList, 1, 0, 1);
         DataLoader c = new DataLoader();
-        c.getGameObjectConfiguration().storeGameEverything();
+        b.writeAllDataIntoDisk();
     }
 
 

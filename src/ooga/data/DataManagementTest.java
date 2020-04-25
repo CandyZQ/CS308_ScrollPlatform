@@ -1,17 +1,19 @@
 package ooga.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import ooga.model.characters.ZeldaCharacter;
-import ooga.model.enums.CharacterProperty;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.CharacterType;
 import ooga.model.enums.backend.Direction;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Testing for DataManagement.
@@ -22,22 +24,14 @@ public class  DataManagementTest {
     private static DataLoader loader;
 
     static {
-        try {
             loader = new DataLoader();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
     }
 
 
     private static DataStorer storer;
 
     static {
-        try {
-            storer = new DataStorer();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
+        storer = new DataStorer();
     }
 
 
@@ -60,9 +54,9 @@ public class  DataManagementTest {
         ExampleDataGenerator.generateTheMapForFirstSprint();
 
         Cell testCell = loader.loadCell(6, 2, 0, 1);
-        Assert.assertNotNull(testCell.getBufferedImage());
-        Assert.assertTrue(testCell.isMapCellWalkable());
-        Assert.assertEquals(testCell.getImage(), 82);
+        assertNotNull(testCell.getBufferedImage());
+        assertTrue(testCell.isMapCellWalkable());
+        assertEquals(82, testCell.getImage());
         System.out.println(testCell.getState());
 
     }
@@ -71,14 +65,17 @@ public class  DataManagementTest {
      *
      */
     @Test
-    public void characterLoadingStoringTest() {
+    public void characterLoadingStoringTest() throws DataLoadingException {
 
         ZeldaCharacter ZC = new ZeldaCharacter(9, 2, 3, 4,0,0, CharacterType.PLAYER);
+        ZeldaCharacter ZC2 = new ZeldaCharacter(93, 21, 33, 44,0,0, CharacterType.PLAYER);
         ZC.setFiringDirection(Direction.E);
         storer.storeCharacter(4, ZC);
-        Assert.assertEquals(loader.loadCharacter(4, CharacterProperty.HP), 9);
-        Assert.assertEquals(loader.loadCharacter(4, CharacterProperty.ATTACK), 3);
-        loader.getGameObjectConfiguration().storeGameEverything();
+        storer.storeCharacter(3, ZC2);
+//        assertEquals(9, loader.loadCharacter(4, CharacterProperty.HP));
+//        assertEquals(3, loader.loadCharacter(4, CharacterProperty.ATTACK));
+//        assertEquals(2, loader.getZeldaCharacters().size());
+//        storer.writeAllDataIntoDisk();
     }
 
     @Test
@@ -90,15 +87,16 @@ public class  DataManagementTest {
         storer.storeKeyCode(keyCodeMap, 3);
         storer.storeKeyCode(keyCodeMap, 2);
         Map<Integer, String> keyCodeMap2 = loader.loadKeyCode(3);
-        Assert.assertEquals("hello", loader.loadKeyCode(3).get(34));
-        loader.getGameObjectConfiguration().storeGameEverything();
+        assertEquals("hello", loader.loadKeyCode(3).get(34));
+//        storer.writeAllDataIntoDisk();
     }
     @Test
-    public void imageLoadingStoringTest() {
+    public void imageLoadingStoringTest() throws DataLoadingException {
         storer.storeImage("321", 2, ImageCategory.RESOURCE);
         storer.storeImage("123", 2, ImageCategory.RESOURCE);
         String imagePath = loader.loadImagePath(2, ImageCategory.RESOURCE);
-        Assert.assertEquals("123", imagePath);
+        assertEquals("123", imagePath);
+//        storer.writeAllDataIntoDisk();
     }
 
     /**
@@ -106,12 +104,12 @@ public class  DataManagementTest {
      */
     @Test
     public void loadAndStoreParam() throws DataLoadingException {
-        int a = loader.loadPlayerPara(PlayerPara.CURRENT_SCORE, 3);
+        int a = loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3);
         storer.addPlayer(3);
-        storer.setPlayerParam(PlayerPara.CURRENT_SCORE, 99, 3);
+        storer.setPlayerParam(PlayerParam.CURRENT_SCORE, 99, 3);
 
-        Assert.assertEquals(99, loader.loadPlayerPara(PlayerPara.CURRENT_SCORE, 3));
-        loader.getGameObjectConfiguration().storeGameEverything();
+        assertEquals(99, loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3));
+//        storer.writeAllDataIntoDisk();
     }
 
 

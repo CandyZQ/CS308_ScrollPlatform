@@ -1,11 +1,8 @@
 package ooga.controller.gamecontrol;
 
-import javafx.scene.input.KeyCode;
+import java.util.Map;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.interfaces.movables.Movable1D;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 public interface PlayerControlInterface{
 //  void keyInput(KeyCode key) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
@@ -26,4 +23,8 @@ public interface PlayerControlInterface{
   boolean update();
 
   boolean hasWon();
+
+  void getHurt();
+
+  boolean isHurt();
 }
