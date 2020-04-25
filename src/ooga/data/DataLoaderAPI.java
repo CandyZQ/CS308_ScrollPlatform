@@ -3,8 +3,8 @@ package ooga.data;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.*;
 import ooga.model.enums.backend.Direction;
-import ooga.model.enums.backend.GamePara;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.GameParam;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 
@@ -16,13 +16,13 @@ import java.util.Map;
  * The interface for game loader
  */
 public interface DataLoaderAPI {
-    int loadCurrentPlayerPara(PlayerPara playerPara) throws DataLoadingException;
+    int loadCurrentPlayerPara(PlayerParam playerParam) throws DataLoadingException;
 
-    int loadPlayerPara(PlayerPara playerPara, int playerID) throws DataLoadingException;
+    int loadPlayerPara(PlayerParam playerParam, int playerID) throws DataLoadingException;
 
-    int loadGameParam(GamePara para);
+    int loadGameParam(GameParam para);
 
-    List<Direction> loadAvailableDirection(GamePara para);
+    List<Direction> loadAvailableDirection(GameParam para);
 
     void setGameAndPlayer(int GameID, List<Integer> PlayersID);
 

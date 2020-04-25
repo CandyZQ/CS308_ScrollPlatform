@@ -18,7 +18,7 @@ import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.movables.Movable1D;
 import org.lwjgl.glfw.GLFW;
@@ -238,7 +238,7 @@ public class GameController {
   }
 
   public int getGameID() {
-    return myDataLoader.getCurrentPlayers().get(0).getPlayerParam(PlayerPara.Game);
+    return myDataLoader.getCurrentPlayers().get(0).getPlayerParam(PlayerParam.Game);
   }
 
   public ModelInterface getMyModel() {

@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.engine.io.Window;
@@ -300,7 +300,7 @@ public class GameObjectConfiguration {
 
       if (!contains) {
         PlayerStatus temp = new PlayerStatus(currentGameID, id);
-        temp.setPlayerParam(PlayerPara.Game, currentGameID);
+        temp.setPlayerParam(PlayerParam.Game, currentGameID);
         playerStatuses.add(temp);
         setPlayerWithID(id, temp);
       }
@@ -354,7 +354,7 @@ public class GameObjectConfiguration {
   }
 
   public GameInfo getCurrentGameInfo() {
-    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerPara.CURRENT_LEVEL));
+    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerParam.CURRENT_LEVEL));
   }
 
   public GameInfo getGameInfo(int level, int id) {

@@ -4,7 +4,7 @@ import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.AnimationType;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
@@ -26,7 +26,7 @@ public interface  DataStorerAPI {
 
     void storeCharacter(int characterID, ZeldaCharacter character);
 
-    void setPlayerParam(PlayerPara para, int value, int playerID);
+    void setPlayerParam(PlayerParam para, int value, int playerID);
 
     void addPlayer(int playerID);
 
