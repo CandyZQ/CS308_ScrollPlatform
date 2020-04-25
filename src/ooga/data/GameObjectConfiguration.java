@@ -405,7 +405,7 @@ public class GameObjectConfiguration {
     } catch (Exception e) {
       throw new DataLoadingException(e.getMessage(), e);
     }
-    
+
   }
 
   /**
