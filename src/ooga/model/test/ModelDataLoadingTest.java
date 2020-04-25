@@ -1,21 +1,18 @@
 package ooga.model.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import ooga.data.DataLoader;
-import ooga.data.DataLoaderAPI;
-import ooga.data.DataLoadingException;
-import ooga.data.DataStorer;
-import ooga.data.DataStorerAPI;
+import ooga.data.*;
 import ooga.game.GameType;
 import ooga.model.Model;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
 import ooga.model.enums.backend.GamePara;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ModelDataLoadingTest {
   DataLoaderAPI loader;

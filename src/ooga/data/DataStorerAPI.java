@@ -1,5 +1,6 @@
 package ooga.data;
 
+import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.AnimationType;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.PlayerPara;
@@ -25,9 +26,9 @@ public interface  DataStorerAPI {
 
     void storeWeapons(int ID, WeaponBase weapon);
 
-    void StoreInventory(Inventory inventory);
+    //    void storePlayerParamToCurrentPlayer(PlayerPara para, int value);
 
-//    void storePlayerParamToCurrentPlayer(PlayerPara para, int value);
+    void storeCharacter(int characterID, ZeldaCharacter character);
 
     void setPlayerParam(PlayerPara para, int value, int playerID);
 
@@ -48,8 +49,6 @@ public interface  DataStorerAPI {
     void resetPlayerInfo();
 
     void writeAllDataIntoDisk();
-
-    void storeMeleeRobotAnimations(Map<String, Animation2D> animations);
 
     void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType);
 

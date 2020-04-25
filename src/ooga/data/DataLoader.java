@@ -1,14 +1,6 @@
 package ooga.data;
 
 
-import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import javax.imageio.ImageIO;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.AnimationType;
 import ooga.model.enums.CharacterProperty;
@@ -20,21 +12,24 @@ import ooga.model.enums.backend.PlayerPara;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
+
 public class DataLoader implements DataLoaderAPI {
 
   public static final int SubMapPerMap = 4;
   public static final String JSON_POSTFIX = ".json";
-  //  private int currentGameID = 1;//the belonging of Game ID is a problem. Where should it get from?
-//  private int currentPlayerID = 1;
   private static GameObjectConfiguration gameObjectConfiguration;
 
   private com.google.gson.Gson gson;
 
   public DataLoader() throws DataLoadingException {
-//    com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
-//    gsonBuilder.serializeNulls(); //ensure gson storing null values.
-//    gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter());
-//    gson = gsonBuilder.create();//3 lines above are the same as DataStorer
     gameObjectConfiguration = GameObjectConfiguration.getInstance();
   }
 
@@ -158,14 +153,7 @@ public class DataLoader implements DataLoaderAPI {
         zeldaCharacter = i;
       }
     }
-//    try {
-//      Method methodcall = zeldaCharacter.getClass().getDeclaredMethod(
-//          "get" + property.toString().substring(0, 1) + property.toString().substring(1));
-//      int a = (int) methodcall.invoke(zeldaCharacter);
-//      return (int) methodcall.invoke(zeldaCharacter);
-//    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-//      e.printStackTrace();
-//    }
+
 
     return property.getProperty(zeldaCharacter);
   }
@@ -210,11 +198,6 @@ public class DataLoader implements DataLoaderAPI {
     Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(category.toString());
     String key = String.valueOf(imageID);
     return loadValueOfMap(imageMap, key);
-  }
-
-  @Override
-  public Map<String, Animation2D> loadMeleeRobotAnimations() {
-    return gameObjectConfiguration.getMeleeRobotAnimations();
   }
 
   /**

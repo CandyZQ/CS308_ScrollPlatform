@@ -52,8 +52,6 @@ public interface DataLoaderAPI {
     String loadImagePath(int imageID, ImageCategory category);
 
 
-    Map<String, Animation2D> loadMeleeRobotAnimations();
-
     List<ZeldaCharacter> getZeldaCharacters();
 
     List<PlayerStatus> getCurrentPlayers();
