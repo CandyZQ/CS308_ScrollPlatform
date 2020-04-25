@@ -15,10 +15,14 @@ import static ooga.data.DataLoader.JSON_POSTFIX;
 import static ooga.data.PlayerStatus.initLevel;
 import static ooga.data.PlayerStatus.initLife;
 
-
+/**
+ * storer class storing all data
+ * @author Guangyu Feng
+ */
 public class DataStorer implements DataStorerAPI {
     private DataLoader dataLoader;
     private GameObjectConfiguration gameObjectConfiguration;
+    private ResourceBundle errorResourceBundle;
 
     /**
      * generate a storer
@@ -26,6 +30,7 @@ public class DataStorer implements DataStorerAPI {
     public DataStorer() {
 
         dataLoader = new DataLoader();
+        errorResourceBundle = dataLoader.getErrorMessageResources();
         gameObjectConfiguration = dataLoader.getGameObjectConfiguration();
 
     }
@@ -48,7 +53,7 @@ public class DataStorer implements DataStorerAPI {
      */
     @Override
     public void storeWeapons(int ID, WeaponBase weapon) {
-        throw new DataLoadingException("store weapons is not implemented");
+        throw new DataLoadingException(errorResourceBundle.getString("storeWeapons"));
     }
 
     /**
@@ -80,7 +85,7 @@ public class DataStorer implements DataStorerAPI {
     public void setPlayerParam(PlayerParam param, int value, int playerID) {
         PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
         if (tempPlayer == null) {
-            throw new DataLoadingException("Player Not Found");
+            throw new DataLoadingException(errorResourceBundle.getString("setPlayerParam"));
         }
         tempPlayer.setPlayerParam(param, value);
     }
@@ -106,7 +111,7 @@ public class DataStorer implements DataStorerAPI {
             tempPlayer.setKeyCodeMap(keyCodeMap);
             gameObjectConfiguration.setPlayerWithID(playerID, tempPlayer);
         } else {
-            throw new DataLoadingException("Player not Found");
+            throw new DataLoadingException(errorResourceBundle.getString("setPlayerParam"));
         }
     }
 
@@ -139,7 +144,7 @@ public class DataStorer implements DataStorerAPI {
      */
     @Override
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
-        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
+        throw new DataLoadingException(errorResourceBundle.getString("storeSubMapWithSubmapIDRandom"));
     }
 
     /**
@@ -163,7 +168,7 @@ public class DataStorer implements DataStorerAPI {
     @Override
     public void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) {
         if (map.size() != GameMapGraph.SUBMAP_ROW_NUM * GameMapGraph.SUBMAP_COL_NUM) {
-            throw new DataLoadingException("map stored didn't fit in dimension");
+            throw new DataLoadingException(errorResourceBundle.getString("storeSubMap"));
         }
 
         GameMapGraph mapGraph = new GameMapGraph(level, subMapID, GameMapGraph.SUBMAP_ROW_NUM, GameMapGraph.SUBMAP_COL_NUM, gameID);

@@ -5,6 +5,7 @@ import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.CharacterType;
 import ooga.model.enums.backend.Direction;
 import ooga.model.enums.backend.PlayerParam;
+import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +97,18 @@ public class  DataManagementTest {
         storer.storeImage("123", 2, ImageCategory.RESOURCE);
         String imagePath = loader.loadImagePath(2, ImageCategory.RESOURCE);
         assertEquals("123", imagePath);
+
 //        storer.writeAllDataIntoDisk();
+    }
+
+    @Test
+    public void badMethodCall() {
+        storer.storeWeapons(1, new WeaponBase(1 ,2,Direction.E) {
+            @Override
+            public void fire() {
+
+            }
+        });
     }
 
     /**

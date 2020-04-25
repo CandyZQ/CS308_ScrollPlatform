@@ -21,6 +21,10 @@ import java.util.ResourceBundle;
 
 import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
 
+/**
+ * Data Loader class responsible for loading all data
+ * @author Guangyu Feng
+ */
 public class DataLoader implements DataLoaderAPI {
   public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
   public static final int SubMapPerMap = 4;

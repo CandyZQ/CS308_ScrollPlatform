@@ -27,7 +27,8 @@ import static ooga.game.GameMain.HEIGHT;
 import static ooga.game.GameMain.WIDTH;
 
 /**
- * this is the man, the object storing EVERY piece of info!
+ * Class responsible for centralized loading and storing
+ * @author Guangyu Feng
  */
 public class GameObjectConfiguration {
   private static final String CELL_CLASS_NAME = "ooga.model.map.GameCell";
@@ -35,6 +36,7 @@ public class GameObjectConfiguration {
   private static final String LIST_KEYWORD = "List";
   private static final String MAP_KEYWORD = "Map";
   private static final String FILE_PATH_DELIMITER = "/";
+  private static final String EXCEPTION_KEYWORD = "File not found";
   private static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
@@ -258,7 +260,7 @@ public class GameObjectConfiguration {
       Reader reader = Files.newBufferedReader(Paths.get(fileName));
       return (clazz) gsonLoad.fromJson(reader, clazz);
     } catch (IOException e) {
-      throw new DataLoadingException(String.format("file at %s hasn't been created.", fileName), e);
+      throw new DataLoadingException(EXCEPTION_KEYWORD, e);
     }
   }
 
@@ -308,7 +310,7 @@ public class GameObjectConfiguration {
   public void setCurrentPlayerAndGameID(int currentGameID, List<Integer> currentPlayersID) {
     this.currentPlayersID = currentPlayersID;
     this.currentGameID = currentGameID;
-    List<PlayerStatus> tempPlayers = getPlayersWithID(currentPlayersID);
+
   }
 
   /**
@@ -397,7 +399,7 @@ public class GameObjectConfiguration {
   public void setTextMap(String text, String keyword, TextCategory category) {
     Map<String, String> tempTextMap = textMap.get(category.toString());
     if (tempTextMap == null) {
-      throw new DataLoadingException("text category not found");
+      throw new DataLoadingException(EXCEPTION_KEYWORD);
     }
     tempTextMap = insertElementToMap(tempTextMap, keyword, text);
     textMap.replace(category.toString(), tempTextMap);
