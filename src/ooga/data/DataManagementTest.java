@@ -104,11 +104,11 @@ public class  DataManagementTest {
      */
     @Test
     public void loadAndStoreParam() throws DataLoadingException {
-        int a = loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3);
+        int a = loader.loadPlayerParam(PlayerParam.CURRENT_SCORE, 3);
         storer.addPlayer(3);
         storer.setPlayerParam(PlayerParam.CURRENT_SCORE, 99, 3);
 
-        assertEquals(99, loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3));
+        assertEquals(99, loader.loadPlayerParam(PlayerParam.CURRENT_SCORE, 3));
 //        storer.writeAllDataIntoDisk();
     }
 
