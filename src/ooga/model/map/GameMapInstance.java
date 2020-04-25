@@ -2,7 +2,7 @@ package ooga.model.map;
 
 import ooga.data.DataLoaderAPI;
 import ooga.model.enums.backend.Direction;
-import ooga.model.enums.backend.GamePara;
+import ooga.model.enums.backend.GameParam;
 import ooga.model.interfaces.gameMap.GameMap;
 import ooga.model.interfaces.gameMap.GridInMap;
 
@@ -28,14 +28,14 @@ public class GameMapInstance implements GameMap {
 
   public GameMapInstance(DataLoaderAPI loader) {
     this.loader = loader;
-    this.level = loader.loadGameParam(GamePara.LEVEL_NUM);
+    this.level = loader.loadGameParam(GameParam.LEVEL_NUM);
     currentGrid = 0;
     initialize();
   }
 
   //TODO: possibly have non-consecutive ids
   private void initialize() {
-    for (int i = 0; i < loader.loadGameParam(GamePara.GRID_NUM); i++) {
+    for (int i = 0; i < loader.loadGameParam(GameParam.GRID_NUM); i++) {
       GridInMap grid = new GameGridInMap(loader, i);
       grid.loadGrid(grid.getID(), level);
       allGrids.put(i, grid);

@@ -6,8 +6,8 @@ import ooga.model.enums.AnimationType;
 import ooga.model.enums.CharacterProperty;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.Direction;
-import ooga.model.enums.backend.GamePara;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.GameParam;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 
@@ -17,59 +17,55 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
 
 public class DataLoader implements DataLoaderAPI {
-
+  public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
   public static final int SubMapPerMap = 4;
   public static final String JSON_POSTFIX = ".json";
   private static GameObjectConfiguration gameObjectConfiguration;
+  private ResourceBundle errorMessageResources;
 
+  /**
+   * fetch an gameObjectConfiguration instance
+   * initializes error message resource bundle
+   * @throws DataLoadingException
+   */
   public DataLoader() throws DataLoadingException {
     gameObjectConfiguration = GameObjectConfiguration.getInstance();
+    errorMessageResources = ResourceBundle.getBundle(ERROR_MESSAGE_RESOURCES_PACKAGE);
   }
 
+  /**
+   * load game's parameter using Gamepara enum
+   * @param para
+   * @return
+   */
   @Override
-  public int loadGameParam(GamePara para) {
+  public int loadGameParam(GameParam para) {
     GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
-    int level = gameInfo.getLevelNum();
-    switch (para) {
-      case GRID_NUM:
-        return gameInfo.getSubMapInfo().get(level).size();
-      case LEVEL_NUM:
-        return level;
-      case NPC_NUM:
-        return gameInfo.getNPC_ID().size();
-      case GAME_TYPE:
-        return gameInfo.getGameType();
-      case PLAYER_NUM:
-        return gameInfo.getPlayer_ID().size();
-      case INIT_POS_X:
-        return gameInfo.getInitialPosition()[0];
-      case INIT_POS_Y:
-        return gameInfo.getInitialPosition()[1];
-    }
-    return ID_NOT_DEFINED;
+    return para.getValue(gameInfo);
   }
 
   @Override
-  public int loadPlayerPara(PlayerPara playerPara, int playerID) throws DataLoadingException {
+  public int loadPlayerPara(PlayerParam playerParam, int playerID) throws DataLoadingException {
     PlayerStatus playerStatus = gameObjectConfiguration.getPlayerWithID(playerID);
     try {
-      return playerStatus.getPlayerParam(playerPara);
+      return playerStatus.getPlayerParam(playerParam);
     } catch (Exception e) {
       throw new DataLoadingException(String.format("Player %d does not exist", playerID), e);
     }
   }
 
   @Override
-  public int loadCurrentPlayerPara(PlayerPara playerPara) throws DataLoadingException {
-    return loadPlayerPara(playerPara, gameObjectConfiguration.getCurrentPlayerID());
+  public int loadCurrentPlayerPara(PlayerParam playerParam) throws DataLoadingException {
+    return loadPlayerPara(playerParam, gameObjectConfiguration.getCurrentPlayerID());
   }
 
   @Override
-  public List<Direction> loadAvailableDirection(GamePara para) {
+  public List<Direction> loadAvailableDirection(GameParam para) {
     GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
     return gameInfo.getAvailableAttackDirections();
   }
@@ -121,6 +117,13 @@ public class DataLoader implements DataLoaderAPI {
     return map;
   }
 
+  /**
+   * load buffered Image by providing the image category and ID
+   * @param ImageID
+   * @param category
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
   public BufferedImage loadBufferImage(int ImageID, ImageCategory category) throws DataLoadingException {
     String imagePath = loadImagePath(ImageID, category);
@@ -132,25 +135,50 @@ public class DataLoader implements DataLoaderAPI {
 
   }
 
+  /**
+   * load text
+   * @param keyword
+   * @param category
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
   public String loadText(String keyword, String category) throws DataLoadingException {
     Map<String, String> textMap = gameObjectConfiguration.getTextMap().get(category);
     return loadValueOfMap(textMap, keyword);
   }
 
+  /**
+   * load charcter's property using ID
+   * @param ID
+   * @param property
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
   public int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException {
     throw new DataLoadingException("load character property is not supported");
   }
 
+  /**
+   * load weapon's property using ID
+   * @param ID
+   * @param property
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
   public int loadWeapon(int ID, int property) throws DataLoadingException {
     throw new DataLoadingException("load weapon is not supported");
   }
 
+  /**
+   * load current level
+   * @return
+   */
   @Override
   public int currentLevel() {
-    return loadGameParam(GamePara.LEVEL_NUM);
+    return loadGameParam(GameParam.LEVEL_NUM);
   }
 
   /**
@@ -221,5 +249,9 @@ public class DataLoader implements DataLoaderAPI {
   @Override
   public Map<String, Animation2D> loadAnimation(AnimationType animationType) {
     return gameObjectConfiguration.getSpecificAgentAnimation(animationType.toString() + JSON_POSTFIX);
+  }
+
+  public ResourceBundle getErrorMessageResources() {
+    return errorMessageResources;
   }
 }

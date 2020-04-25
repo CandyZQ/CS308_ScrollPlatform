@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.engine.io.Window;
@@ -30,7 +30,7 @@ import static ooga.game.GameMain.WIDTH;
  * this is the man, the object storing EVERY piece of info!
  */
 public class GameObjectConfiguration {
-  public static String RESOURCES_PACKAGE = "Data/param_and_path";
+  public static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
   private Map<String, GameMapGraph> gameMapList;
@@ -49,7 +49,6 @@ public class GameObjectConfiguration {
   private int currentGameID = 1;
 
 
-  private Map<Object, String> fieldToPathMap;
   private static GameObjectConfiguration gameObjectConfiguration;
 
   /**
@@ -69,8 +68,7 @@ public class GameObjectConfiguration {
     gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter("ooga.model.map.GameCell"));
     gsonLoad = gsonBuilder.create();//3 lines above are the same as DataStorer
 
-    resources = ResourceBundle.getBundle(RESOURCES_PACKAGE);
-    fieldToPathMap = new HashMap<>();
+    resources = ResourceBundle.getBundle(PARAM_RESOURCES_PACKAGE);
 
     try {
       initiateDataStorageInstanceVariable();
@@ -81,7 +79,7 @@ public class GameObjectConfiguration {
 
 
   private void initiateDataStorageInstanceVariable() throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
-    Window window = new Window(WIDTH, HEIGHT, RESOURCES_PACKAGE);
+    Window window = new Window(WIDTH, HEIGHT, PARAM_RESOURCES_PACKAGE);
     window.create();
     for (String key : Collections.list(resources.getKeys())) {
       Field field = initializeFieldObject(key);
@@ -300,7 +298,7 @@ public class GameObjectConfiguration {
 
       if (!contains) {
         PlayerStatus temp = new PlayerStatus(currentGameID, id);
-        temp.setPlayerParam(PlayerPara.Game, currentGameID);
+        temp.setPlayerParam(PlayerParam.Game, currentGameID);
         playerStatuses.add(temp);
         setPlayerWithID(id, temp);
       }
@@ -354,7 +352,7 @@ public class GameObjectConfiguration {
   }
 
   public GameInfo getCurrentGameInfo() {
-    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerPara.CURRENT_LEVEL));
+    return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerParam.CURRENT_LEVEL));
   }
 
   public GameInfo getGameInfo(int level, int id) {

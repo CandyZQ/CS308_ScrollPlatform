@@ -4,7 +4,7 @@ import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.CharacterType;
 import ooga.model.enums.backend.Direction;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +14,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//import org.junit.Assert;
-
-//import org.junit.Test;
 
 /**
  * Testing for DataManagement.
@@ -27,22 +24,14 @@ public class  DataManagementTest {
     private static DataLoader loader;
 
     static {
-        try {
             loader = new DataLoader();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
     }
 
 
     private static DataStorer storer;
 
     static {
-        try {
-            storer = new DataStorer();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
+        storer = new DataStorer();
     }
 
 
@@ -115,11 +104,11 @@ public class  DataManagementTest {
      */
     @Test
     public void loadAndStoreParam() throws DataLoadingException {
-        int a = loader.loadPlayerPara(PlayerPara.CURRENT_SCORE, 3);
+        int a = loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3);
         storer.addPlayer(3);
-        storer.setPlayerParam(PlayerPara.CURRENT_SCORE, 99, 3);
+        storer.setPlayerParam(PlayerParam.CURRENT_SCORE, 99, 3);
 
-        assertEquals(99, loader.loadPlayerPara(PlayerPara.CURRENT_SCORE, 3));
+        assertEquals(99, loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3));
 //        storer.writeAllDataIntoDisk();
     }
 

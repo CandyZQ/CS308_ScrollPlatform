@@ -4,7 +4,7 @@ import ooga.model.characters.ZeldaCharacter;
 import ooga.model.enums.AnimationType;
 import ooga.model.enums.ImageCategory;
 import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerPara;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
@@ -66,7 +66,7 @@ public class DataStorer implements DataStorerAPI {
 
 
     @Override
-    public void setPlayerParam(PlayerPara param, int value, int playerID) {
+    public void setPlayerParam(PlayerParam param, int value, int playerID) {
         PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
         if (tempPlayer == null) {
             System.out.println("Player not created(storer 114)");
@@ -123,7 +123,7 @@ public class DataStorer implements DataStorerAPI {
      */
     @Override
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
-        throw new DataLoadingException("map stored didn't fit in dimension");
+        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
     }
     @Override
     public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
@@ -166,9 +166,9 @@ public class DataStorer implements DataStorerAPI {
     @Override
     public void resetPlayerInfo() {
         int currentPlayerID = gameObjectConfiguration.getCurrentPlayer().getPlayerID();
-        setPlayerParam(PlayerPara.CURRENT_LEVEL, initLevel, currentPlayerID);
-        setPlayerParam(PlayerPara.LIFE, initLife, currentPlayerID);
-        setPlayerParam(PlayerPara.CURRENT_SCORE, 0, currentPlayerID);
+        setPlayerParam(PlayerParam.CURRENT_LEVEL, initLevel, currentPlayerID);
+        setPlayerParam(PlayerParam.LIFE, initLife, currentPlayerID);
+        setPlayerParam(PlayerParam.CURRENT_SCORE, 0, currentPlayerID);
     }
 
 
