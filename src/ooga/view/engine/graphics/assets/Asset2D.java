@@ -52,6 +52,8 @@ public class Asset2D {
     };
   }
 
+  public static Vector2f getIHateLife(){return new Vector2f(-5f*0.06f,0f);}
+
   public static Vector3f getMapPosition(){
     return new Vector3f(0, 0, 1f);
   }
@@ -88,11 +90,11 @@ public class Asset2D {
 
   public static Vector2f getNonPlayerBounds(){return new Vector2f(0.5f*getNonPlayerScale().getX(), 0.5f*getNonPlayerScale().getY());}
 
-  public static Vector2f getPlayerBounds(){return new Vector2f(0.5f*getPlayerScale().getX(), 0.5f*getPlayerScale().getY());}
+  public static Vector2f getPlayerBounds(){return new Vector2f(0.01f*getPlayerScale().getX(), 0.01f*getPlayerScale().getY());}
 
   public static Vector2f getBulletBounds(){return new Vector2f(0.2f*getBulletScale().getX(), 0.2f*getBulletScale().getY());}
 
-  public static Vector2f getMapTileBounds(){return new Vector2f(1f*getMapScale().getX(), 1f*getMapScale().getY());}
+  public static Vector2f getMapTileBounds(){return new Vector2f(0.2f*getMapScale().getX(), 0.2f*getMapScale().getY());}
 
   public static float getBulletSpeed(){return 100.0f;}
 

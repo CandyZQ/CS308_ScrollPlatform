@@ -40,7 +40,7 @@ public class GameState2DView extends GameStateView {
   private double lasTimeUpdated = 0;
   private double currentTimeUpdated = 0;
   private float zLayer = -0.8f;
-  private float Z_INC = -0.2f;
+  private float Z_INC = -0.01f;
 
   //TODO: remove this part!
   //TODO: loop through a list of agents to update its alive status/ adding new

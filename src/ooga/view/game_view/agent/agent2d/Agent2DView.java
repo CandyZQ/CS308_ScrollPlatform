@@ -3,6 +3,7 @@ package ooga.view.game_view.agent.agent2d;
 import java.io.IOException;
 import ooga.view.engine.graphics.Material;
 import ooga.view.engine.graphics.Mesh;
+import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.maths.Vector2f;
@@ -19,6 +20,7 @@ public class Agent2DView extends AgentView {
   private boolean shouldTerminated = false;
   private BoundingBox box;
   private Vector2f halfBounds;
+  private Vector3f scale;
 
   public Agent2DView(int id, Agent2DDataHolder data, BoundingBox box) {
     super(data.getMoveAction());
@@ -27,10 +29,19 @@ public class Agent2DView extends AgentView {
     indices = data.getIndices();
     halfBounds = data.getHalfBounds();
     controller = new Agent2DController(id, data, box);
+    scale = data.getScale();
     mesh = new Mesh(vertices, indices, controller.getCurrentAnimatedMaterial());
     object = new GameObject(Vector3f.zeros(), data.getRotation(), data.getScale(), mesh);
     controller.setObject(object);
     controller.setAgentView(this);
+  }
+
+  public Vector3f getScale() {
+    return scale;
+  }
+
+  public void setScale(Vector3f scale) {
+    this.scale = scale;
   }
 
   public int getId(){return id;}
@@ -53,7 +64,8 @@ public class Agent2DView extends AgentView {
     return false;
   }
 
-  public Vector2f getCenterPosition(){return object.getMesh().getCenter();}
+  public Vector2f getCenterPosition(){return Vector2f.subtract(object.getMesh().getCenter(),
+      Asset2D.getIHateLife());}
 
   public Vector2f getCenter(){
     float centerX = 0f;

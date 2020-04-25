@@ -99,9 +99,10 @@ public class Agent2DController extends AgentController {
   }
 
   public void move(String direction) { //TODO if valid
-    //System.out.println("it moves");
+    System.out.println("it moves");
     if (box.canMove(!isBullet, isBullet, agentView,
         Asset2D.convertDirectionalSpeed(direction, speedScale))) {
+      System.out.println("it moves!");
       translate(Asset2D.convertDirectionalSpeed(direction, speedScale));
     }
     //object.setPosition(Vector3f.add(object.getPosition(), Asset2D.convertDirectionalSpeed(direction, speedScale)));
