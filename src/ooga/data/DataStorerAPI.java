@@ -66,14 +66,14 @@ public interface  DataStorerAPI {
      * @param level
      */
     @Deprecated
-    void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) throws DataLoadingException;
+    void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level);
     /**
      * store the submap for current game and level
      * @param map
      * @param level
      * @param subMapID
      */
-    void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) throws DataLoadingException;
+    void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID);
     /**
      * store the submap
      * @param map
