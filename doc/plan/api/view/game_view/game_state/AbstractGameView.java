@@ -4,7 +4,7 @@ import java.util.List;
 
 import javafx.scene.Node;
 import ooga.view.game_view.agent.nonplayable.NonPlayableAgentView;
-import ooga.view.game_view.agent.playable.PlayableAgentView;
+import ooga.view.game_view.agent.agent2d.PlayableAgentView;
 import ooga.view.game_view.map.MapView;
 import ooga.view.game_view.object.interactive.InteractiveObjectView;
 import ooga.view.game_view.object.non_interactive.NonInteractiveObjectView;

@@ -1,4 +1,4 @@
-package ooga.view.game_view.agent.playable;
+package ooga.view.game_view.agent.agent2d;
 
 import java.util.Map;
 import ooga.view.game_view.agent.AgentView;

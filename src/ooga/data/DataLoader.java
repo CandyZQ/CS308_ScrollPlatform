@@ -1,156 +1,259 @@
 package ooga.data;
 
-import javafx.scene.input.KeyCode;
+
 import ooga.model.characters.ZeldaCharacter;
+import ooga.model.enums.AnimationType;
 import ooga.model.enums.CharacterProperty;
-import ooga.model.enums.Direction;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.backend.Direction;
+import ooga.model.enums.backend.GameParam;
+import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
 
-import java.io.Reader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-import static ooga.data.DataStorer.characterKeyword;
-import static ooga.data.DataStorer.mapKeyword;
+import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
 
-public class DataLoader implements ooga.data.DataLoaderAPI {
-  public static final String Image_Keyword = "image";
-  public static final String Text_Keyword = "text";
-  public static final String GAME_Keyword = "Game";
-  private int currentLevel;
-  private com.google.gson.Gson gson;
-  public DataLoader() {
-    com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
-    gsonBuilder.serializeNulls(); //ensure gson storing null values.
-    gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter());
-    gson = gsonBuilder.create();//3 lines above are the same as DataStorer
+public class DataLoader implements DataLoaderAPI {
+  public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
+  public static final int SubMapPerMap = 4;
+  public static final String JSON_POSTFIX = ".json";
+  private static GameObjectConfiguration gameObjectConfiguration;
+  private ResourceBundle errorMessageResources;
+
+  /**
+   * fetch an gameObjectConfiguration instance
+   * initializes error message resource bundle
+   * @throws DataLoadingException
+   */
+  public DataLoader() throws DataLoadingException {
+    gameObjectConfiguration = GameObjectConfiguration.getInstance();
+    errorMessageResources = ResourceBundle.getBundle(ERROR_MESSAGE_RESOURCES_PACKAGE);
   }
-  public void setCurrentLevel(int currentLevel) {
-    this.currentLevel = currentLevel;
-  }
 
-  public int getCurrentLevel() {
-    return currentLevel;
+  /**
+   * load game's parameter using Gamepara enum
+   * @param para
+   * @return
+   */
+  @Override
+  public int loadGameParam(GameParam para) {
+    GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
+    return para.getValue(gameInfo);
   }
 
   @Override
-  public void setGame(int GameID) {
+  public int loadPlayerPara(PlayerParam playerParam, int playerID) throws DataLoadingException {
+    PlayerStatus playerStatus = gameObjectConfiguration.getPlayerWithID(playerID);
+    try {
+      return playerStatus.getPlayerParam(playerParam);
+    } catch (Exception e) {
+      throw new DataLoadingException(String.format("Player %d does not exist", playerID), e);
+    }
+  }
 
+  @Override
+  public int loadCurrentPlayerPara(PlayerParam playerParam) throws DataLoadingException {
+    return loadPlayerPara(playerParam, gameObjectConfiguration.getCurrentPlayerID());
+  }
+
+  @Override
+  public List<Direction> loadAvailableDirection(GameParam para) {
+    GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
+    return gameInfo.getAvailableAttackDirections();
+  }
+
+  /**
+   * ***this method has to be called before using any of the loader/storer.
+   *
+   * @param GameID
+   * @param playersID
+   */
+  @Override
+  public void setGameAndPlayer(int GameID, List<Integer> playersID) {
+    gameObjectConfiguration.setCurrentPlayerAndGameID(GameID, playersID);
   }
 
   @Override
   public int getGameType() {
-    return 0;
+    return gameObjectConfiguration.getCurrentGameID();
   }
 
   @Override
-  public Cell loadCell(int row, int col, int subMapID, int level) {
+  public Cell loadCell(int row, int col, int subMapID, int level) throws DataLoadingException {
     return loadMap(level, subMapID).getElement(row, col);
   }
 
   @Override
   public int getNextSubMapID(Direction direction, int current) {
-    return 0;
+    return ID_NOT_DEFINED;
   }
-  //todo: upgrade it from whole map to submap.
-  private GameMapGraph loadMap(int level, int subMapID) {
+
+  @Override
+  public GameMapGraph loadMap(int level, int subMapID) throws DataLoadingException {
 
     GameMapGraph map = new GameMapGraph();
+    GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
+    String keyOfSubmap = gameInfo.getSubMapInfo().get(level).get(subMapID) + JSON_POSTFIX;
     try {
-      //two readings: 1. read level files 2. read subMap file.
-      //Map<String, String> levelInfoMap = loadLevelInfo(GameName, level);
-      //loadJson(GAME_Keyword + String.valueOf(level), );
-      map = (GameMapGraph) loadJson(mapKeyword+ String.valueOf(level) + ".json", map.getClass());
+      Map<String, GameMapGraph> tempMap = gameObjectConfiguration.getGameMapList();
+      if (tempMap.containsKey(keyOfSubmap)) {
+        map = tempMap.get(keyOfSubmap);
+        map.addBufferImage2D(this);//only works for 2D
+      } else {
+        throw new DataLoadingException(String.format("Map File not found with key %s", keyOfSubmap));
+      }
+
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new DataLoadingException(e.getMessage(), e);
     }
     return map;
   }
-  @Override
-  public String loadText(String keyword, String category) {
-    Map<String, String> text = new HashMap<>();
-    text = (Map<String, String>) loadJson(Text_Keyword + category, text.getClass());
-    return text.get(keyword);
-  }
 
+  /**
+   * load buffered Image by providing the image category and ID
+   * @param ImageID
+   * @param category
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
-  public int loadCharacter(int ID, CharacterProperty property) {
-    ZeldaCharacter zeldaCharacter = new ZeldaCharacter(1,2);
-
-    zeldaCharacter = (ZeldaCharacter) loadJson(characterKeyword + ".json", zeldaCharacter.getClass());
+  public BufferedImage loadBufferImage(int ImageID, ImageCategory category) throws DataLoadingException {
+    String imagePath = loadImagePath(ImageID, category);
     try {
-      Method methodcall = zeldaCharacter.getClass().getDeclaredMethod("get" + property.toString().substring(0,1)+ property.toString().substring(1).toLowerCase());
-      int a = (int) methodcall.invoke(zeldaCharacter);
-      return (int) methodcall.invoke(zeldaCharacter);
-    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      return ImageIO.read(new File(imagePath));
+    } catch (IOException e) {
+      throw new DataLoadingException(imagePath + " was not loaded.", e);
     }
 
-
-    return 0;
   }
 
+  /**
+   * load text
+   * @param keyword
+   * @param category
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
-  public int loadWeapon(int ID, int property) {
-    return 0;
+  public String loadText(String keyword, String category) throws DataLoadingException {
+    Map<String, String> textMap = gameObjectConfiguration.getTextMap().get(category);
+    return loadValueOfMap(textMap, keyword);
   }
 
+  /**
+   * load charcter's property using ID
+   * @param ID
+   * @param property
+   * @return
+   * @throws DataLoadingException
+   */
+  @Override
+  public int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException {
+    throw new DataLoadingException("load character property is not supported");
+  }
+
+  /**
+   * load weapon's property using ID
+   * @param ID
+   * @param property
+   * @return
+   * @throws DataLoadingException
+   */
+  @Override
+  public int loadWeapon(int ID, int property) throws DataLoadingException {
+    throw new DataLoadingException("load weapon is not supported");
+  }
+
+  /**
+   * load current level
+   * @return
+   */
   @Override
   public int currentLevel() {
-    return 0;
+    return loadGameParam(GameParam.LEVEL_NUM);
   }
 
+  /**
+   * keycode are stored in the player files.
+   *
+   * @param playerID
+   * @return
+   */
   @Override
-  public Object loadInventoryElement(int ID) {
-    return null;
-  }
-
-  @Override
-  public Map<String, Integer> loadInternalStorage(String category) {
-    return null;
-  }
-
-  @Override
-  public Map<KeyCode, String> loadKeyCode(int playerID, String category) {
-    return null;
-  }
-
-  @Override
-  public Path loadImagePath(int imageID, String category) {
-    Map<Integer, Path> imagePath = new HashMap<>();
-    imagePath = (Map<Integer, Path>) loadJson(Image_Keyword + category, imagePath.getClass());
-    return imagePath.get(imageID);
-  }
-
-  //seems I can't do generic for this guy and have to use the Object class?
-  private Object loadJson(String fileName, Class clazz) {
+  public Map<Integer, String> loadKeyCode(int playerID) throws DataLoadingException {
+    PlayerStatus player;
     try {
-      Reader reader = Files.newBufferedReader(Paths.get(fileName));
-      return gson.fromJson(reader, clazz);
+      player = gameObjectConfiguration.getPlayerWithID(playerID);
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new DataLoadingException(String.format("Player with %s is not found while loading key code", playerID)
+              , e);
     }
-    return 0;
+    return player.getKeyCodeMap();
   }
 
-  //todo: finish the method
-  public String loadSetting(int property) {
-    return "";
-  }
+  /**
+   * in Json, <int, String> always returns <Stirng, String>
+   *
+   * @param imageID
+   * @param category
+   * @return
+   */
   @Override
-  public Integer loadInteger(String keyword, String category) {
-    return null;
+  public String loadImagePath(int imageID, ImageCategory category) throws DataLoadingException {
+    Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(category.toString());
+    String key = String.valueOf(imageID);
+    return loadValueOfMap(imageMap, key);
+  }
+
+  /**
+   * load value of the map
+   *
+   * @param map
+   * @param key
+   * @return
+   */
+  private String loadValueOfMap(Map<String, String> map, String key) throws DataLoadingException {
+    if (map != null && checkKeyExist(map, key)) {
+      return map.get(key);
+    } else {
+      throw new DataLoadingException("image not found");
+    }
+  }
+
+  private <K, V> boolean checkKeyExist(Map<K, V> map, K key) {
+    return (map.get(key) != null);
+  }
+
+  public static GameObjectConfiguration getGameObjectConfiguration() {
+    return gameObjectConfiguration;
   }
 
   @Override
-  public int loadGameParam(String keyword) {
-    return 0;
+  public List<ZeldaCharacter> getZeldaCharacters() {
+    return gameObjectConfiguration.getZeldaCharacterList();
+  }
+
+  @Override
+  public List<PlayerStatus> getCurrentPlayers() {
+    return gameObjectConfiguration.getCurrentPlayers();
   }
 
 
+
+  @Override
+  public Map<String, Animation2D> loadAnimation(AnimationType animationType) {
+    return gameObjectConfiguration.getSpecificAgentAnimation(animationType.toString() + JSON_POSTFIX);
+  }
+
+  public ResourceBundle getErrorMessageResources() {
+    return errorMessageResources;
+  }
 }

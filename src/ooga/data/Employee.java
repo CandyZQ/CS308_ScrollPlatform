@@ -1,5 +1,5 @@
 package ooga.data;
-public class Employee {
+public class  Employee {
     private String name;
     private String dept;
     private int salary;

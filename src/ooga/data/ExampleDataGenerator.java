@@ -1,107 +1,96 @@
 package ooga.data;
 
-import ooga.model.characters.ZeldaCharacter;
-import ooga.model.enums.CharacterProperty;
-import ooga.model.enums.Direction;
+import com.google.gson.Gson;
+import ooga.model.interfaces.gameMap.Cell;
+import ooga.model.map.GameCell;
+import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static ooga.data.GameMapGraph.PIXEL_PALETTE_WIDTH;
+import static ooga.model.enums.ImageCategory.MAP2D;
+
+/**
+ * this class will not be part of the final submission. It's purely used for generating data for the example file for the presentation only.
+ */
 public class ExampleDataGenerator {
-    public static void main(String[] args) {
+
+    static Gson gson;
+    public static void main(String[] args) throws DataLoadingException {
         DataLoader a = new DataLoader();
         DataStorer b = new DataStorer();
-//        Gson gson = new Gson();
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-
-        /**
-         * the following is testing the Game map loading
-         */
-//        LinkedList<Cell> cellLinkedList = new LinkedList<>();
-//        for (int i = 0; i < 20; i++) {
-//            Cell newCell = new GameCell(1);
-//            newCell.setState(1);
-//            newCell.setImage(9);
-//            cellLinkedList.add(newCell);
+        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
+        gsonBuilder.serializeNulls(); //ensure gson storing null values.
+        gson = gsonBuilder.create();
+        //generateLevelData();
+        generateTheMapForFirstSprint();
+    }
+    //    private static void generateLevelData() {
+//        int levelNum = 1;
+//        int gameType = 1;
+//        List<Integer> npcID= new ArrayList<>();
+//        npcID.add(1);
+//        List<Integer> playerID = new ArrayList<>();
+//        playerID.add(1);
+//        Map<Integer, String> subMapID = new HashMap<>();
+//        Map<Integer, Map<Integer, String>> a = new HashMap<>();
+//        for (int i = 0; i  < SubMapPerMap; i++) {
+//
+//            subMapID.put(i, UUID.randomUUID().toString());//file name is a random unique ID.
 //        }
-//
-//
-//        a.loadCell(1,1,1, 1);
-//        b.storeMap(cellLinkedList, 1);
-        /**
-         * the following is generating character loading
-         *
-         */
-        ZeldaCharacter ZC = new ZeldaCharacter(1,2,3,4);
-        ZC.setFiringDirection(Direction.EAST);
-        b.storeCharacter(2, ZC);
-        a.loadCharacter(2, CharacterProperty.ATTACK);
-        /**
-         * the following is testing image map loading/storing (incomplete)
-         */
-
-//        constructExampleGameMap(gameMap);
+//        a.put(levelNum, subMapID);
+//        GameInfo gameInfo1 = new GameInfo(npcID, playerID, levelNum, a, gameType);
+//        writeObjectTOJson(gameInfo1, "data/GameInfo/Game"+gameType+"level"+levelNum+".json");
+//    }
+//    private static void writeObjectTOJson(Object object, String filePath) {
 //        try {
-//            mapper.writeValue(new File("example Data2.json"), gameMap);
-//        } catch (Exception e) {
-//
-//        }
-
-//        Type type = new TypeToken<Map<String, String>>(){}.getType();
-//        Map<String, String> myMap = gson.fromJson("{'k1':'apple','k2':'orange'}", type);
-//        System.out.println(myMap);
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        GameMapGraph gameMap = new GameMapGraph(10, 10);
-//        constructExampleGameMap(gameMap);
-//        try {
-//            mapper.writeValue(new File("example Data2.json"), gameMap);
-//            String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(gameMap);
-//            System.out.println(jsonString);
-//
-//            FileWriter Writer1 = new FileWriter("example Data");
-//            String jsonString2 = gson.toJson(gameMap);
-//            gson.toJson(gameMap, Writer1);
+//            FileWriter Writer1 = new FileWriter(filePath);
+//            String jsonString2 = gson.toJson(object);
+//            gson.toJson(object, Writer1);
 //            Writer1.flush();
 //            Writer1.close();
-//            FileWriter Writer2 = new FileWriter("cell Data");
-//            String jsonString2 = gson.toJson(gameMap.getStartingCell());
-//            Writer2.write(jsonString2);
-//            gson.toJson(gameMap, Writer2);
-//            Writer2.flush();
-//            Writer2.close();
-//            System.out.println(jsonString2);
-
-//        } catch (Exception e) {
+//        } catch (IOException e) {
 //            e.printStackTrace();
+//            //throw appropriate Exceptions
 //        }
-
-    }
-    private static void constructExampleGameMap(GameMapGraph gameMapGraph) {
-//        Cell previous = gameMapGraph.getStartingCell();
-//        Cell current;
-//        for (int i = 0; i < 10; i++) {
-//            current = new GameCell(i, i);
-//            gameMapGraph.addVertex(new GameCell(i, i));
-//            gameMapGraph.addEdge(current, previous);
-//            previous = current;
-//        }
-//        new GameMapGraph(10 , 10);
-    }
-//
-//    public static void main(String[] args) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        GameMapGraph gameMap = new GameMapGraph();
-//
-//        try {
-//            mapper.writeValue(new File("person.json"), gameMap);
-//            String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(person);
-//            System.out.println(jsonString);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    public GameMapGraph storeLevel(double levelNumber) {
 //
 //    }
+    protected static void generateTheMapForFirstSprint() throws DataLoadingException {
+        String mapPath = "/view/textures/2d/cyberpunk/map/map.txt";
+        Text2DMapReader textMapReader = new Text2DMapReader(mapPath);
+        int subMapHeight = textMapReader.getMapHeight();
+        int subMapWidth = textMapReader.getMapWidth();
+        List<Cell> cellList = new ArrayList<>();
+        List<Integer> availableImageID = new ArrayList<>();
+        for (int i = 0; i < subMapHeight; i++) {
+            for (int j = 0; j < subMapWidth; j++) {
+                Cell tempCell = new GameCell();
+                int imageID = textMapReader.getMapCell(i, j);
+                tempCell.setImage(imageID);
+                tempCell.setWalkable(textMapReader.isMapCellWalkable(i, j));
+                cellList.add(tempCell);
+
+                //store the image of Cell in the 2DMap folder under Image folder.
+                if (!availableImageID.contains(imageID)) {
+                    availableImageID.add(imageID);
+                    DataStorer storer = new DataStorer();
+                    int palette_x = imageID % PIXEL_PALETTE_WIDTH;
+                    int palette_y = imageID / PIXEL_PALETTE_WIDTH;
+                    storer.storeImage(String.format("data/2DMAP_PNG/%s_%s.png", palette_x, palette_y), imageID, MAP2D);
+                }
+
+
+            }
+        }
+
+        //store data
+        DataStorer b = new DataStorer();
+        System.out.println(cellList.size());
+        b.storeSubMap(cellList, 1, 0, 1);
+        DataLoader c = new DataLoader();
+        b.writeAllDataIntoDisk();
+    }
+
 
 }

@@ -7,7 +7,7 @@ import ooga.model.enums.ElementState;
  *
  * @author cady
  */
-public interface InteractiveElements {
+public interface  InteractiveElements {
 
   /**
    * Sets the state of this element

@@ -1,144 +1,193 @@
 package ooga.data;
 
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import ooga.model.characters.UnchangableCharacter;
 import ooga.model.characters.ZeldaCharacter;
-import ooga.model.gameElements.Weapon;
-import ooga.model.interfaces.Inventory;
+import ooga.model.enums.AnimationType;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.TextCategory;
+import ooga.model.enums.backend.PlayerParam;
+import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
+
+import static ooga.data.DataLoader.JSON_POSTFIX;
+import static ooga.data.PlayerStatus.initLevel;
+import static ooga.data.PlayerStatus.initLife;
+
+//import ooga.model.gameElements.Weapon;
 
 public class DataStorer implements DataStorerAPI {
-    public static final int numFilesPerLevel = 1;
-    public static final int mapRowNum = 10;//from frontend
-    public static final int mapColNum = 10;//from frontend
-    public static final String mapKeyword =  "MapOfLevel";
-    public static final String characterKeyword =  "CharacterData";
-    private Map<String, String> generalLevelFile;
     private com.google.gson.Gson gson;
+    private DataLoader dataLoader; //for just tentative measure.
+    private GameObjectConfiguration gameObjectConfiguration;
 
-    public DataStorer() {
+    public DataStorer() throws DataLoadingException {
         com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
         gsonBuilder.serializeNulls(); //ensure gson storing null values.
         gson = gsonBuilder.create();
+        dataLoader = new DataLoader();
+        gameObjectConfiguration = dataLoader.getGameObjectConfiguration();
 
-        //delete in the future and move into property files.
-        generalLevelFile = new HashMap<>();
-        generalLevelFile.put("fileName", "level");
-        generalLevelFile.put("map", "MapOfLevel");
     }
+
+    //todo: test not done
+    @Override
+    public void StoreText(String text, String keyword, TextCategory category) {
+        gameObjectConfiguration.setTextMap(text, keyword, category);
+    }
+
+//    @Override
+//    public void storeCharacter(int ID, UnchangableCharacter character) {
+//
+//    }
 
     @Override
-    public int getGameType() {
-        return 0;
+    public void storeWeapons(int ID, WeaponBase weapon) {
+        throw new DataLoadingException("store weapons is not implemented");
     }
+
 
     @Override
-    public void setGame(int GameID) {
-
-    }
-
-    @Override
-    public void StoreText(String text, String keyword, String category) {
-
-    }
-
-    @Override
-    public void storeCharacter(int ID, UnchangableCharacter character) {
-
-    }
-
-
-    //@Override
     public void storeCharacter(int characterID, ZeldaCharacter character) {
-        Map<Integer, ZeldaCharacter> characterMap = new HashMap<>();
-        characterMap.put(characterID, character);
-        writeObjectTOJson(characterMap, characterKeyword+".json");
+
+        character.setId(characterID);
+        List<ZeldaCharacter> tempCharList = new ArrayList<>();
+        for (ZeldaCharacter i : gameObjectConfiguration.getZeldaCharacterList()) {
+            if (i.getId() != characterID) {
+                tempCharList.add(i);
+            }
+        }
+        tempCharList.add(character);
+        gameObjectConfiguration.setZeldaCharacterList(tempCharList);
+//        writeObjectTOJson(character, "data/ZeldaCharacter/" + characterKeyword + characterID + ".json");
     }
 
-    @Override
-    public void storeWeapons(int ID, Weapon weapon) {
 
+    @Override
+    public void setPlayerParam(PlayerParam param, int value, int playerID) {
+        PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
+        if (tempPlayer == null) {
+            System.out.println("Player not created(storer 114)");
+            //todo: throw errors.
+        }
+        tempPlayer.setPlayerParam(param, value);
+    }
+    @Override
+    public void addPlayer(int playerID) {
+        gameObjectConfiguration.setPlayerWithID(playerID, new PlayerStatus(playerID));
+    }
+    @Override
+    public void storeKeyCode(Map<Integer, String> keyCodeMap, int playerID) {
+        PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
+        if (tempPlayer != null) {
+            tempPlayer.setKeyCodeMap(keyCodeMap);
+            gameObjectConfiguration.setPlayerWithID(playerID, tempPlayer);
+        } else {
+            System.out.println("player not found in Storer 144");
+            //todo: throw playerNotFound error
+        }
     }
 
-    @Override
-    public void StoreInventory(Inventory inventory) {
-
-    }
-
-    @Override
-    public void storeKeyCode(Map<KeyCode, String> keyCodeMap, int playerID) {
-
+    private boolean fileExist(String filePath) {
+        File tmpDir = new File(filePath);
+        return tmpDir.exists();
     }
 
     /**
      * Slow if serialize every time?
-     * @param image
+     * @param imagePath
      * @param ImageID
-     * @param category
+     * @param
      */
     @Override
-    public void storeImage(Image image, int ImageID, String category) {
-        Map<Integer, Image> imageMap = new HashMap<>();
-        imageMap.put(ImageID, image);
-        writeObjectTOJson(imageMap, category);
-    }
+    //todo: finish testing
+    public void storeImage(String imagePath, int ImageID, ImageCategory imageCategory) {
+        String imageIDString = String.valueOf(ImageID);
+        Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(imageCategory.toString());
 
-    @Override
-    public void storeInteger(String keyword, String category, int value) {
-
-    }
-
-    @Override
-    public void updateParamSetting(Map<String, Integer> playerPreference, int category) {
-
-    }
-
-    @Override
-    public void storeMap(Collection<Cell> map, int level) {
-        if (map.size() > mapRowNum * mapColNum) {
-            System.out.println("map stored didn't fit in dimension");
-            //throw an exception
+        if (imageMap != null) {
+            imageMap = gameObjectConfiguration.insertElementToMap(imageMap, imageIDString + JSON_POSTFIX, imagePath);
+        } else {
+            imageMap = new HashMap<>();
+            imageMap.put(imageIDString, imagePath);
         }
-        GameMapGraph mapGraph = new GameMapGraph(level, mapRowNum, mapColNum);
+        gameObjectConfiguration.setImageMap(imageMap, imageCategory);
+    }
+
+    /**
+     * level = current level; subMapID = next available ID;
+     * @param map
+     * @param level
+     */
+    @Override
+    public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
+        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
+    }
+    @Override
+    public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
+        storeSubMap( map, level, subMapID, gameObjectConfiguration.getCurrentGameID());
+    }
+    @Override
+    public void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) {
+        if (map.size() != GameMapGraph.SUBMAP_ROW_NUM * GameMapGraph.SUBMAP_COL_NUM) {
+            throw new DataLoadingException("map stored didn't fit in dimension");
+        }
+
+        GameMapGraph mapGraph = new GameMapGraph(level, subMapID, GameMapGraph.SUBMAP_ROW_NUM, GameMapGraph.SUBMAP_COL_NUM, gameID);
         int i = 0;
         for (Cell cell: map) {
-            mapGraph.setElement(i/mapColNum, i%mapRowNum, cell.getState(), cell.getImage() );
+            mapGraph.setElement(i/ GameMapGraph.SUBMAP_COL_NUM, i% GameMapGraph.SUBMAP_ROW_NUM, cell);
             i++;
         }
-        writeObjectTOJson(mapGraph, mapKeyword + String.valueOf(level)+".json");
-
-    }
-
-    private void writeObjectTOJson(Object object, String fileName) {
-        try {
-            FileWriter Writer1 = new FileWriter(fileName);
-            String jsonString2 = gson.toJson(object);
-            gson.toJson(object, Writer1);
-            Writer1.flush();
-            Writer1.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //throw appropriate Exceptions
+        /**
+         * How storer knows the name of the game map file being stored is challenging.
+         * Storer and loader are therefore not independent.
+         *
+         */
+        GameInfo currentGameInfo = gameObjectConfiguration.getGameInfo(level, gameObjectConfiguration.getCurrentGameID());
+        String subMapFileName = currentGameInfo.getSubMapInfo().get(level).get(subMapID) + ".json";
+        Map<String, GameMapGraph> currentGameMapList =  gameObjectConfiguration.getGameMapList();
+        if (currentGameMapList.keySet().contains(subMapFileName)) {
+            currentGameMapList.replace(subMapFileName, mapGraph);
+        } else  {
+            currentGameMapList.put(subMapFileName, mapGraph);
         }
+        gameObjectConfiguration.setGameMapList(currentGameMapList);
+//         writeObjectTOJson(mapGraph, gameMapAddressPrefix + subMapFileName);
 
     }
+
     /**
-     * It will create a Json file holding a menu telling the program where to get data of that specific level.
-     * @param levelNumber the number of the level we add
+     * method is called when the player restarts the game.
+     * resets life, level, and score
      */
     @Override
-    public void addLevel(int levelNumber) {
-
-        for (int i = 0; i < numFilesPerLevel; i++) {
-//            String jsonString = gson.toJson(person);
-        }
+    public void resetPlayerInfo() {
+        int currentPlayerID = gameObjectConfiguration.getCurrentPlayer().getPlayerID();
+        setPlayerParam(PlayerParam.CURRENT_LEVEL, initLevel, currentPlayerID);
+        setPlayerParam(PlayerParam.LIFE, initLife, currentPlayerID);
+        setPlayerParam(PlayerParam.CURRENT_SCORE, 0, currentPlayerID);
     }
+
+
+    /**
+     * call this method before program ends and all data will not be stored into disk without calling this method.
+     */
+    @Override
+    public void writeAllDataIntoDisk() {
+        gameObjectConfiguration.writeAllDataToDisk();
+    }
+
+    @Override
+    public void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType) {
+        gameObjectConfiguration.setAnimationMap(animationType.toString() + JSON_POSTFIX, animations);
+    }
+
+    public DataLoader getDataLoader(){
+        return dataLoader;
+    }
+
 
 }

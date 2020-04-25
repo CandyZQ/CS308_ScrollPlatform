@@ -1,7 +1,7 @@
 package ooga.model.interfaces.gameMap;
 
 import java.util.List;
-import ooga.model.enums.Direction;
+import ooga.model.enums.backend.Direction;
 
 /**
  * GameMap is the whole map for the game. It consists many {@link GridInMap} and talk to other parts
@@ -10,7 +10,7 @@ import ooga.model.enums.Direction;
  * @author cady
  * @see GridInMap
  */
-public interface GameMap {
+public interface  GameMap {
 
   /**
    * Gets the ID of current grid
@@ -21,7 +21,7 @@ public interface GameMap {
   /**
    * Sets the ID of current grid
    */
-  void setCurrentGridID();
+  void setCurrentGridID(int currentGrid);
   /**
    * Gets the game map representation in a list.
    *

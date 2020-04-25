@@ -1,44 +1,51 @@
 package ooga.data;
 
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import ooga.model.characters.UnchangableCharacter;
-import ooga.model.gameElements.Weapon;
-import ooga.model.interfaces.Inventory;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.enums.AnimationType;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.TextCategory;
+import ooga.model.enums.backend.PlayerParam;
+import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
 
 import java.util.Collection;
 import java.util.Map;
 
-public interface DataStorerAPI {
-    int getGameType();
-    void setGame(int GameID);
+public interface  DataStorerAPI {
+
     /**
      * store text files to the database.
      * @return
      */
-    void StoreText(String text, String keyword, String category);
 
-    void storeCharacter(int ID, UnchangableCharacter character);
+    void StoreText(String text, String keyword, TextCategory category);
 
-    void storeWeapons(int ID, Weapon weapon);
+    @Deprecated
+    void storeWeapons(int ID, WeaponBase weapon);
 
-    void StoreInventory(Inventory inventory);
+    void storeCharacter(int characterID, ZeldaCharacter character);
 
-    void storeKeyCode(Map<KeyCode, String> keyCodeMap, int playerID);
+    void setPlayerParam(PlayerParam para, int value, int playerID);
 
-    void storeImage(Image image, int ImageID, String category);
+    void addPlayer(int playerID);
 
-    void storeInteger(String keyword, String category, int value);
+    void storeKeyCode(Map<Integer, String> keyCodeMap, int playerID);
 
-    void updateParamSetting(Map<String, Integer> playerPreference, int category);
+    void storeImage(String image, int ImageID, ImageCategory imageCategory);
+    @Deprecated
+    void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) throws DataLoadingException;
 
-    /**
-     *
-     * @param map cells in the collection will first fill in the 1st row, then the 2nd row of the screen and so on...
-     * @param level the level the game displays.
-     */
-    void storeMap(Collection<Cell> map, int level);
-    void addLevel(int levelNumber);
+    void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) throws DataLoadingException;
+
+    void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) throws DataLoadingException;
+
+    void resetPlayerInfo();
+
+    void writeAllDataIntoDisk();
+
+    void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType);
+
+    DataLoaderAPI getDataLoader();
 
 }

@@ -1,6 +1,6 @@
 package ooga.model.enums;
 
-public enum  ElementState {
+public enum   ElementState {
   STATIONARY,
   ACTIVATED
 }

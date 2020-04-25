@@ -1,7 +1,6 @@
 package ooga.data;
 
 import javafx.scene.image.Image;
-import ooga.model.characters.UnchangableCharacter;
 import ooga.model.gameElements.Weapon;
 import ooga.model.interfaces.Inventory;
 

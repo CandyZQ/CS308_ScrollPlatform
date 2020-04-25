@@ -9,7 +9,7 @@ package ooga.model.interfaces.movables;
  * @see Movable1D
  * @see Movable2D
  */
-public interface Jumpable{
+public interface  Jumpable{
 
   /**
    * Sets the speed this object moves in the z direction

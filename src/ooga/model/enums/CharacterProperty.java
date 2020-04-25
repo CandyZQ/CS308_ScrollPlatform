@@ -1,6 +1,6 @@
 package ooga.model.enums;
 
-public enum CharacterProperty {
+public enum  CharacterProperty {
   X_POS(0),
   Y_POS(1),
   Z_POS(2),

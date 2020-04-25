@@ -1,7 +1,6 @@
 package ooga.model.interfaces;
 
-import ooga.model.enums.Direction;
-import ooga.model.gameElements.Element;
+import ooga.model.enums.backend.Direction;
 
 /**
  * Objects that implement this interface are allowed to attack other objects in different ways.
@@ -10,7 +9,7 @@ import ooga.model.gameElements.Element;
  * @author cady
  * @see Alive
  */
-public interface Attacker {
+public interface  Attacker {
 
   /**
    * Sets weapon this object is holding

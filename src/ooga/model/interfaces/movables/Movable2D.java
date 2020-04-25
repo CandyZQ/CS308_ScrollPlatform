@@ -6,7 +6,7 @@ package ooga.model.interfaces.movables;
  * @author cady
  * @see Movable1D
  */
-public interface Movable2D extends Movable1D {
+public interface  Movable2D extends Movable1D {
 
   /**
    * Sets the y position of this object

@@ -10,7 +10,7 @@ import ooga.model.gameElements.Element;
  * @author cady
  * @see Element
  */
-public interface Inventory {
+public interface  Inventory {
 
   /**
    * Adds a certain amount of an object into the inventory

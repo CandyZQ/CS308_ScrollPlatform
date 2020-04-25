@@ -1,7 +1,7 @@
 package ooga.model.interfaces.gameMap;
 
 import java.util.List;
-import ooga.model.enums.Direction;
+import ooga.model.enums.backend.Direction;
 
 /**
  * This interface creates a single grid that is made up of {@link Cell}. The grid can be loaded from
@@ -37,9 +37,10 @@ public interface SingleGrid {
   /**
    * Loads the grid from an external file
    *
-   * @param filename the filename in which the grid information is stored in
+   * @param id
+   * @param level
    */
-  void loadGridFrom(String filename);
+  void loadGrid(int id, int level);
 
   /**
    * Gets the cell state at a specific location
@@ -69,5 +70,10 @@ public interface SingleGrid {
    */
   boolean isGateCell(int row, int col, Direction direction);
 
+  /**
+   * Gets the entire gird
+   *
+   * @return the gird
+   */
   List<List<?>> getGrid();
 }

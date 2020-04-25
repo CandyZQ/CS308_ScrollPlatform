@@ -2,6 +2,7 @@ package ooga.data;
 
 
 import com.google.gson.*;
+import ooga.model.map.GameCell;
 
 import java.lang.reflect.Type;
 
@@ -11,34 +12,40 @@ import java.lang.reflect.Type;
  */
 
 
-public class InterfaceAdapter implements JsonSerializer, JsonDeserializer{
+public class InterfaceAdapter implements  JsonDeserializer{
 
-    private static final String CLASSNAME = "CLASSNAME";
-    private static final String DATA = "DATA";
+    private String className;
 
+    /**
+     * create an interfaceAdapter
+     * @param className the class of the object to be returned
+     */
+    public InterfaceAdapter(String className) {
+        this.className = className;
+    }
+
+    /**
+     * Specify how to deserialize the corresponding objects. Override deserialize method of Gson.
+     * @param jsonElement element being deserialized
+     * @param type the type of object being deserialzied to
+     * @param jsonDeserializationContext the context where the deserialization happens
+     * @return the object being parsed
+     */
     public Object deserialize(JsonElement jsonElement, Type type,
                          JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        //JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
-//        String className = prim.getAsString();
-        String className = "ooga.data.GameCell";
+
         Class klass = getObjectClass(className);
-        GameCell a = jsonDeserializationContext.deserialize(jsonObject, klass);
-        return a;
+        GameCell gameCell = jsonDeserializationContext.deserialize(jsonObject, klass);
+        return gameCell;
     }
-    public JsonElement serialize(Object jsonElement, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(CLASSNAME, jsonElement.getClass().getName());
-        jsonObject.add(DATA, jsonSerializationContext.serialize(jsonElement));
-        return jsonObject;
-    }
+
     /****** Helper method to get the className of the object to be deserialized *****/
     public Class getObjectClass(String className) {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            //e.printStackTrace();
             throw new JsonParseException(e.getMessage());
         }
     }
