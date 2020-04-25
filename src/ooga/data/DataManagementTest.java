@@ -14,9 +14,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//import org.junit.Assert;
-
-//import org.junit.Test;
 
 /**
  * Testing for DataManagement.
@@ -27,22 +24,14 @@ public class  DataManagementTest {
     private static DataLoader loader;
 
     static {
-        try {
             loader = new DataLoader();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
     }
 
 
     private static DataStorer storer;
 
     static {
-        try {
-            storer = new DataStorer();
-        } catch (DataLoadingException e) {
-            e.printStackTrace();
-        }
+        storer = new DataStorer();
     }
 
 

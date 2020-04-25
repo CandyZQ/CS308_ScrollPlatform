@@ -17,21 +17,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
 
 public class DataLoader implements DataLoaderAPI {
-
+  public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
   public static final int SubMapPerMap = 4;
   public static final String JSON_POSTFIX = ".json";
   private static GameObjectConfiguration gameObjectConfiguration;
+  private ResourceBundle errorMessageResources;
 
   /**
    * fetch an gameObjectConfiguration instance
+   * initializes error message resource bundle
    * @throws DataLoadingException
    */
   public DataLoader() throws DataLoadingException {
     gameObjectConfiguration = GameObjectConfiguration.getInstance();
+    errorMessageResources = ResourceBundle.getBundle(ERROR_MESSAGE_RESOURCES_PACKAGE);
   }
 
   /**
@@ -245,5 +249,9 @@ public class DataLoader implements DataLoaderAPI {
   @Override
   public Map<String, Animation2D> loadAnimation(AnimationType animationType) {
     return gameObjectConfiguration.getSpecificAgentAnimation(animationType.toString() + JSON_POSTFIX);
+  }
+
+  public ResourceBundle getErrorMessageResources() {
+    return errorMessageResources;
   }
 }

@@ -123,7 +123,7 @@ public class DataStorer implements DataStorerAPI {
      */
     @Override
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
-        throw new DataLoadingException("map stored didn't fit in dimension");
+        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
     }
     @Override
     public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
