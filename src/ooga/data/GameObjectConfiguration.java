@@ -36,7 +36,7 @@ public class GameObjectConfiguration {
   private static final String LIST_KEYWORD = "List";
   private static final String MAP_KEYWORD = "Map";
   private static final String FILE_PATH_DELIMITER = "/";
-  private static final String EXCEPTION_KEYWORD = "File not found";
+  private static final String EXCEPTION_KEYWORD = "Can't Load Data";
   private static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
@@ -399,11 +399,13 @@ public class GameObjectConfiguration {
    */
   public void setTextMap(String text, String keyword, TextCategory category) {
     Map<String, String> tempTextMap = textMap.get(category.toString());
-    if (tempTextMap == null) {
-      throw new DataLoadingException(EXCEPTION_KEYWORD);
+    try {
+      tempTextMap = insertElementToMap(tempTextMap, keyword, text);
+      textMap.replace(category.toString(), tempTextMap);
+    } catch (Exception e) {
+      throw new DataLoadingException(e.getMessage(), e);
     }
-    tempTextMap = insertElementToMap(tempTextMap, keyword, text);
-    textMap.replace(category.toString(), tempTextMap);
+    
   }
 
   /**

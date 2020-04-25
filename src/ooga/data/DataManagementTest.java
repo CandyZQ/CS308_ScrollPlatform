@@ -101,18 +101,28 @@ public class  DataManagementTest {
 //        storer.writeAllDataIntoDisk();
     }
 
+    /**
+     * testing whether we can catch bad data
+     */
     @Test
     public void badMethodCall() {
-        storer.storeWeapons(1, new WeaponBase(1 ,2,Direction.E) {
-            @Override
-            public void fire() {
+        boolean hasException = false;
+        try {
+            storer.storeWeapons(1, new WeaponBase(1 ,2,Direction.E) {
+                @Override
+                public void fire() {
 
-            }
-        });
+                }
+            });
+        } catch (DataLoadingException e) {
+            hasException = true;
+        }
+        assertTrue(hasException);
+
     }
 
     /**
-     * todo: interger 99 != String 99
+     * testing data for loading and storing params
      */
     @Test
     public void loadAndStoreParam() throws DataLoadingException {
@@ -123,6 +133,8 @@ public class  DataManagementTest {
         assertEquals(99, loader.loadPlayerParam(PlayerParam.CURRENT_SCORE, 3));
 //        storer.writeAllDataIntoDisk();
     }
+
+
 
 
 
