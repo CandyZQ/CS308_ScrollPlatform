@@ -1,11 +1,15 @@
 package ooga.data;
 
-import static ooga.data.DataLoader.JSON_POSTFIX;
-import static ooga.game.GameMain.HEIGHT;
-import static ooga.game.GameMain.WIDTH;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.TextCategory;
+import ooga.model.enums.backend.PlayerParam;
+import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
+import ooga.view.engine.io.Window;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,19 +20,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import ooga.model.characters.ZeldaCharacter;
-import ooga.model.enums.ImageCategory;
-import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerParam;
-import ooga.model.interfaces.gameMap.Cell;
-import ooga.view.engine.graphics.animation.Animation2D;
-import ooga.view.engine.io.Window;
+import java.util.*;
+
+import static ooga.data.DataLoader.JSON_POSTFIX;
+import static ooga.game.GameMain.HEIGHT;
+import static ooga.game.GameMain.WIDTH;
 
 /**
  * this is the man, the object storing EVERY piece of info!
@@ -110,10 +106,10 @@ public class GameObjectConfiguration {
 
       try {
         for (File child : directoryListing) {
-          if (type.equals("List")) {
+          if (type.equals(LIST_KEYWORD)) {
             loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
-          } else if (type.equals("Map")) {
+          } else if (type.equals(MAP_KEYWORD)) {
             loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
           } else {
