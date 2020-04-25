@@ -61,7 +61,7 @@ public class DataLoader implements DataLoaderAPI {
     try {
       return playerStatus.getPlayerParam(playerParam);
     } catch (Exception e) {
-      throw new DataLoadingException(String.format("Player %d does not exist", playerID), e);
+      throw new DataLoadingException(String.format(errorMessageResources.getString("loadPlayerParam"), playerID), e);
     }
   }
 
@@ -149,7 +149,7 @@ public class DataLoader implements DataLoaderAPI {
         map = tempMap.get(keyOfSubmap);
         map.addBufferImage2D(this);//only works for 2D
       } else {
-        throw new DataLoadingException(String.format("Map File not found with key %s", keyOfSubmap));
+        throw new DataLoadingException(String.format(errorMessageResources.getString("loadMap"), keyOfSubmap));
       }
 
     } catch (Exception e) {
@@ -171,7 +171,7 @@ public class DataLoader implements DataLoaderAPI {
     try {
       return ImageIO.read(new File(imagePath));
     } catch (IOException e) {
-      throw new DataLoadingException(imagePath + " was not loaded.", e);
+      throw new DataLoadingException(imagePath + errorMessageResources.getString("loadBufferImage"), e);
     }
 
   }
@@ -198,7 +198,7 @@ public class DataLoader implements DataLoaderAPI {
    */
   @Override
   public int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException {
-    throw new DataLoadingException("load character property is not supported");
+    throw new DataLoadingException(errorMessageResources.getString("loadCharacter"));
   }
 
   /**
@@ -210,7 +210,7 @@ public class DataLoader implements DataLoaderAPI {
    */
   @Override
   public int loadWeapon(int ID, int property) throws DataLoadingException {
-    throw new DataLoadingException("load weapon is not supported");
+    throw new DataLoadingException(errorMessageResources.getString("loadWeapon"));
   }
 
   /**
@@ -234,7 +234,7 @@ public class DataLoader implements DataLoaderAPI {
     try {
       player = gameObjectConfiguration.getPlayerWithID(playerID);
     } catch (Exception e) {
-      throw new DataLoadingException(String.format("Player with %s is not found while loading key code", playerID)
+      throw new DataLoadingException(String.format(errorMessageResources.getString("loadKeyCode"), playerID)
               , e);
     }
     return player.getKeyCodeMap();
@@ -265,7 +265,7 @@ public class DataLoader implements DataLoaderAPI {
     if (map != null && checkKeyExist(map, key)) {
       return map.get(key);
     } else {
-      throw new DataLoadingException("image not found");
+      throw new DataLoadingException(errorMessageResources.getString("loadValueOfMap"));
     }
   }
 
