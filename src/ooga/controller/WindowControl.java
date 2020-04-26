@@ -14,7 +14,7 @@ import ooga.data.DataStorerAPI;
 import ooga.game.GameType;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
-import ooga.view.game_menu.GameMenu;
+import ooga.view.game_menu.other.GameMenu;
 import ooga.view.game_menu.GameMenuView;
 import ooga.view.game_menu.SelectMenuView;
 import ooga.view.game_view.game_state.state2d.GameState2DView;

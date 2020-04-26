@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import ooga.view.game_menu.other.SelectMenu;
 import ooga.view.game_menu.pretty.PrettyButtons;
 
 import java.util.ArrayList;
