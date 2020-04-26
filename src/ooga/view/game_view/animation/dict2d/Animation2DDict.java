@@ -33,7 +33,7 @@ public class Animation2DDict extends AnimationDict {
 
 
   public Animation2D getAnimation(){
-
+    System.out.println("in anitionmation dict"+direction);
     for (Pair<Pair<String, Boolean>, String> key: prevDict.keySet()){
      // revDict.put(new Pair<>(new Pair<>("SPRINT",false), "SPRINT"), "PRESPRINT")
       if (currentAction.equals(key.getValue()) && ((key.getKey().getValue() && previousAction.equals(key.getKey().getKey())) ||

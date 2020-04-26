@@ -19,6 +19,7 @@ public class Agent2DDataHolder {
   private String moveAction;
   private boolean shouldConsumed = false;
   private boolean isBullet = false;
+  private boolean isNotGonnaDie = false;
   private boolean isSummon = false;
   private float speedScale = 10.0f;
   private Map<String, String> nextDict = new LinkedHashTreeMap<>();
@@ -33,6 +34,7 @@ public class Agent2DDataHolder {
   private Vector3f position;
   private Vector3f scale;
 
+  private boolean isNWAnimationAvail = false;
   private Vertex[] vertices = Asset2D.getAgentVertices();
   private int[] indices = Asset2D.getAgentIndices();
   private Vector2f halfBounds;
@@ -59,10 +61,28 @@ public class Agent2DDataHolder {
     this.vertices = Mesh.verticesCopy(Asset2D.getAgentVertices());
     this.indices = Asset2D.getAgentIndices();
     this.halfBounds = other.halfBounds;
+    this.isNWAnimationAvail = other.isNWAnimationAvail;
+    this.isNotGonnaDie = other.isNotGonnaDie;
   }
 
   public void setHalfBounds(Vector2f halfBounds) {
     this.halfBounds = halfBounds;
+  }
+
+  public void setNWAnimationAvail(boolean NWAnimationAvail) {
+    isNWAnimationAvail = NWAnimationAvail;
+  }
+
+  public void setNotGonnaDie(boolean notGonnaDie) {
+    isNotGonnaDie = notGonnaDie;
+  }
+
+  public boolean isNotGonnaDie() {
+    return isNotGonnaDie;
+  }
+
+  public boolean isNWAnimationAvail() {
+    return isNWAnimationAvail;
   }
 
   public Vector2f getHalfBounds() {

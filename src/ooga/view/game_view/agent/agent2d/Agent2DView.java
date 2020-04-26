@@ -17,10 +17,10 @@ public class Agent2DView extends AgentView {
   //TODO: should remove from hardcoded!
 
   protected Agent2DController controller;
-  private boolean shouldTerminated = false;
   private BoundingBox box;
   private Vector2f halfBounds;
   private Vector3f scale;
+  private String currentRawDirection;
 
   public Agent2DView(int id, Agent2DDataHolder data, BoundingBox box) {
     super(data.getMoveAction());
@@ -34,6 +34,10 @@ public class Agent2DView extends AgentView {
     object = new GameObject(Vector3f.zeros(), data.getRotation(), data.getScale(), mesh);
     controller.setObject(object);
     controller.setAgentView(this);
+  }
+
+  public boolean isShouldTerminated() {
+    return controller.isShouldTerminated();
   }
 
   public Vector3f getScale() {
@@ -78,12 +82,11 @@ public class Agent2DView extends AgentView {
     return new Vector2f(centerX/2.0f, centerY/2.0f);
   }
 
-  public String getCurrentDirection(){return controller.getCurrentDirection();}
+  public String getCurrentDirection(){return currentRawDirection;} //TODO FIX THIS
 
   public void update(String direction, String action) {
+    currentRawDirection = direction;
     controller.setCurrentAnimation(direction, action);
-    System.out.println(MOVE_ACTION);
-    System.out.println(action);
     if (action.equals(MOVE_ACTION)) controller.move(direction);
   }
 

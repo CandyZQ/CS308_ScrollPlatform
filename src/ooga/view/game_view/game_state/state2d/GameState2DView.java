@@ -42,12 +42,6 @@ public class GameState2DView extends GameStateView {
   private float zLayer = -0.8f;
   private float Z_INC = -0.01f;
 
-  //TODO: remove this part!
-  //TODO: loop through a list of agents to update its alive status/ adding new
-  //      how much to move :set in Asset2D
-  //TODO: COLLISION DETECT:
-  //TODO:   0) whether the movement is valid (check before move)
-  //        1) whether the attack is made (1. a method to calc the distance between two objects or with wall)
   private Map<Integer, Agent2DDataHolder> agentDataHolderMap;
 
   public GameState2DView(Map<Integer, Agent2DDataHolder> agentsData) {
@@ -85,7 +79,6 @@ public class GameState2DView extends GameStateView {
 
     window.setBackgroundColor(BACKGROUND_COLOR_R, BACKGROUND_COLOR_G, BACKGROUND_COLOR_B);
     window.create();
-    //window.setFullscreen(true);
 
     map = new Map2DView(mapPath);
     this.box = new BoundingBox(map, agentMap);
@@ -107,14 +100,13 @@ public class GameState2DView extends GameStateView {
 
   public void updateAgent(int id, String direction, String state, boolean isAttack)
       throws IOException {
-    //System.out.println("called");
+
     currentTimeUpdated = Timer.getTime();
     if (currentTimeUpdated - lasTimeUpdated < elapsedInterval) {
       lasTimeUpdated = currentTimeUpdated;
       return;
     }
     lasTimeUpdated = currentTimeUpdated;
-    //System.out.println("run");
 
     if (state.equals("DEATH")) {
       agentMap.get(id).terminate();
@@ -123,7 +115,7 @@ public class GameState2DView extends GameStateView {
 
     if (agentDataHolderMap.get(id).getSpawnerDict().containsKey(state)) // will spawn new agents
     {
-      //System.out.println("spawning");
+
       Vector3f parentPosition = new Vector3f(agentMap.get(id).getCenterPosition(), 0f);
       String parentDirection = agentMap.get(id).getCurrentDirection();
 
@@ -160,41 +152,28 @@ public class GameState2DView extends GameStateView {
   }
 
   public void updateBullets() {
-//    System.out.println(bulletMap.keySet().size());
+
     for (int key : bulletMap.keySet()) {
-      //check if hit the agent or wall
       Agent2DView bullet = bulletMap.get(key);
-      //System.out.println(String.format("BEFORE:key is %d",key));
-      //Test.printVector2f(bullet.getCenterPosition());
       bullet.update(bullet.getCurrentDirection(), "MOVE");
-      // System.out.println(String.format("AFTER:key is %d",key));
-      //Test.printVector2f(bullet.getCenterPosition());
-      //if(!box.canMove(false, true, bullet, ))
     }
   }
 
   private Agent2DDataHolder positionNewAgent(Agent2DDataHolder data, Vector3f parentPosition,
       String parentDirection, boolean isOrigin) {
+
     float MOVEMENT_DELTA = isOrigin ? 0f : 100f;
     Agent2DDataHolder newAgentData = new Agent2DDataHolder(data);
+
     if (newAgentData.getInitialDirection().equals(GenerateAgentsData.getDirectionPlaceholder())) {
       newAgentData.setInitialDirection(parentDirection);
     }
 
-    //System.out.println("dead");
-    //Test.printVector3f(parentPosition);
-    //Test.printVector3f(Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(), MOVEMENT_DELTA));
-
     newAgentData.setPosition(Vector3f.add(parentPosition,
         Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(), MOVEMENT_DELTA)));
 
-    //Test.printVector3f(parentPosition);
-    //Test.printVector3f(newAgentData.getPosition());
-
     setZDepth(newAgentData);
 
-    //System.out.println(newAgentData.isBullet());
-    //System.out.println("hah");
     return newAgentData;
   }
 
@@ -229,39 +208,33 @@ public class GameState2DView extends GameStateView {
 
   @Override
   public void renderAgents() throws IOException { // get rid of dead agents
-//    System.out.println("the set size of agents:");
-//    System.out.println(agentMap.keySet().size());
+
     for (int id : new HashSet<>(agentMap.keySet())) {
-      //System.out.println(agentma);
-//      System.out.println("here is another player");
-//      System.out.println(agentMap.get(id).getId());
-      if (!agentMap.get(id).renderMesh(renderer)) {
-//        System.out.println("the player's render return false");
-//        System.out.println(agentMap.get(id).getId());
-        //render didn't succeed
 
-        //TODO if the agent is summoner, generate new agents
+      if (!agentMap.get(id).renderMesh(renderer) ) {
 
-        Vector3f parentPosition = new Vector3f(agentMap.get(id).getCenterPosition(), 0f);
-        String parentDirection = agentMap.get(id).getCurrentDirection();
+        if (!agentMap.get(id).isShouldTerminated()) {
 
-        Vector3f newAgentDelta = Vector3f.zeros();
+          Vector3f parentPosition = new Vector3f(agentMap.get(id).getCenterPosition(), 0f);
+          String parentDirection = agentMap.get(id).getCurrentDirection();
 
-        Agent2DDataHolder newAgentData = positionNewAgent(
-            agentDataHolderMap.get(id).getSpawnerDict().get(agentMap.get(id).getAction()),
-            parentPosition, parentDirection, true);
-        GenerateAgentsData.loadAnimations(newAgentData);
+          Vector3f newAgentDelta = Vector3f.zeros();
 
-        setZDepth(newAgentData);
-        int newId = getNextAgentId();
-        Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
+          Agent2DDataHolder newAgentData = positionNewAgent(
+              agentDataHolderMap.get(id).getSpawnerDict().get(agentMap.get(id).getAction()),
+              parentPosition, parentDirection, true);
+          GenerateAgentsData.loadAnimations(newAgentData);
 
-        if (box.canMove(true, false, newAgent, newAgentDelta)) {
-          agentDataHolderMap.put(newId, newAgentData);
-          agentMap.put(newId, newAgent);
-          agentMap.get(newId).createMesh();
+          setZDepth(newAgentData);
+          int newId = getNextAgentId();
+          Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
+
+          if (box.canMove(true, false, newAgent, newAgentDelta)) {
+            agentDataHolderMap.put(newId, newAgentData);
+            agentMap.put(newId, newAgent);
+            agentMap.get(newId).createMesh();
+          }
         }
-
         deleteAgent(id);
       }
     }
@@ -283,7 +256,6 @@ public class GameState2DView extends GameStateView {
 
   @Override
   public void deleteAgent(int id) {
-    //System.out.println("delete happened");
     agentMap.get(id).destroyMesh();
     agentMap.remove(id);
   }

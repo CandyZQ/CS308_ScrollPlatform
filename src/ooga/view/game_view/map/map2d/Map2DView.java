@@ -19,10 +19,6 @@ public class Map2DView extends MapView {
     for (int i=0; i<mapReader.getMapHeight(); i++){
       for (int j=0; j<mapReader.getMapWidth(); j++){
         titles[idx++] = new Tile2DView(i, j, mapReader);
-        //Test.printVector2f(titles[idx - 1].getCenterLocation());
-        //Test.printThreeMeshVertices(titles[idx-1].getGameObject().getMesh());
-        //System.out.println(titles[idx-1].getGameObject().getMesh().getMaxHeight());
-        //System.out.println(titles[idx-1].getGameObject().getMesh().getMaxWidth());
       }
     }
 

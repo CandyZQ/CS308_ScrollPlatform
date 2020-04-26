@@ -23,6 +23,8 @@ public class Agent2DController extends AgentController {
   private BoundingBox box;
   private int id;
   private boolean isBullet;
+  private boolean isNSAnimationAvail;
+  private boolean isNotGonnaDie;
 
   public Agent2DController(int id, Agent2DDataHolder data, BoundingBox box) {
     super();
@@ -39,6 +41,8 @@ public class Agent2DController extends AgentController {
     shouldConsumed = data.shouldConsumed();
     isBullet = data.isBullet();
     isSummon = data.isSummon();
+    isNSAnimationAvail = data.isNWAnimationAvail();
+    isNotGonnaDie = data.isNotGonnaDie();
     this.box = box;
     this.id = id;
     this.setCurrentAnimation(direction, action);
@@ -48,8 +52,12 @@ public class Agent2DController extends AgentController {
     this.agentView = view;
   }
 
+  public boolean isShouldTerminated() {
+    return shouldTerminated;
+  }
+
   public void setShouldTerminated(boolean shouldTerminated) {
-    this.shouldTerminated = shouldTerminated;
+    this.shouldTerminated = !isNotGonnaDie && shouldTerminated;
   }
 
   public String getAction() {
@@ -58,22 +66,29 @@ public class Agent2DController extends AgentController {
 
   public void setObject(GameObject object) {
     this.object = object;
-    //System.out.println("ddddd");
-    //Test.printVector3f(initialPos);
     translate(initialPos);
   }
 
   @Override
   public void setCurrentAnimation(String direction, String action) {
-    this.direction = direction;
+    if (Asset2D.isRightSystem(direction)){
+      if (object!=null) object.getMesh().setTextureCoords(Asset2D.getNormalTextureCoords());
+      this.direction = direction;
+    }
+    else if (Asset2D.isMirrorSystem(direction)){
+      if (object!=null) object.getMesh().setTextureCoords(Asset2D.getMirroredTextureCoords());
+      this.direction = Asset2D.getMirroredRightDirection(direction);
+    }
+    else {
+      this.direction = !isNSAnimationAvail?this.direction:direction;
+    }
     this.action = action;
-    //System.out.println(action);
-    //System.out.println(direction);
-    //System.out.println(DEFAULT_ACTION);
-    animationDict.setInUseAnimation(direction, action);
+
+    animationDict.setInUseAnimation(this.direction, this.action);
   }
 
   public Material getCurrentAnimatedMaterial() {
+
     Material frame = animationDict.getAnimation().getCurrentFrame();
     if (frame == null) {
 
@@ -90,22 +105,16 @@ public class Agent2DController extends AgentController {
     }
   }
 
-  public String getCurrentDirection() {
-    return animationDict.getDirection();
-  }
-
   public String getCurrentAction() {
     return animationDict.getCurrentAction();
   }
 
   public void move(String direction) { //TODO if valid
-    System.out.println("it moves");
+
     if (box.canMove(!isBullet, isBullet, agentView,
         Asset2D.convertDirectionalSpeed(direction, speedScale))) {
-      System.out.println("it moves!");
       translate(Asset2D.convertDirectionalSpeed(direction, speedScale));
     }
-    //object.setPosition(Vector3f.add(object.getPosition(), Asset2D.convertDirectionalSpeed(direction, speedScale)));
   }
 
   public void translate(Vector3f delta) {

@@ -44,7 +44,6 @@ public class LoadShieldAnimations {
     mapKey = "E_WALK";
     shieldDict.put(mapKey, new Animation2D(10, fps, DIR_PATH, WALK));
 
-    //TODO W animations
 
     return shieldDict;
   }

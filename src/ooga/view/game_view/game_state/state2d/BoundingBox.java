@@ -21,7 +21,7 @@ public class BoundingBox  {
   }
 
   public boolean canMove(boolean isAgent, boolean isBullet, Agent2DView object, Vector3f delta){
-    //return true;
+
     if (isAgent) return canAgentMove(object, delta);
     if (isBullet) return canBulletMove(object, delta);
 
@@ -59,9 +59,7 @@ public class BoundingBox  {
     boolean isValid = true;
 
     for(int tileIdx =0; tileIdx<map.getTileTotal(); tileIdx++){
-      //System.out.println(map.getTile(tileIdx).getGameObject().getMesh().getMaxHeight());
-      //System.out.println(map.getTile(tileIdx).getGameObject().getMesh().getMaxWidth());
-      //System.out.println(map.getTile(tileIdx).;
+
       System.out.println("tile");
       System.out.println(tileIdx);
       Test.printVector2f(map.idontcare(tileIdx));
@@ -73,7 +71,6 @@ public class BoundingBox  {
       System.out.println();
       Test.printVector2f(Vector2f.multiply(move(object.getCenterPosition(), delta), new Vector2f(object.getScale())));
       Test.printVector2f(object.getHalfBounds());
-      //System.out.println(map.getTile(tileIdx).isWalkable());
       System.out.println();
 
       isValid = isValid&&(map.getTile(tileIdx).isWalkable()||
@@ -110,16 +107,6 @@ public class BoundingBox  {
 
     return (!(distanceX - boundsX < dis) || !(distanceY - boundsY < dis));
   }
-
-  /*private boolean notClose(Vector2f posA, Mesh meshA, Vector3f scaleA, Vector2f posB, Mesh meshB, Vector3f scaleB, float dis){
-    float distanceX = Math.abs(posA.getX()*scaleA.getX() - posB.getX()*scaleB.getX());
-    float distanceY = Math.abs(posA.getY()*scaleA.getY() - posB.getY()*scaleB.getY());
-
-    float boundsX = meshA.getMaxWidth()/2.0 + ;
-    float boundsY = halfBoundsA.getY() + halfBoundsB.getY();
-
-    return (!(distanceX - boundsX < dis) || !(distanceY - boundsY < dis));
-  }*/
 
   public int isAttackEffective(Agent2DView attacker){
     for (int agentId:agents.keySet()){

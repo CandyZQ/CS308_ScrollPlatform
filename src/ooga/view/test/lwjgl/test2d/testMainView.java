@@ -14,6 +14,10 @@ public class testMainView implements Runnable {
   public Thread game;
   public GameState2DView view;
 
+  public static void main(String[] args) {
+    new testMainView().start();
+  }
+
   public void start() {
     game = new Thread(this, "game");
     game.start();
@@ -22,12 +26,15 @@ public class testMainView implements Runnable {
   public void init() throws IOException {
     Map<Integer, Agent2DDataHolder> dataHolderMap = new HashMap<>();
     //dataHolderMap.put(0, GenerateAgentsData.createSoldier(-1f, 0f));
-    dataHolderMap.put(0, GenerateAgentsData.createSoldier(-1.5f, -1f));
-    dataHolderMap.put(1, GenerateAgentsData.createSoldier(-1.5f, -0.5f));
-    dataHolderMap.put(2, GenerateAgentsData.createEngineer(-1.5f, 0f));
-    dataHolderMap.put(3, GenerateAgentsData.createMeleeBot(0f, -0.5f));
+
+    //dataHolderMap.put(0, GenerateAgentsData.createSoldier(-1.5f, -1f));
+    //dataHolderMap.put(1, GenerateAgentsData.createSoldier(-1.5f, -0.5f));
+    //dataHolderMap.put(2, GenerateAgentsData.createEngineer(-1.5f, 0f));
+    //dataHolderMap.put(3, GenerateAgentsData.createMeleeBot(0f, -0.5f));
+    dataHolderMap.put(3, GenerateAgentsData.createSoldier(-1.5f, -1.5f));
+
     view = new GameState2DView(dataHolderMap);
-   view.createWindow();
+    view.createWindow();
   }
 
   public void run() {
@@ -55,25 +62,51 @@ public class testMainView implements Runnable {
     view.updateWindow();
     view.updateMap(); //empty method
     view.updateBullets();
-    if (view.isKeyDown(GLFW.GLFW_KEY_A)){
-      view.updateAgent(2,"E","ATTACK", false);}
-    if (view.isKeyDown(GLFW.GLFW_KEY_B)){
-      view.updateAgent(2,"E","SUMMON_BIGBOY", true);}
-    if (view.isKeyDown(GLFW.GLFW_KEY_W)){
-      view.updateAgent(2,"E","WALK", false);}
-    if (view.isKeyDown(GLFW.GLFW_KEY_E)){
-      view.updateAgent(3,"E","SPRINT", false);}
-    if (view.isKeyDown(GLFW.GLFW_KEY_S)){
-      view.updateAgent(3,"S","SPRINT", false);
+    /*
+    if (view.isKeyDown(GLFW.GLFW_KEY_A)) {
+      view.updateAgent(2, "E", "ATTACK", false);
     }
-    if (view.isKeyDown(GLFW.GLFW_KEY_N)){
-      view.updateAgent(3,"N","SPRINT", false);
+    if (view.isKeyDown(GLFW.GLFW_KEY_B)) {
+      view.updateAgent(2, "E", "SUMMON_BIGBOY", true);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_P)) {
+      view.updateAgent(2, "E", "WALK", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_E)) {
+      view.updateAgent(3, "E", "SPRINT", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_S)) {
+      view.updateAgent(3, "S", "SPRINT", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_N)) {
+      view.updateAgent(3, "N", "SPRINT", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_W)) {
+      view.updateAgent(3, "W", "SPRINT", false);
+    }
+    */
+
+    if (view.isKeyDown(GLFW.GLFW_KEY_N)) {
+      view.updateAgent(3, "N", "WALK", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_S)) {
+      view.updateAgent(3, "S", "WALK", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_E)) {
+      view.updateAgent(3, "E", "WALK", false);
+    }
+    if (view.isKeyDown(GLFW.GLFW_KEY_W)) {
+      view.updateAgent(3, "W", "WALK", false);
+    }
+
+    if (view.isKeyDown(GLFW.GLFW_KEY_D)){
+      view.updateAgent(3,"W", "DEATH", false);
     }
 
     //if (Input.isKeyDown(GLFW.GLFW_KEY_O)){
     //  agentView.update("SE","SPRINT");
     //}
-    }
+  }
 
   private void render() throws IOException {
     view.renderAll();
@@ -82,9 +115,5 @@ public class testMainView implements Runnable {
 
   private void close() {
     view.closeWindow();
-  }
-
-  public static void main(String[] args) {
-    new testMainView().start();
   }
 }

@@ -47,9 +47,15 @@ public class Mesh {
 		return ret;
 	}
 
+	public void setTextureCoords(Vector2f[] newTextureCoords){
+		for(int idx=0; idx<newTextureCoords.length; idx++){
+			vertices[idx].setTextureCoord(newTextureCoords[idx]);
+		}
+	}
+
 	public void rotateVertices(Vector3f rotation){
-		for(int i=0; i<this.vertices.length; i++){
-			this.vertices[i].rotate(rotation);
+		for (Vertex vertex : this.vertices) {
+			vertex.rotate(rotation);
 		}
 	}
 
