@@ -119,6 +119,7 @@ public class testAgentMap implements Runnable {
     shader.destroy();
   }
 
+  @org.junit.Test
   public static void main(String[] args) {
     new testAgentMap().start();
   }

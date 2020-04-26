@@ -108,6 +108,7 @@ public class testThirdPersonAgent implements Runnable {
     shader.destroy();
   }
 
+  @org.junit.Test
   public static void main(String[] args) {
     new testThirdPersonAgent().start();
   }

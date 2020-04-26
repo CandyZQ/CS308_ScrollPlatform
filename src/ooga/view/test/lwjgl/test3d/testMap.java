@@ -97,6 +97,7 @@ public class testMap implements Runnable {
     shader.destroy();
   }
 
+  @org.junit.Test
   public static void main(String[] args) {
     new testMap().start();
   }
