@@ -32,13 +32,12 @@ public class GameState2DView extends GameStateView {
   public Renderer2D renderer;
   public Shader shader;
   public BoundingBox box;
-  String mapPath = "/view/textures/2d/cyberpunk/map/map.txt";
+  String mapPath = "/view/textures/2d/cyberpunk/map/map_1.txt";
   private Map2DView map;
   private Map<Integer, Agent2DView> agentMap;
   private Map<Integer, Agent2DView> bulletMap;
   private Window window;
   private double lasTimeUpdated = 0;
-  private double currentTimeUpdated = 0;
   private float zLayer = -0.8f;
   private float Z_INC = -0.01f;
 
@@ -101,7 +100,7 @@ public class GameState2DView extends GameStateView {
   public void updateAgent(int id, String direction, String state, boolean isAttack)
       throws IOException {
 
-    currentTimeUpdated = Timer.getTime();
+    double currentTimeUpdated = Timer.getTime();
     if (currentTimeUpdated - lasTimeUpdated < elapsedInterval) {
       lasTimeUpdated = currentTimeUpdated;
       return;
