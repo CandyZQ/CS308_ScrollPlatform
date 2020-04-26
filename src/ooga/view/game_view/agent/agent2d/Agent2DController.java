@@ -83,8 +83,8 @@ public class Agent2DController extends AgentController {
       this.direction = !isNSAnimationAvail?this.direction:direction;
     }
     this.action = action;
-
-    animationDict.setInUseAnimation(this.direction, this.action);
+    //System.out.println("action -"+action);
+    animationDict.setInUseAnimation(this.direction, action);
   }
 
   public Material getCurrentAnimatedMaterial() {
@@ -109,7 +109,7 @@ public class Agent2DController extends AgentController {
     return animationDict.getCurrentAction();
   }
 
-  public void move(String direction) { //TODO if valid
+  public void move(String direction) {
 
     if (box.canMove(!isBullet, isBullet, agentView,
         Asset2D.convertDirectionalSpeed(direction, speedScale))) {
@@ -123,9 +123,5 @@ public class Agent2DController extends AgentController {
           .add(object.getMesh().getVertices()[i].getPosition(), delta));
     }
   }
-
-
-
-
 
 }

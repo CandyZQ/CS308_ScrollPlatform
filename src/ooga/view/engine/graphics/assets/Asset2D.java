@@ -21,7 +21,7 @@ public class Asset2D {
       entry("SW","WE")
   );
 
-  private static final float SPEED_MELEE_SPRINT = 0.005f;
+  private static final float SPEED_MELEE_SPRINT = 0.01f;
 
   public static Vertex[] getTileVertices() {
 
@@ -96,8 +96,12 @@ public class Asset2D {
     };
   }
 
+  //public static Vector2f getIHateLife() {
+  //  return new Vector2f(-5f * 0.06f, 0f);
+  //}
+
   public static Vector2f getIHateLife() {
-    return new Vector2f(-5f * 0.06f, 0f);
+      return new Vector2f(0f, 0f);
   }
 
   public static Vector3f getMapPosition() {
@@ -129,11 +133,11 @@ public class Asset2D {
   }
 
   public static Vector3f getBulletScale() {
-    return new Vector3f(0.03f, 0.015f, 1f);
+    return new Vector3f(0.020f, 0.010f, 1f);
   }
 
   public static Vector3f getBulletDelta() {
-    return new Vector3f(0.0f, 5f, 0f);
+    return new Vector3f(0.0f, 0.005f, 0f);
   }
 
   public static Vector3f getSummonDelta() {
@@ -141,20 +145,20 @@ public class Asset2D {
   }
 
   public static Vector2f getNonPlayerBounds() {
-    return new Vector2f(0.05f * getNonPlayerScale().getX(), 0.05f * getNonPlayerScale().getY());
+    return new Vector2f(0.05f * getNonPlayerScale().getX(), 0.06f * getNonPlayerScale().getY());
   }
 
   public static Vector2f getPlayerBounds() {
-    return new Vector2f(0.01f * getPlayerScale().getX(), 0.01f * getPlayerScale().getY());
-  }
+    return new Vector2f(0.05f * getPlayerScale().getX(), 0.05f * getPlayerScale().getY());
+  }//0.01
 
   public static Vector2f getBulletBounds() {
     return new Vector2f(0.2f * getBulletScale().getX(), 0.2f * getBulletScale().getY());
   }
 
   public static Vector2f getMapTileBounds() {
-    return new Vector2f(0.2f * getMapScale().getX(), 0.2f * getMapScale().getY());
-  }
+    return new Vector2f(0.5f * getMapScale().getX(), 0.5f * getMapScale().getY());
+  }//0.2
 
   public static float getBulletSpeed() {
     return 100.0f;
@@ -194,6 +198,7 @@ public class Asset2D {
   }
 
   public static boolean isRightSystem(String direction) {
+    //System.out.println(direction);
     return rightSystem.containsKey(direction);
   }
 

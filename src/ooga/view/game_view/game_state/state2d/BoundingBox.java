@@ -11,8 +11,9 @@ import ooga.view.game_view.map.map2d.Map2DView;
 public class BoundingBox  {
   private Map2DView map;
   private Map<Integer, Agent2DView> agents;
-  private static final float MELEE_ATTACK_RANGE = 0.1f;
+  private static final float MELEE_ATTACK_RANGE = 0.5f;
   private float eps = 0.0000000001f;
+  private float png_eps = 0.01f;
   private final static int NON_ID = -17;
 
   public BoundingBox(Map2DView map, Map<Integer, Agent2DView> agents){
@@ -36,9 +37,9 @@ public class BoundingBox  {
   private boolean canAgentMove(Agent2DView agent, Vector3f delta){
 
     boolean isValid = isHitWall(agent, delta);
-    System.out.println("after checking wall");
-    System.out.println(isValid);
-    System.out.println();
+    //System.out.println("after checking wall");
+    //System.out.println(isValid);
+    //System.out.println();
     for(int agentId:agents.keySet()){
       if (agentId != agent.getId()){
         isValid = isValid&& notClose(
@@ -59,7 +60,7 @@ public class BoundingBox  {
     boolean isValid = true;
 
     for(int tileIdx =0; tileIdx<map.getTileTotal(); tileIdx++){
-
+      /*
       System.out.println("tile");
       System.out.println(tileIdx);
       Test.printVector2f(map.idontcare(tileIdx));
@@ -72,7 +73,7 @@ public class BoundingBox  {
       Test.printVector2f(Vector2f.multiply(move(object.getCenterPosition(), delta), new Vector2f(object.getScale())));
       Test.printVector2f(object.getHalfBounds());
       System.out.println();
-
+      */
       isValid = isValid&&(map.getTile(tileIdx).isWalkable()||
           notClose(map.getTile(tileIdx).getCenterLocation(), Asset2D.getMapTileBounds(), Asset2D.getMapScale(),
           move(object.getCenterPosition(),delta), object.getHalfBounds(), object.getScale(), eps));
@@ -110,9 +111,12 @@ public class BoundingBox  {
 
   public int isAttackEffective(Agent2DView attacker){
     for (int agentId:agents.keySet()){
-      if (agentId!=attacker.getId() && isAgentDirection(attacker.getCenterPosition(), agents.get(agentId).getCenterPosition(), attacker.getCurrentDirection())
-      && !notClose(attacker.getCenterPosition(), attacker.getHalfBounds(), attacker.getScale(),
-          agents.get(agentId).getCenterPosition(), agents.get(agentId).getHalfBounds(), agents.get(agentId).getScale(), MELEE_ATTACK_RANGE)){
+      if (agentId!=attacker.getId() &&
+          isAgentDirection(attacker.getCenterPosition(), agents.get(agentId).getCenterPosition(), attacker.getCurrentDirection()) &&
+          !notClose(
+              attacker.getCenterPosition(), attacker.getHalfBounds(), attacker.getScale(),
+              agents.get(agentId).getCenterPosition(), agents.get(agentId).getHalfBounds(), agents.get(agentId).getScale(),
+              MELEE_ATTACK_RANGE)){
         return agentId;
       }
     }
@@ -120,17 +124,29 @@ public class BoundingBox  {
   }
 
   public boolean isAgentDirection(Vector2f agentX, Vector2f agentY, String direction){
+    //System.out.println("attacker");
+    //Test.printVector2f(agentX);
+    //System.out.println("the attacked");
+    //Test.printVector2f(agentY);
     if (direction.equals("E")){
-      return agentX.getX()-agentY.getX() < eps;
+      //System.out.println("bE");
+      //System.out.println(agentX.getX()-agentY.getX() < png_eps);
+      return agentX.getX()-agentY.getX() < png_eps;
     }
     if (direction.equals("W")){
-      return agentX.getX()-agentY.getX() > eps;
+      //System.out.println("bW");
+      //System.out.println(agentX.getX()-agentY.getX() > png_eps);
+      return agentX.getX()-agentY.getX() > png_eps;
     }
     if (direction.equals("S")){
-      return agentX.getY() - agentY.getY() > eps;
+      //System.out.println("bS");
+      //System.out.println(agentX.getY() - agentY.getY() > png_eps);
+      return agentX.getY() - agentY.getY() > png_eps;
     }
     if (direction.equals("N")){
-      return agentX.getY() - agentY.getY() < eps;
+      //System.out.println("bN");
+      //System.out.println(agentX.getY() - agentY.getY() < png_eps);
+      return agentX.getY() - agentY.getY() < png_eps;
     }
     System.out.println("Strange direction");
     return false;

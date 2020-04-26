@@ -170,7 +170,7 @@ public class Mesh {
 	}
 
 	public Vector2f getCenter(){
-		return new Vector2f(getMinX() + (getMaxX()-getMaxX())/2.0f, getMinY() + (getMaxY() - getMinY())/2.0f);
+		return new Vector2f(getMinX() + (getMaxX()-getMinX())/2.0f, getMinY() + (getMaxY() - getMinY())/2.0f);
 	}
 
 	private float getMaxX(){

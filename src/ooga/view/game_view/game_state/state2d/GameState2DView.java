@@ -20,7 +20,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class GameState2DView extends GameStateView {
 
-  final private static double elapsedInterval = 1.0 / 100.0;
+  final private static double elapsedInterval = 1.0 / 20.0;
   private static final float BACKGROUND_COLOR_R = 22.0f / 255.0f;
   private static final float BACKGROUND_COLOR_G = 23.0f / 255.0f;
   private static final float BACKGROUND_COLOR_B = 25.0f / 255.0f;
@@ -32,7 +32,7 @@ public class GameState2DView extends GameStateView {
   public Renderer2D renderer;
   public Shader shader;
   public BoundingBox box;
-  String mapPath = "/view/textures/2d/cyberpunk/map/map_2.txt";
+  String mapPath = "/view/textures/2d/cyberpunk/map/map_1.txt";
   private Map2DView map;
   private Map<Integer, Agent2DView> agentMap;
   private Map<Integer, Agent2DView> bulletMap;
@@ -102,7 +102,7 @@ public class GameState2DView extends GameStateView {
 
     double currentTimeUpdated = Timer.getTime();
     if (currentTimeUpdated - lasTimeUpdated < elapsedInterval) {
-      lasTimeUpdated = currentTimeUpdated;
+      //lasTimeUpdated = currentTimeUpdated;
       return;
     }
     lasTimeUpdated = currentTimeUpdated;
@@ -144,7 +144,9 @@ public class GameState2DView extends GameStateView {
       }
     }
 
-    if (isAttack && box.isAttackEffective(agentMap.get(id))!=box.getNonId()) {
+    if(!isAttack) return;
+    if (box.isAttackEffective(agentMap.get(id))!=box.getNonId()) {
+      System.out.println(String.format("the attacked is %d",box.isAttackEffective(agentMap.get(id))));
       isHurt.replace(box.isAttackEffective(agentMap.get(id)), true);
     }
 
@@ -164,9 +166,10 @@ public class GameState2DView extends GameStateView {
     float MOVEMENT_DELTA = isOrigin ? 0f : 100f;
     Agent2DDataHolder newAgentData = new Agent2DDataHolder(data);
 
-    if (newAgentData.getInitialDirection().equals(GenerateAgentsData.getDirectionPlaceholder())) {
-      newAgentData.setInitialDirection(parentDirection);
-    }
+    //if (newAgentData.getInitialDirection().equals(GenerateAgentsData.getDirectionPlaceholder())) {
+    newAgentData.setInitialDirection(parentDirection);
+    //System.out.println("parent direction"+parentDirection);
+    //}
 
     newAgentData.setPosition(Vector3f.add(parentPosition,
         Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(), MOVEMENT_DELTA)));

@@ -21,7 +21,7 @@ public class Agent2DDataHolder {
   private boolean isBullet = false;
   private boolean isNotGonnaDie = false;
   private boolean isSummon = false;
-  private float speedScale = 10.0f;
+  private float speedScale = 10f;
   private Map<String, String> nextDict = new LinkedHashTreeMap<>();
   private Map<Pair<Pair<String, Boolean>, String>, String> prevDict = new LinkedHashTreeMap<>();
   // what would come next to the current animation

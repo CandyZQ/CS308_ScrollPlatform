@@ -34,6 +34,7 @@ public class Agent2DView extends AgentView {
     object = new GameObject(Vector3f.zeros(), data.getRotation(), data.getScale(), mesh);
     controller.setObject(object);
     controller.setAgentView(this);
+    currentRawDirection = data.getInitialDirection();
   }
 
   public boolean isShouldTerminated() {
@@ -86,6 +87,7 @@ public class Agent2DView extends AgentView {
 
   public void update(String direction, String action) {
     currentRawDirection = direction;
+    //System.out.println("action input in view"+action);
     controller.setCurrentAnimation(direction, action);
     if (action.equals(MOVE_ACTION)) controller.move(direction);
   }
