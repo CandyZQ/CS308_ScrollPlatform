@@ -10,6 +10,7 @@ import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.io.Input;
 import ooga.view.engine.io.Window;
 import ooga.view.engine.maths.Vector3f;
+import ooga.view.engine.utils.Test;
 import ooga.view.engine.utils.Timer;
 import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
 import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
@@ -36,7 +37,6 @@ public class GameState2DView extends GameStateView {
   private Map2DView map;
   private Map<Integer, Agent2DView> agentMap;
   private Map<Integer, Agent2DView> bulletMap;
-  private Window window;
   private double lasTimeUpdated = 0;
   private float zLayer = -0.8f;
   private float Z_INC = -0.01f;
@@ -59,13 +59,15 @@ public class GameState2DView extends GameStateView {
   }
 
   public void resetHurtStatus(){
-    for(int id:isHurt.keySet())
+    for(int id:agentMap.keySet())
     {
-      isHurt.replace(id, false);
+      if(!isHurt.containsKey(id)) isHurt.put(id, false);
+      else isHurt.replace(id, false);
     }
   }
 
   public boolean getHurtStatus(int id){
+    System.out.println(isHurt.keySet().size());
     return isHurt.get(id);
   }
 
@@ -88,6 +90,7 @@ public class GameState2DView extends GameStateView {
       agentMap.put(id, new Agent2DView(id, agentDataHolderMap.get(id), box));
       agentMap.get(id).createMesh();
     }
+    resetHurtStatus();
 
     map.createMesh();
     shader.create();
@@ -118,7 +121,6 @@ public class GameState2DView extends GameStateView {
       Vector3f parentPosition = new Vector3f(agentMap.get(id).getCenterPosition(), 0f);
       String parentDirection = agentMap.get(id).getCurrentDirection();
 
-      Vector3f newAgentDelta = Vector3f.zeros();
       Agent2DDataHolder newAgentData = positionNewAgent(
           agentDataHolderMap.get(id).getSpawnerDict().get(state),
           parentPosition, parentDirection, false);
@@ -128,14 +130,14 @@ public class GameState2DView extends GameStateView {
       if (newAgentData.isBullet()) {
         int newId = getNextBulletId();
         Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
-        if (box.canMove(false, true, newAgent, newAgentDelta)) {
+        if (box.canMove(false, true, newAgent, Vector3f.zeros())) {
           bulletMap.put(newId, newAgent);
           bulletMap.get(newId).createMesh();
         }
       } else if (!newAgentData.isBullet()) {
         int newId = getNextAgentId();
         Agent2DView newAgent = new Agent2DView(newId, newAgentData, box);
-        if (box.canMove(true, false, newAgent, newAgentDelta))
+        if (box.canMove(true, false, newAgent, Vector3f.zeros()))
         {
           agentDataHolderMap.put(newId, newAgentData);
           agentMap.put(newId, newAgent);
@@ -146,31 +148,46 @@ public class GameState2DView extends GameStateView {
 
     if(!isAttack) return;
     if (box.isAttackEffective(agentMap.get(id))!=box.getNonId()) {
-      System.out.println(String.format("the attacked is %d",box.isAttackEffective(agentMap.get(id))));
-      isHurt.replace(box.isAttackEffective(agentMap.get(id)), true);
+      //System.out.println(String.format("the attacked is %d",box.isAttackEffective(agentMap.get(id))));
+      changeAgentHurtStatus(box.isAttackEffective(agentMap.get(id)));
     }
 
   }
 
+  private void changeAgentHurtStatus(int id){
+    isHurt.replace(id, true);
+  }
+
   public void updateBullets() {
 
-    for (int key : bulletMap.keySet()) {
+    for (int key : new HashSet<>(bulletMap.keySet())) {
       Agent2DView bullet = bulletMap.get(key);
-      bullet.update(bullet.getCurrentDirection(), "MOVE");
+
+      //System.out.println("ded...");
+      //Test.printVector2f(bullet.getCenterPosition());
+      if (box.isBulletAttack(bullet)!=box.getNonId()){
+        changeAgentHurtStatus(box.isBulletAttack(bullet));
+      }
+
+      if(bullet.canMove(bullet.getCurrentDirection())) {
+        bullet.update(bullet.getCurrentDirection(), "MOVE");
+      }
+      else {
+        bullet.terminate();
+        deleteBullet(key);
+      }
     }
   }
 
   private Agent2DDataHolder positionNewAgent(Agent2DDataHolder data, Vector3f parentPosition,
       String parentDirection, boolean isOrigin) {
 
-    float MOVEMENT_DELTA = isOrigin ? 0f : 100f;
+    float MOVEMENT_DELTA = isOrigin ? 0f : 10f;
     Agent2DDataHolder newAgentData = new Agent2DDataHolder(data);
 
-    //if (newAgentData.getInitialDirection().equals(GenerateAgentsData.getDirectionPlaceholder())) {
     newAgentData.setInitialDirection(parentDirection);
-    //System.out.println("parent direction"+parentDirection);
-    //}
-
+    //Test.printVector3f(parentPosition);
+    //System.out.println(parentDirection);
     newAgentData.setPosition(Vector3f.add(parentPosition,
         Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(), MOVEMENT_DELTA)));
 
@@ -198,14 +215,6 @@ public class GameState2DView extends GameStateView {
       idx = Math.max(key, idx);
     }
     return idx + 1;
-  }
-
-  @Override
-  public void updateWindow() {
-    if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) {
-      window.setFullscreen(!window.isFullscreen());
-    }
-    window.update();
   }
 
   @Override
@@ -246,12 +255,15 @@ public class GameState2DView extends GameStateView {
   public void renderAll() throws IOException {
     renderMap();
     renderAgents();
-    renderBullets();
+    //renderBullets();
     renderWindow();
   }
 
   public void renderBullets() {
     for (int id : bulletMap.keySet()) {
+      //System.out.println("rendering bulletid");
+      //System.out.println(id);
+      //Test.printThreeMeshVertices(bulletMap.get(id).getObject().getMesh());
       bulletMap.get(id).renderMesh(renderer);
     }
   }
@@ -262,15 +274,16 @@ public class GameState2DView extends GameStateView {
     agentMap.remove(id);
   }
 
+  public void deleteBullet(int id) {
+    bulletMap.get(id).destroyMesh();
+    bulletMap.remove(id);
+  }
+
   @Override
   public void renderMap() {
     map.renderMesh(renderer);
   }
 
-  @Override
-  public void renderWindow() {
-    window.swapBuffers();
-  }
 
   @Override
   public void updateMap() {
@@ -288,13 +301,6 @@ public class GameState2DView extends GameStateView {
     shader.destroy();
   }
 
-  @Override
-  public boolean shouldWindowClose() {
-    return window.shouldClose() || Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE);
-  }
 
-  @Override
-  public boolean isKeyDown(int key) {
-    return Input.isKeyDown(key);
-  }
+
 }

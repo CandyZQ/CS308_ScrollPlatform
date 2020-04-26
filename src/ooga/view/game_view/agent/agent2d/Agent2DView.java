@@ -72,17 +72,6 @@ public class Agent2DView extends AgentView {
   public Vector2f getCenterPosition(){return Vector2f.subtract(object.getMesh().getCenter(),
       Asset2D.getIHateLife());}
 
-  public Vector2f getCenter(){
-    float centerX = 0f;
-    float centerY = 0f;
-
-    for(Vertex v:vertices){
-      centerX+=v.getPosition().getX();
-      centerX+=v.getPosition().getY();
-    }
-    return new Vector2f(centerX/2.0f, centerY/2.0f);
-  }
-
   public String getCurrentDirection(){return currentRawDirection;} //TODO FIX THIS
 
   public void update(String direction, String action) {
@@ -92,5 +81,11 @@ public class Agent2DView extends AgentView {
     if (action.equals(MOVE_ACTION)) controller.move(direction);
   }
 
+  public boolean canMove(String direction){
+    return controller.canMove(direction);
+  }
+
   public String getAction(){return controller.getAction();}
+
+  public GameObject getObject(){return object;}
 }

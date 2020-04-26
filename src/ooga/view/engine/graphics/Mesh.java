@@ -25,7 +25,7 @@ public class Mesh {
 		Mesh.normalize(this);
 	}
 
-	public Mesh(Vertex[] vertices, int[] indices, Material material, boolean isMap) {
+	public Mesh(Vertex[] vertices, int[] indices, Material material, boolean notNormalized) {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;

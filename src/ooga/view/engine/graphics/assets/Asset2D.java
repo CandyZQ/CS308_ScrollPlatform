@@ -137,7 +137,7 @@ public class Asset2D {
   }
 
   public static Vector3f getBulletDelta() {
-    return new Vector3f(0.0f, 0.005f, 0f);
+    return new Vector3f(0.0f, 0.05f, 0f);
   }
 
   public static Vector3f getSummonDelta() {

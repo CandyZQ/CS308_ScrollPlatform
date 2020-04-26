@@ -104,7 +104,7 @@ public class testMainView implements Runnable {
     }
 
     if (view.isKeyDown(GLFW.GLFW_KEY_Q)){
-      view.updateAgent(3,"W", "ATTACK", true);
+      view.updateAgent(3,"E", "ATTACK", true);
     }
 
 
@@ -128,7 +128,8 @@ public class testMainView implements Runnable {
     if (view.isKeyDown(GLFW.GLFW_KEY_SPACE)){
       view.updateAgent(2,"W", "ATTACK3", true);
     }
-
+    System.out.println("the player is hurt");
+    System.out.println(view.getHurtStatus(2));
 
     //if (Input.isKeyDown(GLFW.GLFW_KEY_O)){
     //  agentView.update("SE","SPRINT");

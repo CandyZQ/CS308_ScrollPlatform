@@ -1,8 +1,13 @@
 package ooga.view.game_view.game_state.interfaces;
 
 import java.io.IOException;
+import ooga.view.engine.io.Input;
+import ooga.view.engine.io.Window;
+import org.lwjgl.glfw.GLFW;
 
 abstract public class GameStateView {
+
+  protected Window window;
 
   public GameStateView(){}
 
@@ -14,8 +19,6 @@ abstract public class GameStateView {
 
   abstract public void updateMap();
 
-  abstract public void updateWindow();
-
   public void renderAll() throws IOException {
     renderMap();
     renderAgents();
@@ -26,12 +29,25 @@ abstract public class GameStateView {
 
   abstract public void renderMap();
 
-  abstract public void renderWindow();
+  public void renderWindow() {
+    window.swapBuffers();
+  }
 
   abstract public void closeWindow();
 
-  abstract public boolean shouldWindowClose();
+  public void updateWindow() {
+    if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) {
+      window.setFullscreen(!window.isFullscreen());
+    }
+    window.update();
+  }
 
-  abstract public boolean isKeyDown(int key);
+  public boolean shouldWindowClose() {
+    return window.shouldClose() || Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE);
+  }
+
+  public boolean isKeyDown(int key) {
+    return Input.isKeyDown(key);
+  }
 
 }

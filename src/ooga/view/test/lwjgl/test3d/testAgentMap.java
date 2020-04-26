@@ -54,7 +54,7 @@ public class testAgentMap implements Runnable {
     try {
       init();
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("test failed to initiate");
     }
     while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
       update();
@@ -107,7 +107,7 @@ public class testAgentMap implements Runnable {
   }
 
   private void render() {
-//    agentView.renderMesh(renderer, camera);
+    agentView.renderMesh(renderer, camera);
     mapView.renderMesh(renderer, camera);
     window.swapBuffers();
   }
