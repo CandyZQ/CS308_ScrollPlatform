@@ -31,7 +31,7 @@ public class testMainView implements Runnable {
     //dataHolderMap.put(1, GenerateAgentsData.createSoldier(-1.5f, -0.5f));
     //dataHolderMap.put(2, GenerateAgentsData.createEngineer(-1.5f, 0f));
     //dataHolderMap.put(3, GenerateAgentsData.createMeleeBot(0f, -0.5f));
-    dataHolderMap.put(3, GenerateAgentsData.createSoldier(-1.5f, -1.5f));
+    dataHolderMap.put(3, GenerateAgentsData.createSoldier(-1.5f, -1f));
 
     view = new GameState2DView(dataHolderMap);
     view.createWindow();
@@ -86,21 +86,26 @@ public class testMainView implements Runnable {
     }
     */
 
-    if (view.isKeyDown(GLFW.GLFW_KEY_N)) {
+    if (view.isKeyDown(GLFW.GLFW_KEY_UP)) {
       view.updateAgent(3, "N", "WALK", false);
     }
-    if (view.isKeyDown(GLFW.GLFW_KEY_S)) {
+    if (view.isKeyDown(GLFW.GLFW_KEY_DOWN)) {
       view.updateAgent(3, "S", "WALK", false);
     }
-    if (view.isKeyDown(GLFW.GLFW_KEY_E)) {
+    if (view.isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
       view.updateAgent(3, "E", "WALK", false);
     }
-    if (view.isKeyDown(GLFW.GLFW_KEY_W)) {
+    if (view.isKeyDown(GLFW.GLFW_KEY_LEFT)) {
       view.updateAgent(3, "W", "WALK", false);
     }
 
     if (view.isKeyDown(GLFW.GLFW_KEY_D)){
       view.updateAgent(3,"W", "DEATH", false);
+    }
+
+
+    if (view.isKeyDown(GLFW.GLFW_KEY_H)){
+      view.updateAgent(3,"W", "HURT", false);
     }
 
     //if (Input.isKeyDown(GLFW.GLFW_KEY_O)){

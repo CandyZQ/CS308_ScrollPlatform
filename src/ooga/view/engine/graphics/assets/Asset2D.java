@@ -141,7 +141,7 @@ public class Asset2D {
   }
 
   public static Vector2f getNonPlayerBounds() {
-    return new Vector2f(0.5f * getNonPlayerScale().getX(), 0.5f * getNonPlayerScale().getY());
+    return new Vector2f(0.05f * getNonPlayerScale().getX(), 0.05f * getNonPlayerScale().getY());
   }
 
   public static Vector2f getPlayerBounds() {
