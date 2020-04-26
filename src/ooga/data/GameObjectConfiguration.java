@@ -126,6 +126,8 @@ public class GameObjectConfiguration {
         }
       } catch (Exception e) {
         //this catch is used because some teammate's computer will run into errors without it. However, this problem is not displayed when I am running the program.
+
+        throw new DataLoadingException(EXCEPTION_KEYWORD + key, e);
       }
     }
     window.destroy();
