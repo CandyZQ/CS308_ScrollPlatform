@@ -69,10 +69,10 @@ public class WindowControl {
    * @param currentStage
    */
   public WindowControl(Stage currentStage) {
+    myLogIn = new LogInControl(this);
     myStage = currentStage;
     myMenuView = new GameMenuView();
     mySelectView = new SelectMenuView();
-    myLogIn = new LogInControl(this);
     mySettingControl = new SettingControl(this);
     myUserProfileControl = new UserProfileControl();
 
@@ -324,5 +324,17 @@ public class WindowControl {
       myUserProfileControl.writeScore(score);
       System.out.println("saved?");
     }
+  }
+
+  public boolean isLogIn(){
+    return isLogIn;
+  }
+
+  public String getUserName() {
+    return myUserName;
+  }
+
+  public LogInControl getLogInControl() {
+    return myLogIn;
   }
 }
