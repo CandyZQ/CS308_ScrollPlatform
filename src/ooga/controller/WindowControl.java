@@ -14,7 +14,7 @@ import ooga.data.DataStorerAPI;
 import ooga.game.GameType;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
-import ooga.view.game_menu.GameMenu;
+import ooga.view.game_menu.other.GameMenu;
 import ooga.view.game_menu.GameMenuView;
 import ooga.view.game_menu.SelectMenuView;
 import ooga.view.game_view.game_state.state2d.GameState2DView;
@@ -69,10 +69,10 @@ public class WindowControl {
    * @param currentStage
    */
   public WindowControl(Stage currentStage) {
+    myLogIn = new LogInControl(this);
     myStage = currentStage;
     myMenuView = new GameMenuView();
     mySelectView = new SelectMenuView();
-    myLogIn = new LogInControl(this);
     mySettingControl = new SettingControl(this);
     myUserProfileControl = new UserProfileControl();
 
@@ -140,7 +140,6 @@ public class WindowControl {
       try {
         startGame2();
       } catch (Exception ex) {
-        ex.printStackTrace();
         System.out.println("WINDOW CONTROL STARTGAME2");
       }
     });
@@ -324,5 +323,17 @@ public class WindowControl {
       myUserProfileControl.writeScore(score);
       System.out.println("saved?");
     }
+  }
+
+  public boolean isLogIn(){
+    return isLogIn;
+  }
+
+  public String getUserName() {
+    return myUserName;
+  }
+
+  public LogInControl getLogInControl() {
+    return myLogIn;
   }
 }

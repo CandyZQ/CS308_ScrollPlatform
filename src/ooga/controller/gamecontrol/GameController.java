@@ -164,12 +164,14 @@ public class GameController {
     this.dark = dark;
     myPauseControl.setMode(dark);
     myFinishControl.setMode(dark);
+    mydDsplayControl.setMode(dark);
   }
 
   public void setLanguage(String language) {
     this.language = language;
     myPauseControl.setLanguage(language);
     myFinishControl.setLanguage(language);
+    mydDsplayControl.setLanguage(language);
   }
 
   public void setView(GameZelda2DSingle view) {
@@ -235,6 +237,7 @@ public class GameController {
   public void setColor(Color color) {
     myPauseControl.setColor(color);
     myFinishControl.setColor(color);
+    mydDsplayControl.setColor(color);
   }
 
   public int getGameID() {

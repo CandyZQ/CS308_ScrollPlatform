@@ -151,4 +151,13 @@ public class LogInView implements MenuView{
         nameInput.clear();
         passwordInput.clear();
     }
+
+    public void setInput(String a, String b) {
+        nameInput.setText(a);
+        passwordInput.setText(b);
+    }
+
+    public String getMessage(){
+        return Message.getText();
+    }
 }
