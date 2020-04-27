@@ -59,13 +59,13 @@ public class GameMapInstance implements GameMap {
   /**
    * Gets the game map representation in a list.
    *
-   * @return the game map representation of all grids in a list.
+   * @return the game map representatioof all grids in a list.
    */
   @Override
   public List<GridInMap> getGameMap() {
     List<GridInMap> ret = (List) allGrids.values();
     return Collections.unmodifiableList(ret);
-  }
+  }n
   /**
    * Gets the cell state at a specific location
    *
