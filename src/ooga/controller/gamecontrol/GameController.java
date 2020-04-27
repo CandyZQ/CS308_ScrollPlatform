@@ -237,6 +237,7 @@ public class GameController {
   public void setColor(Color color) {
     myPauseControl.setColor(color);
     myFinishControl.setColor(color);
+    mydDsplayControl.setColor(color);
   }
 
   public int getGameID() {
