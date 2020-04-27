@@ -52,7 +52,6 @@ public class SettingControl {
                 throw new Exception();
             }
         } catch(Exception e) {
-            e.printStackTrace();
             myView.NotInt();
         }
     }

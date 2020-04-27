@@ -140,7 +140,6 @@ public class WindowControl {
       try {
         startGame2();
       } catch (Exception ex) {
-        ex.printStackTrace();
         System.out.println("WINDOW CONTROL STARTGAME2");
       }
     });
