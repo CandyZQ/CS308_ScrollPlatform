@@ -41,8 +41,8 @@ public class InterfaceAdapter implements  JsonDeserializer{
         return gameCell;
     }
 
-    /****** Helper method to get the className of the object to be deserialized *****/
-    public Class getObjectClass(String className) {
+    
+    private Class getObjectClass(String className) {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -50,20 +50,3 @@ public class InterfaceAdapter implements  JsonDeserializer{
         }
     }
 }
-
-//import com.google.gson.InstanceCreator;
-//import ooga.model.interfaces.gameMap.Cell;
-//
-//import java.lang.reflect.Type;
-//
-//public class InterfaceAdapter implements InstanceCreator<Cell> {
-//    private int ID;
-//    InterfaceAdapter(int ID) {
-//        this.ID = ID;
-//    }
-//    @Override
-//    public Cell createInstance(Type type) {
-//        Cell gameCell = new GameCell(ID);
-//        return gameCell;
-//    }
-//}

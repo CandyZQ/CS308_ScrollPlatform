@@ -9,46 +9,58 @@ import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
 import ooga.view.engine.graphics.animation.Animation2D;
 
-import java.io.File;
 import java.util.*;
 
 import static ooga.data.DataLoader.JSON_POSTFIX;
 import static ooga.data.PlayerStatus.initLevel;
 import static ooga.data.PlayerStatus.initLife;
 
-//import ooga.model.gameElements.Weapon;
-
+/**
+ * storer class storing all data
+ * @author Guangyu Feng
+ */
 public class DataStorer implements DataStorerAPI {
-    private com.google.gson.Gson gson;
-    private DataLoader dataLoader; //for just tentative measure.
+    private DataLoader dataLoader;
     private GameObjectConfiguration gameObjectConfiguration;
+    private ResourceBundle errorResourceBundle;
 
-    public DataStorer() throws DataLoadingException {
-        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
-        gsonBuilder.serializeNulls(); //ensure gson storing null values.
-        gson = gsonBuilder.create();
+    /**
+     * generate a storer
+     */
+    public DataStorer() {
+
         dataLoader = new DataLoader();
+        errorResourceBundle = dataLoader.getErrorMessageResources();
         gameObjectConfiguration = dataLoader.getGameObjectConfiguration();
 
     }
 
-    //todo: test not done
+    /**
+     * store the text under certain category by using its reference keyword
+     * @param text
+     * @param keyword
+     * @param category
+     */
     @Override
     public void StoreText(String text, String keyword, TextCategory category) {
         gameObjectConfiguration.setTextMap(text, keyword, category);
     }
 
-//    @Override
-//    public void storeCharacter(int ID, UnchangableCharacter character) {
-//
-//    }
-
+    /**
+     * store Weapons with its ID as reference
+     * @param ID
+     * @param weapon
+     */
     @Override
     public void storeWeapons(int ID, WeaponBase weapon) {
-        throw new DataLoadingException("store weapons is not implemented");
+        throw new DataLoadingException(errorResourceBundle.getString("storeWeapons"));
     }
 
-
+    /**
+     * store its character using specified ID
+     * @param characterID
+     * @param character
+     */
     @Override
     public void storeCharacter(int characterID, ZeldaCharacter character) {
 
@@ -61,23 +73,37 @@ public class DataStorer implements DataStorerAPI {
         }
         tempCharList.add(character);
         gameObjectConfiguration.setZeldaCharacterList(tempCharList);
-//        writeObjectTOJson(character, "data/ZeldaCharacter/" + characterKeyword + characterID + ".json");
     }
 
-
+    /**
+     * set the param of playerstatus
+     * @param param
+     * @param value
+     * @param playerID
+     */
     @Override
     public void setPlayerParam(PlayerParam param, int value, int playerID) {
         PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
         if (tempPlayer == null) {
-            System.out.println("Player not created(storer 114)");
-            //todo: throw errors.
+            throw new DataLoadingException(errorResourceBundle.getString("setPlayerParam"));
         }
         tempPlayer.setPlayerParam(param, value);
     }
+
+    /**
+     * Add a player with the new ID
+     * @param playerID
+     */
     @Override
     public void addPlayer(int playerID) {
         gameObjectConfiguration.setPlayerWithID(playerID, new PlayerStatus(playerID));
     }
+
+    /**
+     * store user's key's setting
+     * @param keyCodeMap
+     * @param playerID
+     */
     @Override
     public void storeKeyCode(Map<Integer, String> keyCodeMap, int playerID) {
         PlayerStatus tempPlayer = gameObjectConfiguration.getPlayerWithID(playerID);
@@ -85,24 +111,18 @@ public class DataStorer implements DataStorerAPI {
             tempPlayer.setKeyCodeMap(keyCodeMap);
             gameObjectConfiguration.setPlayerWithID(playerID, tempPlayer);
         } else {
-            System.out.println("player not found in Storer 144");
-            //todo: throw playerNotFound error
+            throw new DataLoadingException(errorResourceBundle.getString("setPlayerParam"));
         }
     }
 
-    private boolean fileExist(String filePath) {
-        File tmpDir = new File(filePath);
-        return tmpDir.exists();
-    }
 
     /**
-     * Slow if serialize every time?
+     * Store images that belong to a specific category.
      * @param imagePath
      * @param ImageID
      * @param
      */
     @Override
-    //todo: finish testing
     public void storeImage(String imagePath, int ImageID, ImageCategory imageCategory) {
         String imageIDString = String.valueOf(ImageID);
         Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(imageCategory.toString());
@@ -118,21 +138,37 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * level = current level; subMapID = next available ID;
+     * store submap with assigning a random ID
      * @param map
      * @param level
      */
     @Override
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
-        throw new DataLoadingException("Method storeSubMapWithSubmapIDRandom is not supported");
+        throw new DataLoadingException(errorResourceBundle.getString("storeSubMapWithSubmapIDRandom"));
     }
+
+    /**
+     * store the submap for current game and level
+     * @param map
+     * @param level
+     * @param subMapID
+     */
     @Override
     public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
         storeSubMap( map, level, subMapID, gameObjectConfiguration.getCurrentGameID());
     }
+
+    /**
+     * store the submap
+     * @param map
+     * @param level
+     * @param subMapID
+     * @param gameID
+     */
     @Override
     public void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) {
         if (map.size() != GameMapGraph.SUBMAP_ROW_NUM * GameMapGraph.SUBMAP_COL_NUM) {
-            throw new DataLoadingException("map stored didn't fit in dimension");
+            throw new DataLoadingException(errorResourceBundle.getString("storeSubMap"));
         }
 
         GameMapGraph mapGraph = new GameMapGraph(level, subMapID, GameMapGraph.SUBMAP_ROW_NUM, GameMapGraph.SUBMAP_COL_NUM, gameID);
@@ -141,22 +177,12 @@ public class DataStorer implements DataStorerAPI {
             mapGraph.setElement(i/ GameMapGraph.SUBMAP_COL_NUM, i% GameMapGraph.SUBMAP_ROW_NUM, cell);
             i++;
         }
-        /**
-         * How storer knows the name of the game map file being stored is challenging.
-         * Storer and loader are therefore not independent.
-         *
-         */
-        GameInfo currentGameInfo = gameObjectConfiguration.getGameInfo(level, gameObjectConfiguration.getCurrentGameID());
-        String subMapFileName = currentGameInfo.getSubMapInfo().get(level).get(subMapID) + ".json";
-        Map<String, GameMapGraph> currentGameMapList =  gameObjectConfiguration.getGameMapList();
-        if (currentGameMapList.keySet().contains(subMapFileName)) {
-            currentGameMapList.replace(subMapFileName, mapGraph);
-        } else  {
-            currentGameMapList.put(subMapFileName, mapGraph);
-        }
-        gameObjectConfiguration.setGameMapList(currentGameMapList);
-//         writeObjectTOJson(mapGraph, gameMapAddressPrefix + subMapFileName);
 
+        GameInfo currentGameInfo = gameObjectConfiguration.getGameInfo(level, gameObjectConfiguration.getCurrentGameID());
+        String subMapFileName = currentGameInfo.getSubMapInfo().get(level).get(subMapID) + JSON_POSTFIX;
+        Map<String, GameMapGraph> currentGameMapList =  gameObjectConfiguration.getGameMapList();
+        currentGameMapList = gameObjectConfiguration.insertElementToMap(currentGameMapList, subMapFileName, mapGraph);
+        gameObjectConfiguration.setGameMapList(currentGameMapList);
     }
 
     /**
@@ -180,14 +206,21 @@ public class DataStorer implements DataStorerAPI {
         gameObjectConfiguration.writeAllDataToDisk();
     }
 
+    /**
+     * store the animation to disk
+     * @param animations
+     * @param animationType
+     */
     @Override
     public void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType) {
         gameObjectConfiguration.setAnimationMap(animationType.toString() + JSON_POSTFIX, animations);
     }
 
+    /**
+     * return the dataloader storer is using
+     * @return
+     */
     public DataLoader getDataLoader(){
         return dataLoader;
     }
-
-
 }

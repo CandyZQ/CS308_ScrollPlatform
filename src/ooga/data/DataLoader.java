@@ -21,6 +21,10 @@ import java.util.ResourceBundle;
 
 import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
 
+/**
+ * Data Loader class responsible for loading all data
+ * @author Guangyu Feng
+ */
 public class DataLoader implements DataLoaderAPI {
   public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
   public static final int SubMapPerMap = 4;
@@ -40,32 +44,48 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * load game's parameter using Gamepara enum
-   * @param para
-   * @return
+   * @param param the parameter of the game
+   * @return the value of the parameter of the game
    */
   @Override
-  public int loadGameParam(GameParam para) {
+  public int loadGameParam(GameParam param) {
     GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
-    return para.getValue(gameInfo);
+    return param.getValue(gameInfo);
   }
 
+  /**
+   * Load the param of any specific player
+   * @param playerParam the parameter of player
+   * @param playerID id of player
+   * @return the parameter of player
+   */
   @Override
-  public int loadPlayerPara(PlayerParam playerParam, int playerID) throws DataLoadingException {
+  public int loadPlayerParam(PlayerParam playerParam, int playerID) throws DataLoadingException {
     PlayerStatus playerStatus = gameObjectConfiguration.getPlayerWithID(playerID);
     try {
       return playerStatus.getPlayerParam(playerParam);
     } catch (Exception e) {
-      throw new DataLoadingException(String.format("Player %d does not exist", playerID), e);
+      throw new DataLoadingException(String.format(errorMessageResources.getString("loadPlayerParam"), playerID), e);
     }
   }
 
+  /**
+   * load the param of current player
+   * @param playerParam the parameter of player
+   * @return the value of the player's property
+   * @throws DataLoadingException
+   */
   @Override
   public int loadCurrentPlayerPara(PlayerParam playerParam) throws DataLoadingException {
-    return loadPlayerPara(playerParam, gameObjectConfiguration.getCurrentPlayerID());
+    return loadPlayerParam(playerParam, gameObjectConfiguration.getCurrentPlayerID());
   }
 
+  /**
+   * load available directions that is available in current game
+   * @return the list of Directions that are available
+   */
   @Override
-  public List<Direction> loadAvailableDirection(GameParam para) {
+  public List<Direction> loadAvailableDirection() {
     GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
     return gameInfo.getAvailableAttackDirections();
   }
@@ -73,29 +93,54 @@ public class DataLoader implements DataLoaderAPI {
   /**
    * ***this method has to be called before using any of the loader/storer.
    *
-   * @param GameID
-   * @param playersID
+   * @param GameID the ID representing the type of the current Game
+   * @param playersID the ID representing player
    */
   @Override
   public void setGameAndPlayer(int GameID, List<Integer> playersID) {
     gameObjectConfiguration.setCurrentPlayerAndGameID(GameID, playersID);
   }
 
+  /**
+   * get the type of the game people currently are working on
+   * @return int indicating the type of the game
+   */
   @Override
   public int getGameType() {
     return gameObjectConfiguration.getCurrentGameID();
   }
 
+  /**
+   * load a specific cell
+   * @param row the row the cell is at
+   * @param col the column the cell is at
+   * @param subMapID the ID indicating which submap the cell locates
+   * @param level the level the cell is used in
+   * @return the Cell at the specified locatioin
+   */
   @Override
-  public Cell loadCell(int row, int col, int subMapID, int level) throws DataLoadingException {
+  public Cell loadCell(int row, int col, int subMapID, int level) {
     return loadMap(level, subMapID).getElement(row, col);
   }
 
+  /**
+   * get the subMapID for the map in certain direction
+   * @param direction direction of the next submap relative to the current submap
+   * @param current the current sumap
+   * @return the ID of the next submap at the specified direction
+   */
   @Override
   public int getNextSubMapID(Direction direction, int current) {
     return ID_NOT_DEFINED;
   }
 
+  /**
+   * get the whole gameMapGraph object from data
+   * @param level
+   * @param subMapID
+   * @return
+   * @throws DataLoadingException
+   */
   @Override
   public GameMapGraph loadMap(int level, int subMapID) throws DataLoadingException {
 
@@ -108,7 +153,7 @@ public class DataLoader implements DataLoaderAPI {
         map = tempMap.get(keyOfSubmap);
         map.addBufferImage2D(this);//only works for 2D
       } else {
-        throw new DataLoadingException(String.format("Map File not found with key %s", keyOfSubmap));
+        throw new DataLoadingException(String.format(errorMessageResources.getString("loadMap"), keyOfSubmap));
       }
 
     } catch (Exception e) {
@@ -130,7 +175,7 @@ public class DataLoader implements DataLoaderAPI {
     try {
       return ImageIO.read(new File(imagePath));
     } catch (IOException e) {
-      throw new DataLoadingException(imagePath + " was not loaded.", e);
+      throw new DataLoadingException(imagePath + errorMessageResources.getString("loadBufferImage"), e);
     }
 
   }
@@ -157,7 +202,7 @@ public class DataLoader implements DataLoaderAPI {
    */
   @Override
   public int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException {
-    throw new DataLoadingException("load character property is not supported");
+    throw new DataLoadingException(errorMessageResources.getString("loadCharacter"));
   }
 
   /**
@@ -169,7 +214,7 @@ public class DataLoader implements DataLoaderAPI {
    */
   @Override
   public int loadWeapon(int ID, int property) throws DataLoadingException {
-    throw new DataLoadingException("load weapon is not supported");
+    throw new DataLoadingException(errorMessageResources.getString("loadWeapon"));
   }
 
   /**
@@ -193,7 +238,7 @@ public class DataLoader implements DataLoaderAPI {
     try {
       player = gameObjectConfiguration.getPlayerWithID(playerID);
     } catch (Exception e) {
-      throw new DataLoadingException(String.format("Player with %s is not found while loading key code", playerID)
+      throw new DataLoadingException(String.format(errorMessageResources.getString("loadKeyCode"), playerID)
               , e);
     }
     return player.getKeyCodeMap();
@@ -224,7 +269,7 @@ public class DataLoader implements DataLoaderAPI {
     if (map != null && checkKeyExist(map, key)) {
       return map.get(key);
     } else {
-      throw new DataLoadingException("image not found");
+      throw new DataLoadingException(errorMessageResources.getString("loadValueOfMap"));
     }
   }
 
@@ -232,27 +277,46 @@ public class DataLoader implements DataLoaderAPI {
     return (map.get(key) != null);
   }
 
+  /**
+   * get the object that stores all loaded data
+   * @return
+   */
   public static GameObjectConfiguration getGameObjectConfiguration() {
     return gameObjectConfiguration;
   }
 
+  /**
+   * get the list of current available zelda characters
+   * @return
+   */
   @Override
   public List<ZeldaCharacter> getZeldaCharacters() {
     return gameObjectConfiguration.getZeldaCharacterList();
   }
 
+  /**
+   * get the list of current available players
+   * @return
+   */
   @Override
   public List<PlayerStatus> getCurrentPlayers() {
     return gameObjectConfiguration.getCurrentPlayers();
   }
 
-
-
+  /**
+   * get certain type of animation
+   * @param animationType
+   * @return
+   */
   @Override
   public Map<String, Animation2D> loadAnimation(AnimationType animationType) {
     return gameObjectConfiguration.getSpecificAgentAnimation(animationType.toString() + JSON_POSTFIX);
   }
 
+  /**
+   * get the resource bundle that fetches the error message property file.
+   * @return
+   */
   public ResourceBundle getErrorMessageResources() {
     return errorMessageResources;
   }

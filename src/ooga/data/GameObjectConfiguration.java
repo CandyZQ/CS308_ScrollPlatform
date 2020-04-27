@@ -1,11 +1,15 @@
 package ooga.data;
 
-import static ooga.data.DataLoader.JSON_POSTFIX;
-import static ooga.game.GameMain.HEIGHT;
-import static ooga.game.GameMain.WIDTH;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.enums.ImageCategory;
+import ooga.model.enums.TextCategory;
+import ooga.model.enums.backend.PlayerParam;
+import ooga.model.interfaces.gameMap.Cell;
+import ooga.view.engine.graphics.animation.Animation2D;
+import ooga.view.engine.io.Window;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,25 +20,24 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import ooga.model.characters.ZeldaCharacter;
-import ooga.model.enums.ImageCategory;
-import ooga.model.enums.TextCategory;
-import ooga.model.enums.backend.PlayerParam;
-import ooga.model.interfaces.gameMap.Cell;
-import ooga.view.engine.graphics.animation.Animation2D;
-import ooga.view.engine.io.Window;
+import java.util.*;
+
+import static ooga.data.DataLoader.JSON_POSTFIX;
+import static ooga.game.GameMain.HEIGHT;
+import static ooga.game.GameMain.WIDTH;
 
 /**
- * this is the man, the object storing EVERY piece of info!
+ * Class responsible for centralized loading and storing
+ * @author Guangyu Feng
  */
 public class GameObjectConfiguration {
-  public static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
+  private static final String CELL_CLASS_NAME = "ooga.model.map.GameCell";
+  private static final String DELIMITER_PRAM_RESOURCE_FILE = ",";
+  private static final String LIST_KEYWORD = "List";
+  private static final String MAP_KEYWORD = "Map";
+  private static final String FILE_PATH_DELIMITER = "/";
+  private static final String EXCEPTION_KEYWORD = "Can't Load Data";
+  private static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
   private Map<String, GameMapGraph> gameMapList;
@@ -49,8 +52,8 @@ public class GameObjectConfiguration {
 
   private Map<String, Map<String, Animation2D>> animationMap;
   private List<Integer> currentPlayersID;
-  private int currentPlayerID = 1;
-  private int currentGameID = 1;
+  private int currentPlayerID;
+  private int currentGameID;
 
 
   private static GameObjectConfiguration gameObjectConfiguration;
@@ -58,21 +61,24 @@ public class GameObjectConfiguration {
   /**
    * Static 'instance' method
    */
-  public static GameObjectConfiguration getInstance() throws DataLoadingException {
+  public static GameObjectConfiguration getInstance() {
     if (gameObjectConfiguration == null) {
       gameObjectConfiguration = new GameObjectConfiguration();
     }
+
     return gameObjectConfiguration;
   }
 
   private GameObjectConfiguration() throws DataLoadingException {
     GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.serializeNulls(); //ensure gson storing null values.
+    gsonBuilder.serializeNulls();
     gsonStore = gsonBuilder.create();
-    gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter("ooga.model.map.GameCell"));
-    gsonLoad = gsonBuilder.create();//3 lines above are the same as DataStorer
+    gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter(CELL_CLASS_NAME));
+    gsonLoad = gsonBuilder.create();
 
     resources = ResourceBundle.getBundle(PARAM_RESOURCES_PACKAGE);
+    currentPlayerID = 1;
+    currentGameID = 1;
 
     try {
       initiateDataStorageInstanceVariable();
@@ -87,25 +93,25 @@ public class GameObjectConfiguration {
     window.create();
     for (String key : Collections.list(resources.getKeys())) {
       Field field = initializeFieldObject(key);
-      String[] value = resources.getString(key).split(",");
-      String type = value[1];
+      String[] value = resources.getString(key).split(DELIMITER_PRAM_RESOURCE_FILE);
       String directoryPath = value[0];
+      String type = value[1];
       String instanceClass = value[2];
 
       File dir = new File(directoryPath);
       File[] directoryListing = dir.listFiles();
       try {
         field.set(this, new ArrayList<>());
-      } catch (Exception d) {
+      } catch (Exception e) {
         field.set(this, new HashMap<>());
       }
 
       try {
         for (File child : directoryListing) {
-          if (type.equals("List")) {
+          if (type.equals(LIST_KEYWORD)) {
             loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
-          } else if (type.equals("Map")) {
+          } else if (type.equals(MAP_KEYWORD)) {
             loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
           } else {
@@ -117,9 +123,12 @@ public class GameObjectConfiguration {
             animationMap.put(child.getName(), tempAgent);
 
           }
-
         }
-      } catch (Exception e) { }
+      } catch (Exception e) {
+        //this catch is used because some teammate's computer will run into errors without it. However, this problem is not displayed when I am running the program.
+        System.out.println(EXCEPTION_KEYWORD + key);
+//        throw new DataLoadingException(EXCEPTION_KEYWORD + key, e);
+      }
     }
     window.destroy();
   }
@@ -144,16 +153,19 @@ public class GameObjectConfiguration {
     }
   }
 
+  /**
+   * write data stored in the object into the disk
+   */
   public void writeAllDataToDisk() {
     for (String key : Collections.list(resources.getKeys())) {
 
       try {
         Field field = initializeFieldObject(key);
-        String[] value = resources.getString(key).split(",");
+        String[] value = resources.getString(key).split(DELIMITER_PRAM_RESOURCE_FILE);
         String type = value[1];
         String directoryPath = value[0];
 
-        if (type.equals("List")) {
+        if (type.equals(LIST_KEYWORD)) {
           String getfileNameIDMethod = value[3];
           storeListToDisk(field, directoryPath, getfileNameIDMethod);
         } else {
@@ -172,7 +184,7 @@ public class GameObjectConfiguration {
   }
   private <E> void storeListToDisk(Field field, String directoryPath, String getfileNameIDMethod) throws IllegalAccessException {
     List<E> tempList = (List<E>) field.get(this);
-    String[] pathArray = directoryPath.split("/");
+    String[] pathArray = directoryPath.split(FILE_PATH_DELIMITER);
     String folderName = pathArray[pathArray.length - 1];
 
     for (E j : tempList) {
@@ -193,7 +205,10 @@ public class GameObjectConfiguration {
     return field;
   }
 
-
+  /**
+   * get the List of GameInfo object
+   * @return
+   */
   public List<GameInfo> getGameInfoList() {
     return gameInfoList;
   }
@@ -248,7 +263,7 @@ public class GameObjectConfiguration {
       Reader reader = Files.newBufferedReader(Paths.get(fileName));
       return (clazz) gsonLoad.fromJson(reader, clazz);
     } catch (IOException e) {
-      throw new DataLoadingException(String.format("file at %s hasn't been created.", fileName), e);
+      throw new DataLoadingException(EXCEPTION_KEYWORD, e);
     }
   }
 
@@ -261,31 +276,44 @@ public class GameObjectConfiguration {
       Writer1.close();
     } catch (IOException e) {
       throw new DataLoadingException(e.getMessage(), e);
-      //throw appropriate Exceptions
     }
   }
 
+  /**
+   * set the image map to corresponding values
+   * @param newImageMap
+   * @param imageCategory
+   */
   public void setImageMap(Map<String, String> newImageMap, ImageCategory imageCategory) {
     String newKey = imageCategory.toString();
     insertElementToMap(imageMap, newKey, newImageMap);
   }
 
-  public List<Integer> getCurrentPlayersID() {
-    return currentPlayersID;
-  }
-
+  /**
+   * get the player ID of the current player
+   * @return
+   */
   public int getCurrentPlayerID() {
     return currentPlayersID.get(0);
   }
 
+  /**
+   * get the ID of the current game
+   * @return
+   */
   public int getCurrentGameID() {
     return currentGameID;
   }
 
+  /**
+   * set the current player and game using ID
+   * @param currentGameID
+   * @param currentPlayersID
+   */
   public void setCurrentPlayerAndGameID(int currentGameID, List<Integer> currentPlayersID) {
     this.currentPlayersID = currentPlayersID;
     this.currentGameID = currentGameID;
-    List<PlayerStatus> tempPlayers = getPlayersWithID(currentPlayersID);
+
   }
 
   /**
@@ -316,6 +344,11 @@ public class GameObjectConfiguration {
     return playerStatuses;
   }
 
+  /**
+   * get the Player status using its ID
+   * @param playerID
+   * @return
+   */
   public PlayerStatus getPlayerWithID(int playerID) {
     for (PlayerStatus i : playerList) {
       if (i.getPlayerID() == playerID) {
@@ -326,10 +359,18 @@ public class GameObjectConfiguration {
     return null;
   }
 
+  /**
+   * get the list of the current players in objects
+   * @return
+   */
   public List<PlayerStatus> getCurrentPlayers() {
     return getPlayersWithID(currentPlayersID);
   }
 
+  /**
+   * get the current player's player status
+   * @return
+   */
   public PlayerStatus getCurrentPlayer() {
     return getCurrentPlayers().get(0);
   }
@@ -352,19 +393,37 @@ public class GameObjectConfiguration {
     playerList = tempList;
   }
 
+  /**
+   * set the text map
+   * @param text
+   * @param keyword
+   * @param category
+   */
   public void setTextMap(String text, String keyword, TextCategory category) {
     Map<String, String> tempTextMap = textMap.get(category.toString());
-    if (tempTextMap == null) {
-      throw new DataLoadingException("text category not found");
+    try {
+      tempTextMap = insertElementToMap(tempTextMap, keyword, text);
+      textMap.replace(category.toString(), tempTextMap);
+    } catch (Exception e) {
+      throw new DataLoadingException(e.getMessage(), e);
     }
-    tempTextMap = insertElementToMap(tempTextMap, keyword, text);
-    textMap.replace(category.toString(), tempTextMap);
+
   }
 
+  /**
+   * get the game info and param of current game
+   * @return
+   */
   public GameInfo getCurrentGameInfo() {
     return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerParam.CURRENT_LEVEL));
   }
 
+  /**
+   * get the game information
+   * @param level
+   * @param id
+   * @return
+   */
   public GameInfo getGameInfo(int level, int id) {
     for (GameInfo i : gameInfoList) {
       if (i.getGameType() == id && i.getLevelNum() == level) {
@@ -374,14 +433,33 @@ public class GameObjectConfiguration {
     return null;
   }
 
+  /**
+   * set the animation map
+   * @param agent
+   * @param agentAnimation
+   */
   public void setAnimationMap(String agent, Map<String, Animation2D> agentAnimation) {
     insertElementToMap(animationMap, agent, agentAnimation);
   }
 
+  /**
+   * get the specific animation info
+   * @param agent
+   * @return
+   */
   public Map<String, Animation2D> getSpecificAgentAnimation(String agent) {
     return animationMap.get(agent);
   }
 
+  /**
+   * insert an element into the map
+   * @param map
+   * @param newkey
+   * @param newValue
+   * @param <K>
+   * @param <V>
+   * @return
+   */
   public <K, V> Map<K, V> insertElementToMap(Map<K, V> map, K newkey, V newValue) {
     if (map.containsKey(newkey)) {
       map.replace(newkey, newValue);
