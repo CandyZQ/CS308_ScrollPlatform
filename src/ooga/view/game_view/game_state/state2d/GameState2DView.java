@@ -265,7 +265,7 @@ public class GameState2DView extends GameStateView {
   public void renderAll() throws IOException {
     renderMap();
     renderAgents();
-    renderBullets();
+    //renderBullets();
     renderWindow();
   }
 
