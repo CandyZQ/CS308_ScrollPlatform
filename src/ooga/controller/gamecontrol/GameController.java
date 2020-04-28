@@ -121,8 +121,11 @@ public class GameController {
     if (myGameView.getView().isKeyDown(GLFW.GLFW_KEY_P)) {
       pause();
     }
-    distanceCheck();
-    attackCheck();
+
+    try {
+      distanceCheck();
+      attackCheck();
+    } catch (Exception ignored){}
   }
 
   private void deathCheck() {
@@ -150,14 +153,16 @@ public class GameController {
   }
 
   private void distanceCheck() {
-    for (MainPlayerControl mpc : myMainPlayerController) {
-      for (MainNPCControl npc : myNPCControl) {
-        if (Math.abs(myGameView.getXPos(mpc.getID()) - myGameView.getXPos(npc.getID())) < MIN_DIS &&
-            Math.abs(myGameView.getYPos(mpc.getID()) - myGameView.getYPos(npc.getID())) < MIN_DIS) {
-          npc.attack();
+      for (MainPlayerControl mpc : myMainPlayerController) {
+        for (MainNPCControl npc : myNPCControl) {
+          if (Math.abs(myGameView.getXPos(mpc.getID()) - myGameView.getXPos(npc.getID())) < MIN_DIS
+              &&
+              Math.abs(myGameView.getYPos(mpc.getID()) - myGameView.getYPos(npc.getID()))
+                  < MIN_DIS) {
+            npc.attack();
+          }
         }
       }
-    }
   }
 
   public void pause() {
