@@ -136,10 +136,12 @@ public class Agent2DController extends AgentController {
   private void translate(Vector3f delta) {
     if (!temp_switch && isBullet) System.out.println("before");
     if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
+
     for (int i = 0; i < object.getMesh().getVertices().length; i++) {
       object.getMesh().setVerticesPosition(i,
           Vector3f.add(object.getMesh().getVertices()[i].getPosition(), delta));
     }
+
     if (!temp_switch && isBullet) System.out.println("after");
     if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
     temp_switch = true;

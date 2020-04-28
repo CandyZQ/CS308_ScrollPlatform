@@ -137,7 +137,7 @@ public class Asset2D {
   }
 
   public static Vector3f getBulletDelta() {
-    return new Vector3f(0.0f, 0.05f, 0f);
+    return new Vector3f(0.0f, 0.005f, 0f);
   }
 
   public static Vector3f getSummonDelta() {
@@ -153,7 +153,7 @@ public class Asset2D {
   }//0.01
 
   public static Vector2f getBulletBounds() {
-    return new Vector2f(0.2f * getBulletScale().getX(), 0.2f * getBulletScale().getY());
+    return new Vector2f(0.02f * getBulletScale().getX(), 0.02f * getBulletScale().getY());
   }
 
   public static Vector2f getMapTileBounds() {

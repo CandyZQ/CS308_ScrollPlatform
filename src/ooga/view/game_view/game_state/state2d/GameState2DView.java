@@ -121,11 +121,17 @@ public class GameState2DView extends GameStateView {
       Vector3f parentPosition = new Vector3f(agentMap.get(id).getCenterPosition(), 0f);
       String parentDirection = agentMap.get(id).getCurrentDirection();
 
+      System.out.println("parent position");
+      Test.printVector3f(parentPosition);
+
       Agent2DDataHolder newAgentData = positionNewAgent(
-          agentDataHolderMap.get(id).getSpawnerDict().get(state),
+          new Agent2DDataHolder(agentDataHolderMap.get(id).getSpawnerDict().get(state)),
           parentPosition, parentDirection, false);
       GenerateAgentsData.loadAnimations(newAgentData);
       setZDepth(newAgentData);
+
+      System.out.println("bullet position");
+      Test.printVector3f(newAgentData.getPosition());
 
       if (newAgentData.isBullet()) {
         int newId = getNextBulletId();
@@ -163,10 +169,14 @@ public class GameState2DView extends GameStateView {
     for (int key : new HashSet<>(bulletMap.keySet())) {
       Agent2DView bullet = bulletMap.get(key);
 
-      //System.out.println("ded...");
+      //System.out.println("center pos in update...");
       //Test.printVector2f(bullet.getCenterPosition());
+
       if (box.isBulletAttack(bullet)!=box.getNonId()){
         changeAgentHurtStatus(box.isBulletAttack(bullet));
+        bullet.terminate();
+        deleteBullet(key);
+        continue;
       }
 
       if(bullet.canMove(bullet.getCurrentDirection())) {
@@ -182,14 +192,14 @@ public class GameState2DView extends GameStateView {
   private Agent2DDataHolder positionNewAgent(Agent2DDataHolder data, Vector3f parentPosition,
       String parentDirection, boolean isOrigin) {
 
-    float MOVEMENT_DELTA = isOrigin ? 0f : 10f;
+    float MOVEMENT_DELTA = isOrigin ? 0f : 1000f;
     Agent2DDataHolder newAgentData = new Agent2DDataHolder(data);
 
     newAgentData.setInitialDirection(parentDirection);
     //Test.printVector3f(parentPosition);
     //System.out.println(parentDirection);
     newAgentData.setPosition(Vector3f.add(parentPosition,
-        Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(), MOVEMENT_DELTA)));
+        Asset2D.convertDirectionalSpeed(newAgentData.getInitialDirection(),MOVEMENT_DELTA)));
 
     setZDepth(newAgentData);
 
@@ -255,15 +265,15 @@ public class GameState2DView extends GameStateView {
   public void renderAll() throws IOException {
     renderMap();
     renderAgents();
-    //renderBullets();
+    renderBullets();
     renderWindow();
   }
 
   public void renderBullets() {
     for (int id : bulletMap.keySet()) {
-      //System.out.println("rendering bulletid");
-      //System.out.println(id);
-      //Test.printThreeMeshVertices(bulletMap.get(id).getObject().getMesh());
+      System.out.println("rendering bulletid");
+      System.out.println(id);
+      Test.printThreeMeshVertices(bulletMap.get(id).getObject().getMesh());
       bulletMap.get(id).renderMesh(renderer);
     }
   }

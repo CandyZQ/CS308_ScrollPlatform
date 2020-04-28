@@ -107,7 +107,7 @@ public class testAgentMap implements Runnable {
   }
 
   private void render() {
-    agentView.renderMesh(renderer, camera);
+//    agentView.renderMesh(renderer, camera);
     mapView.renderMesh(renderer, camera);
     window.swapBuffers();
   }
@@ -119,7 +119,7 @@ public class testAgentMap implements Runnable {
     shader.destroy();
   }
 
-  @org.junit.Test
+  //@org.junit.Test
   public static void main(String[] args) {
     new testAgentMap().start();
   }

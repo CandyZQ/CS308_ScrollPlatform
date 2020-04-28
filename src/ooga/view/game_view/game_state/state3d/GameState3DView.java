@@ -38,8 +38,12 @@ public class GameState3DView extends GameStateView {
     window.setBackgroundColor(22.0f/255.0f, 23.0f/255.0f, 25.0f/255.0f);
     window.create();
     agentView = new Agent3DView();
+    Test.printAgentLoadingMessage();
+
     agentView.createMesh();
+    Test.printAgentCreateMessage();
     mapView.createMesh();
+    Test.printMapCreateMessage();
     shader.create();
   }
 
@@ -63,6 +67,7 @@ public class GameState3DView extends GameStateView {
 
 
   private void updateCamera(){
+    camera.update();
     if (Input.isKeyDown(GLFW.GLFW_KEY_UP)){
       camera.moveXForward();
     }
@@ -93,6 +98,7 @@ public class GameState3DView extends GameStateView {
     mapView.renderMesh(renderer, camera);
   }
 
+  @Override
   public void renderAll(){
     renderAgents();
     renderMap();

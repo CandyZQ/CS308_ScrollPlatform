@@ -15,7 +15,7 @@ public class testMainView implements Runnable {
   public GameState2DView view;
 
   public static void main(String[] args) {
-    new testMainView().start();
+    new ooga.view.test.lwjgl.test2d.testMainView().start();
   }
 
   public void start() {
