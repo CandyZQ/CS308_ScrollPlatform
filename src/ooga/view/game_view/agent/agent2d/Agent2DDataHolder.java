@@ -52,7 +52,7 @@ public class Agent2DDataHolder {
     this.moveAction = other.getMoveAction();
     this.speedScale = other.getSpeedScale();
     this.shouldConsumed = other.shouldConsumed();
-    this.nextDict = Map.copyOf(other.getNextDict());
+    this.nextDict = Map.copyOf(other.getNextDict());  //fixme maybe do a deep copy?
     this.prevDict = Map.copyOf(other.getPrevDict());
     this.spawnerDict = Map.copyOf(other.getSpawnerDict());
     this.rotation = new Vector3f(other.getRotation());
