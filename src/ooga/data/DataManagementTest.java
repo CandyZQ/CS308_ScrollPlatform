@@ -5,6 +5,7 @@ import ooga.model.enums.ImageCategory;
 import ooga.model.enums.backend.CharacterType;
 import ooga.model.enums.backend.Direction;
 import ooga.model.enums.backend.PlayerParam;
+import ooga.model.gameElements.WeaponBase;
 import ooga.model.interfaces.gameMap.Cell;
 import org.junit.jupiter.api.Test;
 
@@ -96,21 +97,44 @@ public class  DataManagementTest {
         storer.storeImage("123", 2, ImageCategory.RESOURCE);
         String imagePath = loader.loadImagePath(2, ImageCategory.RESOURCE);
         assertEquals("123", imagePath);
+
 //        storer.writeAllDataIntoDisk();
     }
 
     /**
-     * todo: interger 99 != String 99
+     * testing whether we can catch bad data
+     */
+    @Test
+    public void badMethodCall() {
+        boolean hasException = false;
+        try {
+            storer.storeWeapons(1, new WeaponBase(1 ,2,Direction.E) {
+                @Override
+                public void fire() {
+
+                }
+            });
+        } catch (DataLoadingException e) {
+            hasException = true;
+        }
+        assertTrue(hasException);
+
+    }
+
+    /**
+     * testing data for loading and storing params
      */
     @Test
     public void loadAndStoreParam() throws DataLoadingException {
-        int a = loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3);
+        int a = loader.loadPlayerParam(PlayerParam.CURRENT_SCORE, 3);
         storer.addPlayer(3);
         storer.setPlayerParam(PlayerParam.CURRENT_SCORE, 99, 3);
 
-        assertEquals(99, loader.loadPlayerPara(PlayerParam.CURRENT_SCORE, 3));
+        assertEquals(99, loader.loadPlayerParam(PlayerParam.CURRENT_SCORE, 3));
 //        storer.writeAllDataIntoDisk();
     }
+
+
 
 
 

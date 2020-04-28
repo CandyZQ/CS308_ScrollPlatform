@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import ooga.view.game_menu.other.GameMenu;
 import ooga.view.game_menu.pretty.PrettyBox;
 import ooga.view.game_menu.pretty.PrettyButtons;
 import ooga.view.game_menu.pretty.PrettyColorPicker;

@@ -52,10 +52,11 @@ Hours Spent: >= 100hr
 - Dark Mode that allows the user to change the background to a dark color 
 - Different background colors that can be selected from a dropdown panel 
 - Saves the player's progress on a game on quit
-- Load last saved game progress
+- Load and store last saved game progress
 - Artificial Players that automatically attack the player 
 - Allows two players to play one game at the same time
 - Allows user to log in and save scores
+
 
 ### Notes/Assumptions
 

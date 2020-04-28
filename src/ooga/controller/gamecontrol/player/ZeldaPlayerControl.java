@@ -143,7 +143,6 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
         keyReleased();
       }
     } catch (Exception e) {
-      e.printStackTrace();
       System.out.println("key map fault");
     }
   }
