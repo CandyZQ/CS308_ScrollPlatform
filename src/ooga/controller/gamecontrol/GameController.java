@@ -134,7 +134,14 @@ public class GameController {
         npc.getCharacter().setState(MovingState.DEATH);
       }
     }
+    for (MainPlayerControl playerControl : myMainPlayerController) {
+      if (!((ZeldaPlayer) playerControl.getPlayer()).isAlive()) {
+        playerControl.getPlayer().setState(MovingState.DEATH);
+      }
+    }
     myNPCControl.removeIf(npc -> npc.getCharacter().getState() == MovingState.DEATH);
+    myMainPlayerController.removeIf(playerControl -> playerControl.getPlayer().getState() == MovingState.DEATH);
+
   }
 
   private void attackCheck() {

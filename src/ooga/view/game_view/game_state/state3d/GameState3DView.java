@@ -50,6 +50,8 @@ public class GameState3DView extends GameStateView {
   public void updateAll(){
     update3DAgent();
     updateCamera();
+    window.update();
+    camera.update();
   }
 
   private void update3DAgent(){
@@ -103,6 +105,7 @@ public class GameState3DView extends GameStateView {
     renderAgents();
     renderMap();
     renderWindow();
+    window.swapBuffers();
   }
 
   @Override

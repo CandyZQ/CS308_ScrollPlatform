@@ -11,6 +11,7 @@ import ooga.controller.gamecontrol.GameController;
 import ooga.data.DataLoaderAPI;
 import ooga.data.DataLoadingException;
 import ooga.data.DataStorerAPI;
+import ooga.game.Game3D;
 import ooga.game.GameType;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
@@ -231,7 +232,7 @@ public class WindowControl {
   }
 
   private void startGame1() throws DataLoadingException, IOException {
-    myDataLoader.setGameAndPlayer(GameType.ZELDA.getIndex(), List.of(1,2));
+    myDataLoader.setGameAndPlayer(GameType.ZELDA.getIndex(), List.of(1,0));
     startGame();
   }
 
@@ -256,8 +257,7 @@ public class WindowControl {
 
 
   private void startGame3() throws IOException, DataLoadingException {
-    myDataLoader.setGameAndPlayer(GameType.ZELDA.getIndex(), List.of(CURRENT_PLAYER_ID));
-    startGame();
+    new Game3D().start();
   }
 
   /**
