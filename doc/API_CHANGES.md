@@ -1,5 +1,4 @@
-# ooga
-Depricated methods in DataManagement:  
+#### Depricated methods in DataManagement:  
  void storeWeapons(int ID, WeaponBase weapon);  
  void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level)  
  int getNextSubMapID(Direction direction, int current);  
@@ -23,6 +22,11 @@ Depricated methods in DataManagement:
  int loadCharacter(int ID, CharacterProperty property)
  is gone because backend found it's more useful to load character object directly rather than loading single property.
 
+#### Model
+ - added Notifier Interface or listener and notifier implementation 
+ - Added getImage(), setImage(), getUniqueId(), setUniqueID() in Cell API for data loading and storing 
+
+ 
  
 
 
