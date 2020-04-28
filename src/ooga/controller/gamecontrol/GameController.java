@@ -18,6 +18,7 @@ import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
+import ooga.model.enums.backend.MovingState;
 import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.movables.Movable1D;
@@ -97,6 +98,7 @@ public class GameController {
   }
 
   public void update() {
+    deathCheck();
     mydDsplayControl.update(getSScoreList(), getLifeList());
     for (MainNPCControl npc : myNPCControl) {
       if (!npc.isHurt()) {
@@ -123,6 +125,15 @@ public class GameController {
     attackCheck();
   }
 
+  private void deathCheck() {
+    for (MainNPCControl npc : myNPCControl) {
+      if (!npc.getCharacter().isAlive()) {
+        npc.getCharacter().setState(MovingState.DEATH);
+      }
+    }
+    myNPCControl.removeIf(npc -> npc.getCharacter().getState() == MovingState.DEATH);
+  }
+
   private void attackCheck() {
     for (MainPlayerControl mpc : myMainPlayerController) {
       if (myGameView.isAttacked(mpc.getID())) {
@@ -132,7 +143,8 @@ public class GameController {
 
     for (MainNPCControl npc : myNPCControl) {
       if (myGameView.isAttacked(npc.getID())) {
-        npc.getHurt();
+        System.out.println("attacked: " + npc.getID());
+        npc.getHurt((ZeldaPlayer) myMainPlayerController.get(0).getPlayer());
       }
     }
   }

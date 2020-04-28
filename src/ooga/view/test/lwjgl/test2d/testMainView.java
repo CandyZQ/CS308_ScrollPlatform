@@ -100,7 +100,7 @@ public class testMainView implements Runnable {
     }
 
     if (view.isKeyDown(GLFW.GLFW_KEY_C)){
-      view.updateAgent(3,"W", "DEATH", false);
+      view.updateAgent(3,"E", "HURT", false);
     }
 
     if (view.isKeyDown(GLFW.GLFW_KEY_Q)){
@@ -123,6 +123,7 @@ public class testMainView implements Runnable {
 
     if (view.isKeyDown(GLFW.GLFW_KEY_ENTER)){
       view.updateAgent(2,"W", "ATTACK1", true);
+      view.updateAgent(3, "W", "DEATH", false);
     }
 
     if (view.isKeyDown(GLFW.GLFW_KEY_SPACE)){

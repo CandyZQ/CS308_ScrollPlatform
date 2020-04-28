@@ -7,17 +7,14 @@ import java.util.Map;
 import ooga.view.engine.graphics.Shader;
 import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.graphics.render.Renderer2D;
-import ooga.view.engine.io.Input;
 import ooga.view.engine.io.Window;
 import ooga.view.engine.maths.Vector3f;
-import ooga.view.engine.utils.Test;
 import ooga.view.engine.utils.Timer;
 import ooga.view.engine.utils.cyberpunk2d.GenerateAgentsData;
 import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.agent.agent2d.Agent2DView;
 import ooga.view.game_view.game_state.interfaces.GameStateView;
 import ooga.view.game_view.map.map2d.Map2DView;
-import org.lwjgl.glfw.GLFW;
 
 public class GameState2DView extends GameStateView {
 
@@ -67,7 +64,7 @@ public class GameState2DView extends GameStateView {
   }
 
   public boolean getHurtStatus(int id){
-    System.out.println(isHurt.keySet().size());
+//    System.out.println(isHurt.keySet().size());
     return isHurt.get(id);
   }
 
