@@ -36,13 +36,16 @@ public class LogInView implements MenuView{
     private String myLanguage = "English";
     private boolean dark = false;
 
+    private static final int SIZE = 400;
+    private static final String resourcename = "menu";
+
     public LogInView(){
         setUpLabel();
         setUpField();
         setUpButton();
         setUpVBox();
         switchMode(dark);
-        myScene = new Scene(vBox, 400,400);
+        myScene = new Scene(vBox, SIZE,SIZE);
     }
 
     private void setUpButton() {
@@ -97,17 +100,17 @@ public class LogInView implements MenuView{
 
 
     public void UserDNE(){
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("UserDNE"));
     }
 
     public void logInFail(){
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("LogInFail"));
     }
 
     public void signUpFail(){
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("SignUpFail"));
     }
 
@@ -126,18 +129,18 @@ public class LogInView implements MenuView{
     }
 
     private void setUpLabel() {
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         userName = new Label(resource.getString("UserName"));
 
-        userName.setFont(Font.font("Ariel", 18));
+        userName.setFont(Constants.font);
         userPassWord = new Label(resource.getString("PassWord"));
-        userPassWord.setFont(Font.font("Ariel", 18));
+        userPassWord.setFont(Constants.font);
         Message = new Label("");
-        Message.setFont(Font.font("Ariel", 18));
+        Message.setFont(Constants.font);
     }
 
     private void changeLableText(){
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         userName.setText(resource.getString("UserName"));
         userPassWord.setText(resource.getString("PassWord"));
         Message.setText("");
@@ -146,14 +149,5 @@ public class LogInView implements MenuView{
     public void clearInput() {
         nameInput.clear();
         passwordInput.clear();
-    }
-
-    public void setInput(String a, String b) {
-        nameInput.setText(a);
-        passwordInput.setText(b);
-    }
-
-    public String getMessage(){
-        return Message.getText();
     }
 }

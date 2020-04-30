@@ -14,56 +14,44 @@ import java.util.*;
 
 public class FinishScreen implements MenuView {
 
-    private PrettyButtons ResumeButton;
     private PrettyButtons BackToMenuButton;
-    private PrettyButtons SaveGameButton;
-
-
     private List<PrettyButtons> myButtonList = new ArrayList<>();
-
     private VBox vBox;
     private Scene myScene;
     private boolean dark;
-    private String myLanguage;
+    private String myLanguage = "English";
 
-    private Label finishText;
-    private Label scorelist;
+    private Label finishText, scorelist;
 
     private boolean win = false;
     private int score = 0;
     private int id = 0;
 
+    private static final int ZIZE = 800;
+    private static final String resourceName = "menu";
 
     public FinishScreen(){
-        myLanguage = "English";
         setUpLabel();
         setUpButton();
         setUpVBox();
-        myScene = new Scene(vBox, 800, 800);
+        myScene = new Scene(vBox, ZIZE, ZIZE);
     }
 
     private void setUpLabel() {
         finishText = new Label();
-        finishText.setFont(Font.font("Ariel", 18));
+        finishText.setFont(Constants.font);
         scorelist = new Label();
-        scorelist.setFont(Font.font("Ariel", 18));
+        scorelist.setFont(Constants.font);
     }
-//
-//    private void changeLabelText() {
-//        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
-//        if(win)finishText.setText(resource.getString("playerf") + " " + id + " " + resource.getString("win"));
-//        else finishText.setText(resource.getString("playerf") + " " + id + " " + resource.getString("dead"));
-//    }
 
     public void setWin(boolean win, int id, int score){
         this.win = win;
         this.id = id;
         this.score = score;
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourceName, new Locale(myLanguage));
         if(win)finishText.setText(resource.getString("playerf") + " " + id + " " + resource.getString("win"));
         else finishText.setText(resource.getString("playerf") + " " + id + " " + resource.getString("dead"));
 
-        //scorelist.setText(resource.getString("playerscore")+" "+score);
     }
 
 
@@ -103,7 +91,7 @@ public class FinishScreen implements MenuView {
     }
 
     private void setUpButton(){
-        BackToMenuButton = new PrettyButtons("menu", myLanguage);
+        BackToMenuButton = new PrettyButtons(resourceName, myLanguage);
         myButtonList = List.of( BackToMenuButton);
     }
 
@@ -114,7 +102,7 @@ public class FinishScreen implements MenuView {
     }
 
     public void updateScore(Map<Integer, Integer> list){
-        var resource = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourceName, new Locale(myLanguage));
         String s = "";
         for(int i:list.keySet()){
             s+= (resource.getString("playerf")+i+resource.getString("playerscore")+list.get(i)+"; \n");

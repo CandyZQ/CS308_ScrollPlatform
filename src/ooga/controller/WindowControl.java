@@ -25,18 +25,6 @@ public class WindowControl {
 
   public static final int CURRENT_PLAYER_ID = 0;
 
-  private Button myStartButton;
-  private Button myExitButton;
-  private Button myLoadButton;
-  private Button myChangeBackgroundButton;
-  private Button myGameButton1;
-  private Button myGameButton2;
-  private Button myGameButton3;
-  private Button mySettingButton;
-  private Button myUserButton;
-
-  private ColorPicker myColorPicker;
-
   private String myUserName = "";
   private boolean isLogIn = false;
 
@@ -44,7 +32,6 @@ public class WindowControl {
   private Color color = Color.WHITE;
   private boolean resetGame = true;
 
-  private ComboBox myLanguagePicker;
 
   private LogInControl myLogIn;
   private SettingControl mySettingControl;
@@ -62,8 +49,6 @@ public class WindowControl {
 
   private boolean dark = false;
   private String language = "English";
-
-  private GameState2DView myGameView;
 
   /**
    * Create the menu based on the stage provided
@@ -110,14 +95,14 @@ public class WindowControl {
 
 
   private void initializeButtons() {
-    myStartButton = myMenuView.getNewGameButton();
+    Button myStartButton = myMenuView.getNewGameButton();
     //myStartButton.setOnAction(e->startGame(myStage));
     myStartButton.setOnAction(e -> selectGameMenu());
-    myExitButton = myMenuView.getExitGameButton();
+    Button myExitButton = myMenuView.getExitGameButton();
     myExitButton.setOnAction(e -> myStage.close());
-    myChangeBackgroundButton = myMenuView.getBackgroundButton();
+    Button myChangeBackgroundButton = myMenuView.getBackgroundButton();
     myChangeBackgroundButton.setOnAction(e -> switchMode());
-    myLoadButton = myMenuView.getLoadButton();
+    Button myLoadButton = myMenuView.getLoadButton();
     myLoadButton.setOnAction(e -> {
       try {
         loadlist();
@@ -125,10 +110,10 @@ public class WindowControl {
         System.out.println("WINDOW CONTROL LOAD LAST PLAYED");
       }
     });
-    myUserButton = myMenuView.getUserButton();
+    Button myUserButton = myMenuView.getUserButton();
     myUserButton.setOnAction(e -> showProfile());
 
-    myGameButton1 = mySelectView.getGame1();
+    Button myGameButton1 = mySelectView.getGame1();
     myGameButton1.setOnAction(e -> {
       try {
         startGame1();
@@ -136,7 +121,7 @@ public class WindowControl {
         System.out.println("WINDOW CONTROL STARTGAME1");
       }
     });
-    myGameButton2 = mySelectView.getGame2();
+    Button myGameButton2 = mySelectView.getGame2();
     myGameButton2.setOnAction(e -> {
       try {
         startGame2();
@@ -144,7 +129,7 @@ public class WindowControl {
         System.out.println("WINDOW CONTROL STARTGAME2");
       }
     });
-    myGameButton3 = mySelectView.getGame3();
+    Button myGameButton3 = mySelectView.getGame3();
     myGameButton3.setOnAction(e -> {
       try {
         startGame3();
@@ -152,13 +137,13 @@ public class WindowControl {
         System.out.println("WINDOW CONTROL STARTGAME3");
       }
     });
-    mySettingButton = mySelectView.getSetting();
+    Button mySettingButton = mySelectView.getSetting();
     mySettingButton.setOnAction(e -> changeSettings());
 
-    myLanguagePicker = myMenuView.getLanguagePicker();
+    ComboBox myLanguagePicker = myMenuView.getLanguagePicker();
     myLanguagePicker.setOnAction(e -> setLanguage(myLanguagePicker.getValue().toString()));
 
-    myColorPicker = myMenuView.getMyColorPicker();
+    ColorPicker myColorPicker = myMenuView.getMyColorPicker();
     myColorPicker.setOnAction(e -> setColor(myColorPicker.getValue()));
 
   }

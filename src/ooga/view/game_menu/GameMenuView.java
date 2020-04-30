@@ -15,26 +15,22 @@ import ooga.view.game_menu.pretty.PrettyColorPicker;
 import java.util.*;
 
 public class GameMenuView implements GameMenu {
-    private PrettyButtons myNewButton;
-    private PrettyButtons myExitButton;
-    private PrettyButtons myMode;
-    private PrettyButtons myLoad;
-    private PrettyButtons myUser;
+    private PrettyButtons myNewButton,  myExitButton, myMode, myLoad, myUser;
     private List<PrettyButtons> myButtonList;
     private VBox vBox;
     private HBox hBox;
     private Scene myScene;
     private boolean dark;
-    private boolean isColor;
-    private String myLanguage;
+    private String myLanguage= "English";
     private PrettyBox myLanguagePicker;
     private PrettyColorPicker myColorPicker;
     private Label myColorLable;
     private VBox myColorBox;
 
 
+    private static final String resourcename = "menu";
+
     public GameMenuView(){
-        myLanguage = "English";
         setUpColorPicker();
         setUpButton();
         setUpHBox();
@@ -44,12 +40,11 @@ public class GameMenuView implements GameMenu {
     }
 
     private void setUpColorPicker() {
-        var resource = ResourceBundle.getBundle("menu",new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename,new Locale(myLanguage));
         myColorLable = new Label(resource.getString("Color"));
-        myColorLable.setFont(Font.font("Ariel", 14));
+        myColorLable.setFont(Constants.font);
         myColorPicker = new PrettyColorPicker();
-        myColorPicker.setSize(200, 30);
-        myColorBox = new VBox(10);
+        myColorBox = new VBox();
         myColorBox.getChildren().addAll(myColorLable, myColorPicker);
     }
 
@@ -95,7 +90,6 @@ public class GameMenuView implements GameMenu {
     @Override
     public void switchMode(boolean dark){
         this.dark = dark;
-        this.isColor = false;
         setColor();
     }
 
@@ -104,13 +98,12 @@ public class GameMenuView implements GameMenu {
         myLanguage = language;
         for (PrettyButtons button : myButtonList) button.changeLanguage(myLanguage);
 
-        var resource = ResourceBundle.getBundle("menu",new Locale(myLanguage));
+        var resource = ResourceBundle.getBundle(resourcename,new Locale(myLanguage));
         myColorLable.setText(resource.getString("Color"));
     }
 
     @Override
     public void changColor(Color color) {
-        isColor = true;
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
@@ -143,14 +136,11 @@ public class GameMenuView implements GameMenu {
         setUpLanguageMenu();
         hBox = new HBox(500);
         hBox.getChildren().addAll(myColorPicker, myLanguagePicker);
-        hBox.setPrefHeight(60);
         hBox.setAlignment(Pos.BASELINE_CENTER);
     }
 
     private void setUpLanguageMenu(){
-        var resource = ResourceBundle.getBundle("menu");
         myLanguagePicker = new PrettyBox("Language");
-        myLanguagePicker.setSize(200, 30);
     }
 
 

@@ -14,24 +14,24 @@ import java.util.*;
 public class DisplayStatusView implements MenuView {
 
     private List<PrettyButtons> myButtonList = new ArrayList<>();
+    private static final int ZIZE = 300;
 
     private VBox vBox;
     private Scene myScene;
     private boolean dark;
-    private String myLanguage;
+    private String myLanguage= "English";
 
     private Label scorelist;
     private Label life;
 
 
     public DisplayStatusView(){
-        myLanguage = "English";
         scorelist = new Label();
-        scorelist.setFont(Font.font("Ariel", 18));
+        scorelist.setFont(Constants.font);
         life = new Label();
-        life.setFont(Font.font("Ariel", 18));
+        life.setFont(Constants.font);
         setUpVBox();
-        myScene = new Scene(vBox, 300, 300);
+        myScene = new Scene(vBox, ZIZE, ZIZE);
     }
 
     @Override

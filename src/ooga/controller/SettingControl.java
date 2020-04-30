@@ -22,7 +22,6 @@ public class SettingControl {
     private Stage myStage;
     private SettingView myView;
     private WindowControl myControl;
-    private Button ConfirmButton;
 
     /**
      * Controller for setting (ie, allowing the user to change initial game configuration / values)
@@ -41,7 +40,7 @@ public class SettingControl {
     Sets up the button's action
      */
     private void setUpButtons() {
-        ConfirmButton = myView.getConfirm();
+        Button ConfirmButton = myView.getConfirm();
         ConfirmButton.setOnAction(e->confirm());
     }
 

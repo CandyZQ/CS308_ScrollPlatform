@@ -36,11 +36,8 @@ public class GameController {
   private DisplayStatusControl mydDsplayControl;
   private DataLoaderAPI myDataLoader;
   private DataStorerAPI myDataStorer;
-  private boolean dark;
-  private String language;
   private GameZelda2DSingle myGameView;
   private AnimationTimer myTimer;
-  private boolean win;
 
   public GameController(DataStorerAPI storer) throws DataLoadingException {
     myModel = new Model(storer.getDataLoader());
@@ -111,7 +108,6 @@ public class GameController {
         mpc.updateKey();
         if (!mpc.update()) {
           finishGame(mpc, false); // this is dead
-          win = false;
         }
         if (mpc.hasWon()) {
           finishGame(mpc, true); // this is won
@@ -185,14 +181,12 @@ public class GameController {
   }
 
   public void setMode(boolean dark) {
-    this.dark = dark;
     myPauseControl.setMode(dark);
     myFinishControl.setMode(dark);
     mydDsplayControl.setMode(dark);
   }
 
   public void setLanguage(String language) {
-    this.language = language;
     myPauseControl.setLanguage(language);
     myFinishControl.setLanguage(language);
     mydDsplayControl.setLanguage(language);

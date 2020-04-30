@@ -34,6 +34,10 @@ public class UserProfileView implements MenuView{
     private String userName;
     private boolean dark = false;
 
+    private static final int SIZE = 400;
+    private static final String resourceName = "menu";
+    private static final String resourceName2 = "user";
+
 
     public UserProfileView(String userName){
         this.userName = userName;
@@ -41,7 +45,7 @@ public class UserProfileView implements MenuView{
         setLabel();
         setUpVBox();
         switchMode(dark);
-        myScene = new Scene(vBox, 400,400);
+        myScene = new Scene(vBox, SIZE,SIZE);
     }
 
     @Override
@@ -70,7 +74,7 @@ public class UserProfileView implements MenuView{
 
     private void setUpVBox() {
         vBox = new VBox(10);
-        vBox.setMaxWidth(300);
+        vBox.setMaxWidth(SIZE*.75);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(Name, HighestScore, LastPlayed);
     }
@@ -78,16 +82,17 @@ public class UserProfileView implements MenuView{
 
     private void setUpTempVal() {
         try {
-            var resource2 = ResourceBundle.getBundle("user", new Locale(userName));
+            var resource2 = ResourceBundle.getBundle(resourceName2, new Locale(userName));
             userName = resource2.getString("Name");
             tempHighest = Integer.parseInt(resource2.getString("High"));
             tempLast = Integer.parseInt(resource2.getString("Last"));
         }
-        catch(Exception e) {
-            Properties prop = new Properties();
-            prop.setProperty("Name", userName);
-            prop.setProperty("High", tempHighest + "");
-            prop.setProperty("Last", tempLast + "");
+        catch(Exception e) { //if resource bundle does not exist, use default and create this properties file
+            Properties prop = new Properties(){{
+                setProperty("Name", userName);
+                setProperty("High", tempHighest + "");
+                setProperty("Last", tempLast + "");
+            }};
             try {
                 FileOutputStream fos = new FileOutputStream("resources/user_" + userName + ".properties");
                 prop.store(fos, "test");
@@ -100,17 +105,17 @@ public class UserProfileView implements MenuView{
     }
 
     private void setLabel(){
-        var resource1 = ResourceBundle.getBundle("menu", new Locale(myLanguage));
-        Name = new Label(resource1.getString("Name") + userName);
-        Name.setFont(Font.font("Ariel", 18));
-        HighestScore = new Label(resource1.getString("HighScore") + tempHighest);
-        HighestScore.setFont(Font.font("Ariel", 18));
-        LastPlayed = new Label(resource1.getString("Last") + tempLast);
-        LastPlayed.setFont(Font.font("Ariel", 18));
+        Name = new Label();
+        Name.setFont(Constants.font);
+        HighestScore = new Label();
+        HighestScore.setFont(Constants.font);
+        LastPlayed = new Label();
+        LastPlayed.setFont(Constants.font);
+        changeLableText();
     }
 
     public void changeLableText(){
-        var resource1 = ResourceBundle.getBundle("menu", new Locale(myLanguage));
+        var resource1 = ResourceBundle.getBundle(resourceName, new Locale(myLanguage));
         Name.setText(resource1.getString("Name") + userName);
         HighestScore.setText(resource1.getString("HighScore") + tempHighest);
         LastPlayed.setText(resource1.getString("Last") + tempLast);

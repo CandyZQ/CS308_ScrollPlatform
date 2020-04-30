@@ -8,7 +8,7 @@ import ooga.view.game_menu.Constants;
 import java.util.ResourceBundle;
 
 public class PrettyBox extends ComboBox {
-    private static final int BUTTON_HEIGHT = 45, BUTTON_WIDTH = 300;
+    private static final int BUTTON_HEIGHT = 30, BUTTON_WIDTH = 200;
     private boolean dark = false;
     private DropShadow shadow = new DropShadow();
     private String myResource;
