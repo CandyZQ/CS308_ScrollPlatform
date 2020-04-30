@@ -36,10 +36,6 @@ public class LogInView implements MenuView{
     private String myLanguage = "English";
     private boolean dark = false;
 
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
-
-
     public LogInView(){
         setUpLabel();
         setUpField();
@@ -80,7 +76,7 @@ public class LogInView implements MenuView{
     @Override
     public void switchMode(boolean dark) {
         this.dark = dark;
-        vBox.setBackground(dark?darkMode:lightMode);
+        vBox.setBackground(dark? Constants.darkModebox: Constants.lightModebox);
         for(PrettyButtons button:myButtonList) button.switchMode(dark);
         userName.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
         userPassWord.setTextFill(dark?Color.DARKGRAY:Color.BLACK);

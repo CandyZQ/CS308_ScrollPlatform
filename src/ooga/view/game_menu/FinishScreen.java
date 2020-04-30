@@ -33,8 +33,6 @@ public class FinishScreen implements MenuView {
     private int score = 0;
     private int id = 0;
 
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 
     public FinishScreen(){
         myLanguage = "English";
@@ -96,8 +94,8 @@ public class FinishScreen implements MenuView {
     }
 
     public void setColor(){
-        if(dark) vBox.setBackground(darkMode);
-        else vBox.setBackground(lightMode);
+        if(dark) vBox.setBackground(Constants.darkModebox);
+        else vBox.setBackground(Constants.lightModebox);
         for(PrettyButtons button:myButtonList) button.switchMode(dark);
 
         finishText.setTextFill(dark?Color.DARKGRAY:Color.BLACK);

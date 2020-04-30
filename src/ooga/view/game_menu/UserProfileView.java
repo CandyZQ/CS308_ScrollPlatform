@@ -3,20 +3,15 @@ package ooga.view.game_menu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import ooga.view.game_menu.pretty.PrettyButtons;
 
 import java.io.FileOutputStream;
-import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -38,15 +33,12 @@ public class UserProfileView implements MenuView{
     private String myLanguage = "English";
     private String userName;
     private boolean dark = false;
-    private  boolean newUser = false;
-
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 
 
     public UserProfileView(String userName){
         this.userName = userName;
-        setUpLabel();
+        setUpTempVal();
+        setLabel();
         setUpVBox();
         switchMode(dark);
         myScene = new Scene(vBox, 400,400);
@@ -60,7 +52,7 @@ public class UserProfileView implements MenuView{
     @Override
     public void switchMode(boolean dark) {
         this.dark = dark;
-        vBox.setBackground(dark?darkMode:lightMode);
+        vBox.setBackground(dark? Constants.darkModebox: Constants.lightModebox);
         Name.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
         HighestScore.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
         LastPlayed.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
@@ -84,31 +76,30 @@ public class UserProfileView implements MenuView{
     }
 
 
-    private void setUpLabel() {
+    private void setUpTempVal() {
         try {
             var resource2 = ResourceBundle.getBundle("user", new Locale(userName));
             userName = resource2.getString("Name");
             tempHighest = Integer.parseInt(resource2.getString("High"));
             tempLast = Integer.parseInt(resource2.getString("Last"));
         }
-        catch(Exception e){
-            newUser = true;
+        catch(Exception e) {
             Properties prop = new Properties();
             prop.setProperty("Name", userName);
-            prop.setProperty("High", tempHighest+"");
-            prop.setProperty("Last", tempLast+"");
+            prop.setProperty("High", tempHighest + "");
+            prop.setProperty("Last", tempLast + "");
             try {
-                FileOutputStream fos = new FileOutputStream("resources/user_"+userName+".properties");
+                FileOutputStream fos = new FileOutputStream("resources/user_" + userName + ".properties");
                 prop.store(fos, "test");
                 fos.flush();
                 fos.close();
-                System.out.println(">");
-            }
-            catch(Exception ex){
+            } catch (Exception ex) {
                 System.out.println("userProfileCreationFail");
             }
         }
+    }
 
+    private void setLabel(){
         var resource1 = ResourceBundle.getBundle("menu", new Locale(myLanguage));
         Name = new Label(resource1.getString("Name") + userName);
         Name.setFont(Font.font("Ariel", 18));

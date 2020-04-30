@@ -1,14 +1,12 @@
 package ooga.view.game_menu.pretty;
 
 import java.util.Locale;
-import javafx.geometry.Insets;
+
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.control.Button;
+import ooga.view.game_menu.Constants;
 
 import java.util.ResourceBundle;
 
@@ -16,8 +14,6 @@ public class PrettyButtons extends Button
 {
     private static final int BOX_HEIGHT = 45, BOX_WIDTH = 300;
     private boolean dark = false;
-    private static final Background darkMode = new Background(new BackgroundFill(new Color(0.4,0.4,0.4,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private static final Background lightMode = new Background(new BackgroundFill(new Color(0.85,0.85,0.85,1), CornerRadii.EMPTY, Insets.EMPTY));
     private DropShadow shadow = new DropShadow();
     private String myWord;
     private String myLanguage;
@@ -47,8 +43,8 @@ public class PrettyButtons extends Button
 
     public void switchMode(boolean dark){
 
-        if(dark) setBackground(darkMode);
-        else setBackground(lightMode);
+        if(dark) setBackground(Constants.darkModebutton);
+        else setBackground(Constants.lightModebutton);
         shadow.setColor(dark? Color.CORNFLOWERBLUE:Color.LIGHTBLUE);
         this.dark = dark;
     }

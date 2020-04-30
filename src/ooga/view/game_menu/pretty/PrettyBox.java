@@ -1,21 +1,15 @@
 package ooga.view.game_menu.pretty;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import ooga.view.game_menu.Constants;
 
 import java.util.ResourceBundle;
 
 public class PrettyBox extends ComboBox {
     private static final int BUTTON_HEIGHT = 45, BUTTON_WIDTH = 300;
     private boolean dark = false;
-    private static final Background darkMode = new Background(new BackgroundFill(new Color(0.4,0.4,0.4,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private static final Background lightMode = new Background(new BackgroundFill(new Color(0.85,0.85,0.85,1), CornerRadii.EMPTY, Insets.EMPTY));
     private DropShadow shadow = new DropShadow();
     private String myResource;
 
@@ -42,8 +36,8 @@ public class PrettyBox extends ComboBox {
     }
 
     public void switchMode(boolean dark){
-        if(dark) setBackground(darkMode);
-        else setBackground(lightMode);
+        if(dark) setBackground(Constants.darkModebutton);
+        else setBackground(Constants.lightModebutton);
         shadow.setColor(dark? Color.CORNFLOWERBLUE:Color.LIGHTBLUE);
         this.dark = dark;
     }

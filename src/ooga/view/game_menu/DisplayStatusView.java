@@ -3,7 +3,6 @@ package ooga.view.game_menu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,8 +23,6 @@ public class DisplayStatusView implements MenuView {
     private Label scorelist;
     private Label life;
 
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 
     public DisplayStatusView(){
         myLanguage = "English";
@@ -60,7 +57,7 @@ public class DisplayStatusView implements MenuView {
     }
 
     public void setColor(){
-        vBox.setBackground(dark?darkMode: lightMode);
+        vBox.setBackground(dark? Constants.darkModebox: Constants.darkModebutton);
         scorelist.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
         life.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
     }

@@ -32,8 +32,6 @@ public class GameMenuView implements GameMenu {
     private Label myColorLable;
     private VBox myColorBox;
 
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 
     public GameMenuView(){
         myLanguage = "English";
@@ -117,7 +115,7 @@ public class GameMenuView implements GameMenu {
     }
 
     private void setColor(){
-        vBox.setBackground(dark?darkMode:lightMode);
+        vBox.setBackground(dark? Constants.darkModebox: Constants.lightModebox);
         for(PrettyButtons button:myButtonList) button.switchMode(dark);
         myLanguagePicker.switchMode(dark);
         myColorPicker.switchMode(dark);

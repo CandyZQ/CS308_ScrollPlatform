@@ -29,8 +29,6 @@ public class SelectMenuView implements SelectMenu {
     private boolean dark;
     private String myLanguage;
 
-    private Background darkMode = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
-    private Background lightMode = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 
     public SelectMenuView(){
         myLanguage = "English";
@@ -88,8 +86,8 @@ public class SelectMenuView implements SelectMenu {
     }
 
     private void setColor(){
-        if(dark) vBox.setBackground(darkMode);
-        else vBox.setBackground(lightMode);
+        if(dark) vBox.setBackground(Constants.darkModebox);
+        else vBox.setBackground(Constants.lightModebox);
         for(PrettyButtons button:myButtonList) button.switchMode(dark);
     }
 
