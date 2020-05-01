@@ -33,15 +33,21 @@ void setMyPlayer(Movable1D player);
 
 
 
-###JumpableControl [***REMOVED***]  
-   * removed since we stopped using Mario players
+###JumpableControl [***UNUSED***]
+  void jump();
 
-###MovableControll1D [***REMOVED***]  
-   * removed since we stopped using Mario players
-
-###MovableControll2D [***REMOVED***]  
-   * removed since we stopped using Mario players
-
+###MovableControll1D 
+  void left();
+  void right();
+  
+###MovableControll2D
+  void up();
+  void down();
+  
+###AttackerControl [***NEW***]
+  void attack1();
+  void attack2();
+  void attack0();
 
 ###NPC Controller [***NEW***]  
   void setMyNPC(Movable1D NPC);  

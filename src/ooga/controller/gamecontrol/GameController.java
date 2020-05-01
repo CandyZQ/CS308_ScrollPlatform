@@ -24,6 +24,12 @@ import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.movables.Movable1D;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Controls the flow of game play, as well as menus that can only appear as the game goes on, such as
+ * status display, pause screen, and finish screen
+ *
+ * @author Lucy
+ */
 public class GameController {
 
   public static final double MIN_DIS = 1;
@@ -50,7 +56,9 @@ public class GameController {
     mydDsplayControl.showMenu();
   }
 
-
+  /**
+   * Sets up timer and begin game
+   */
   public void startTimer() {
     myTimer = new AnimationTimer() {
       @Override
@@ -94,7 +102,7 @@ public class GameController {
     }
   }
 
-  public void update() {
+  private void update() {
     deathCheck();
     mydDsplayControl.update(getSScoreList(), getLifeList());
     for (MainNPCControl npc : myNPCControl) {
@@ -168,30 +176,43 @@ public class GameController {
       }
   }
 
-  public void pause() {
+  private void pause() {
     myPauseControl.updateScore(getSScoreList());
     myPauseControl.updateLife(getLifeList());
     myPauseControl.showMenu();
   }
 
-  public void finishGame(MainPlayerControl mpc, boolean win) {
+
+  private void finishGame(MainPlayerControl mpc, boolean win) {
     myTimer.stop();
     myFinishControl.showMenu(win, mpc.getID(), (int) ((ZeldaPlayer) mpc.getPlayer()).getScore());
     myFinishControl.setScore(getSScoreList());
   }
 
+  /**
+   * sets the mode of all menus
+   * @param dark true = darkmode
+   */
   public void setMode(boolean dark) {
     myPauseControl.setMode(dark);
     myFinishControl.setMode(dark);
     mydDsplayControl.setMode(dark);
   }
 
+  /**
+   * changes the language of all menus
+   * @param language string that represents the name of language
+   */
   public void setLanguage(String language) {
     myPauseControl.setLanguage(language);
     myFinishControl.setLanguage(language);
     mydDsplayControl.setLanguage(language);
   }
 
+  /**
+   * Sets the game play view and passes it onto npc and players
+   * @param view game view input
+   */
   public void setView(GameZelda2DSingle view) {
     myGameView = view;
     myPauseControl.setView(view.getView());
@@ -203,19 +224,21 @@ public class GameController {
     }
   }
 
+  /**
+   * Passes the windowcontrol to the menus that needs to interact with window control
+   * @param windowControl input
+   */
   public void setWindowControl(WindowControl windowControl) {
     myWindowControl = windowControl;
-    System.out.println(myWindowControl);
     myPauseControl.setWindowControl(windowControl);
     myFinishControl.setWindowControl(windowControl);
   }
 
-  public void keyReleased() {
-    for (MainPlayerControl mpc : myMainPlayerController) {
-      mpc.keyReleased();
-    }
-  }
 
+  /**
+   * asks data storer to save all information thus far to disk and ask window control to
+   * save score to user profile if user is logged in
+   */
   public void save() {
     for (MainPlayerControl mpc : myMainPlayerController) {
       ((DataStorer) myDataStorer).storeCharacter(mpc.getID(), (ZeldaCharacter) mpc.getPlayer());
@@ -226,6 +249,10 @@ public class GameController {
     System.out.println("game controller - save method called");
   }
 
+  /**
+   * Sets initial life of all players to i
+   * @param i hp value
+   */
   public void setInitLife(int i) {
     for (MainPlayerControl mpc : myMainPlayerController) {
       ((ZeldaPlayer) mpc.getPlayer()).setHP(i);
@@ -252,25 +279,37 @@ public class GameController {
     return ret;
   }
 
+  /**
+   * Sets the color of all menus contained in this controller
+   * @param color Color selected
+   */
   public void setColor(Color color) {
     myPauseControl.setColor(color);
     myFinishControl.setColor(color);
     mydDsplayControl.setColor(color);
   }
 
+  /**
+   * Get game id from data loader
+   * @return game id
+   */
   public int getGameID() {
     return myDataLoader.getCurrentPlayers().get(0).getPlayerParam(PlayerParam.Game);
   }
 
+  /**
+   * Get the model used in this controller
+   * @return backend model
+   */
   public ModelInterface getMyModel() {
     return myModel;
   }
 
+  /**
+   * Resets data loader (player informtaion)
+   */
   public void reset() {
     myDataStorer.resetPlayerInfo();
   }
 
-  public MainPlayerControl getMPC(int i) {
-    return myMainPlayerController.get(i);
-  }
 }

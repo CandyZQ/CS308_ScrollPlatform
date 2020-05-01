@@ -13,6 +13,11 @@ import ooga.model.enums.backend.Direction;
 import ooga.model.enums.backend.MovingState;
 import ooga.model.interfaces.movables.Movable1D;
 
+/**
+ * Player control for zelda characters
+ *
+ * @author Lucy
+ */
 public class ZeldaPlayerControl implements PlayerControlInterface, MovableControll2D,
     AttackerControl, PropertyChangeListener {
 
@@ -46,71 +51,105 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
 
   }
 
+  /**
+   * Set my player and listener
+   * @param myPlayer player provided by backend
+   */
   @Override
   public void setMyPlayer(Movable1D myPlayer) {
     this.myPlayer = (ZeldaPlayer) myPlayer;
     this.myPlayer.addListener(this);
   }
 
+  /**
+   * set control id to be the same as the player that is provided
+   */
   @Override
   public void setID() {
     myID = myPlayer.getId();
   }
 
+  /**
+   *
+   * @return id of the control (same as player id
+   */
   @Override
   public int getID() {
     return myID;
   }
-
+  /**
+   * set player to idel when key is released
+   */
   @Override
   public void keyReleased() {
     myPlayer.setState(MovingState.IDLE);
   }
-
+  /**
+   * Move up (north
+   */
   @Override
   public void up() {
     myPlayer.setState(MovingState.SPRINT);
     myPlayer.setDirection(Direction.N);
   }
-
+  /**
+   * Move down (south
+   */
   @Override
   public void down() {
     myPlayer.setState(MovingState.SPRINT);
     myPlayer.setDirection(Direction.S);
   }
-
+  /**
+   * Move Left
+   */
   @Override
   public void left() {
     myPlayer.setState(MovingState.SPRINT);
     myPlayer.setDirection(Direction.W);
   }
-
+  /**
+   * Move right
+   */
   @Override
   public void right() {
     myPlayer.setState(MovingState.SPRINT);
     myPlayer.setDirection(Direction.E);
   }
 
+  /**
+   * Attack type 1
+   */
   @Override
   public void attack0() {
     myPlayer.setState(MovingState.ATTACK1);
   }
-
+  /**
+   * Attack type 2
+   */
   @Override
   public void attack1() {
     myPlayer.setState(MovingState.ATTACK1);
   }
-
+  /**
+   * Attack type 3
+   */
   @Override
   public void attack2() {
     myPlayer.setState(MovingState.ATTACK3);
   }
-
+  /**
+   * Character death
+   */
   public void death() {
     myPlayer.setState(MovingState.DEATH);
     myPlayer.setDirection(Direction.E);
   }
 
+  /**
+   * Listen to property change and update front end
+   * @param evt
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     String s = evt.getPropertyName();
@@ -125,6 +164,9 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
     }
   }
 
+  /**
+   * Calls method (appropriate backend and frontend change) when user presses keyboard
+   */
   @Override
   public void updateKey() {
     boolean keyPressed = false;
@@ -133,8 +175,6 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
         if (myView.getView().isKeyDown(i)) {
           keyPressed = true;
           this.getClass().getDeclaredMethod(myGLFWMap.get(i)).invoke(this);
-//          System.out.println(myPlayer.getDirection().toString());
-//          System.out.println(myPlayer.getState().toString());
           break;
         }
       }
@@ -193,10 +233,6 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
    */
   @Override
   public boolean update() {
-//    if (myPlayer.getState() == MovingState.SPRINT) {
-//      myPlayer.addScore(10);
-//    }
-
     if (!myPlayer.isAlive()) {
       death();
       return false;
@@ -205,17 +241,28 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
     return true;
   }
 
+  /**
+   *
+   * @return if the player has won
+   */
   @Override
   public boolean hasWon() {
     return myPlayer.hasWon();
   }
 
+  /**
+   * hurts the backend player
+   */
   @Override
   public void getHurt() {
     myPlayer.setState(MovingState.HURT);
     myPlayer.subtractHP(1);
   }
 
+  /**
+   *
+   * @return if the player is hurt
+   */
   @Override
   public boolean isHurt() {
     if (myPlayer.getState() == MovingState.HURT && hurtCount > 200){

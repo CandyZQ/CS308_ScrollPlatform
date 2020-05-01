@@ -13,6 +13,11 @@ import ooga.view.game_view.game_state.state2d.GameState2DView;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for the status page that displays the player scores and lives and updates live during game play
+ *
+ * @author Lucy
+ */
 public class DisplayStatusControl {
 
     private Stage myStage;
@@ -25,6 +30,9 @@ public class DisplayStatusControl {
         myStage.setScene(myStatus.getMenuView());
     }
 
+    /**
+     * shows this stage
+     */
     public void showMenu(){
         myStage.show();
     }
@@ -61,6 +69,11 @@ public class DisplayStatusControl {
         myStatus.updateLife(lifeList);
     }
 
+    /**
+     * updates the score and life printed in view
+     * @param sScoreList list of id:score
+     * @param lifeList list of id:life
+     */
     public void update(Map<Integer, Integer> sScoreList, Map<Integer, Integer> lifeList) {
         updateScore(sScoreList);
         updateLife(lifeList);

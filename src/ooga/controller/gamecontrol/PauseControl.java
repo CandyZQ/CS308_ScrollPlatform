@@ -12,21 +12,20 @@ import ooga.view.game_view.game_state.state2d.GameState2DView;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Control for the pause screen/menu
+ *
+ * @author Lucy
+ */
 public class PauseControl {
 
     private Stage myStage;
     private PauseMenu myPauseMenu;
-    private Button myResumeButton;
-    private Button myBackButton;
-    private Button mySaveButton;
-
-    private List<Button> buttonList;
 
     private WindowControl myWindowControl;
     private GameState2DView myView;
     private AnimationTimer myTimer;
 
-    private DataStorerAPI myStorer;
     private GameController myGameController;
 
     public PauseControl(GameController gameController){
@@ -43,14 +42,9 @@ public class PauseControl {
     }
 
     private void setUpButton(){
-        myResumeButton = myPauseMenu.getResumeButton();
-        myResumeButton.setOnAction(e->resumeGame());
-        myBackButton = myPauseMenu.getBackToMenuButton();
-        myBackButton.setOnAction(e->backToMenu());
-        mySaveButton = myPauseMenu.getSaveGameButton();
-        mySaveButton.setOnAction(e->save());
-
-        //buttonList = List.of(myResumeButton, myBackButton, mySaveButton);
+        myPauseMenu.getResumeButton().setOnAction(e->resumeGame());
+        myPauseMenu.getBackToMenuButton().setOnAction(e->backToMenu());
+        myPauseMenu.getSaveGameButton().setOnAction(e->save());
     }
 
     private void resumeGame(){

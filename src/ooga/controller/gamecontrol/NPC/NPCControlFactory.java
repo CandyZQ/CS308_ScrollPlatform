@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import ooga.model.enums.backend.CharacterType;
 
+/**
+ * Helps facillitate the selection of different NPC controls
+ *
+ * @author Lucy
+ */
 public class NPCControlFactory {
 
 
@@ -23,6 +28,11 @@ public class NPCControlFactory {
 //    controlMap.put(0, new MarioNPCControl());
   }
 
+  /**
+   * Return a NPC control depending on the type asked for by the control
+   * @param type identifies which control is needed
+   * @return NPC control
+   */
   public NPCControlInterface selectControl(int type){
     if(!controlMap.containsKey(type)) return null; //throw exception
     return controlMap.get(type);
