@@ -5,10 +5,10 @@ import static ooga.controller.gamecontrol.player.ZeldaPlayerControl.PROPERTY_STA
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Random;
 import ooga.controller.gamecontrol.NPCControlInterface;
 import ooga.game.GameZelda2DSingle;
 import ooga.model.characters.ZeldaCharacter;
+import ooga.model.characters.ZeldaPlayer;
 import ooga.model.enums.backend.Direction;
 import ooga.model.enums.backend.MovingState;
 import ooga.model.interfaces.movables.Movable1D;
@@ -40,21 +40,25 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
 
   @Override
   public void attack() {
-    myNPC.setState(MovingState.ATTACK);
+//    myNPC.setState(MovingState.WALK);
   }
 
   @Override
-  public void getHurt() {
+  public void getHurt(ZeldaPlayer player) {
+    if (myNPC.getState() != MovingState.HURT) {
+      player.addScore(10);
+    }
     myNPC.setState(MovingState.HURT);
+    myNPC.subtractHP(1);
   }
 
   @Override
   public boolean isHurt() {
-    if (myNPC.getState() == MovingState.ATTACK && hurtCount > 200) {
-      myNPC.setState(MovingState.IDLE);
+    if (myNPC.getState() == MovingState.HURT && hurtCount > 200) {
+      myNPC.setState(MovingState.DEATH);
       hurtCount = 0;
       return false;
-    } else if (myNPC.getState() == MovingState.ATTACK1) {
+    } else if (myNPC.getState() == MovingState.HURT) {
       hurtCount++;
       return true;
     }
@@ -97,7 +101,7 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
     }
 
     if (isAttacking()) {
-      if (attackCounter > 500) {
+      if (attackCounter > 300) {
         myNPC.setState(MovingState.IDLE);
         attackCounter = 0;
       } else {
@@ -106,25 +110,29 @@ public class NPCSubControl implements NPCControlInterface, PropertyChangeListene
       return;
     }
 
-    randomMove();
+//    randomMove();
   }
 
-    private void randomMove() {
-      if (myNPC.getState() == MovingState.IDLE) {
-        if (new Random().nextInt(2) == 0) {
-          switch (new Random().nextInt(2)) {
-            case 0:
-              myNPC.setDirection(Direction.E);
-              break;
-            case 1:
-              myNPC.setDirection(Direction.E);
-          }
-          myNPC.setState(MovingState.WALK);
-        }
-      }
-    }
+//    private void randomMove() {
+//      if (myNPC.getState() == MovingState.IDLE) {
+//        if (new Random().nextInt(2) == 0) {
+//          switch (new Random().nextInt(2)) {
+//            case 0:
+//              myNPC.setDirection(Direction.E);
+//              break;
+//            case 1:
+//              myNPC.setDirection(Direction.E);
+//          }
+//          myNPC.setState(MovingState.WALK);
+//        }
+//      }
+//    }
 
-    protected boolean isAttacking () {
-      return myNPC.getState() != MovingState.IDLE;
-    }
+  protected boolean isAttacking() {
+    return myNPC.getState() != MovingState.IDLE;
   }
+
+  public ZeldaCharacter getCharacter() {
+    return myNPC;
+  }
+}

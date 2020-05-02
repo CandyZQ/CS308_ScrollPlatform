@@ -43,7 +43,6 @@ public class LoadSoldierAnimations {
     mapKey = "E_WALK";
     soldierDict.put(mapKey, new Animation2D(9, fps, DIR_PATH, WALK));
 
-    //TODO
 
     return soldierDict;
 

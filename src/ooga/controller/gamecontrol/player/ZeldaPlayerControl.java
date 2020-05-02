@@ -81,8 +81,8 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
 
   @Override
   public void left() {
-//    myPlayer.setState(MovingState.SPRINT);
-//    myPlayer.setDirection(Direction.W);
+    myPlayer.setState(MovingState.SPRINT);
+    myPlayer.setDirection(Direction.W);
   }
 
   @Override
@@ -133,8 +133,8 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
         if (myView.getView().isKeyDown(i)) {
           keyPressed = true;
           this.getClass().getDeclaredMethod(myGLFWMap.get(i)).invoke(this);
-          System.out.println(myPlayer.getDirection().toString());
-          System.out.println(myPlayer.getState().toString());
+//          System.out.println(myPlayer.getDirection().toString());
+//          System.out.println(myPlayer.getState().toString());
           break;
         }
       }
@@ -143,7 +143,6 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
         keyReleased();
       }
     } catch (Exception e) {
-      e.printStackTrace();
       System.out.println("key map fault");
     }
   }
@@ -194,9 +193,9 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
    */
   @Override
   public boolean update() {
-    if (myPlayer.getState() == MovingState.SPRINT) {
-      myPlayer.addScore(10);
-    }
+//    if (myPlayer.getState() == MovingState.SPRINT) {
+//      myPlayer.addScore(10);
+//    }
 
     if (!myPlayer.isAlive()) {
       death();
@@ -213,17 +212,17 @@ public class ZeldaPlayerControl implements PlayerControlInterface, MovableContro
 
   @Override
   public void getHurt() {
-    myPlayer.setState(MovingState.ATTACK1);
+    myPlayer.setState(MovingState.HURT);
     myPlayer.subtractHP(1);
   }
 
   @Override
   public boolean isHurt() {
-    if (myPlayer.getState() == MovingState.ATTACK1 && hurtCount > 200){
+    if (myPlayer.getState() == MovingState.HURT && hurtCount > 200){
       myPlayer.setState(MovingState.IDLE);
       hurtCount = 0;
       return false;
-    } else if (myPlayer.getState() == MovingState.ATTACK1) {
+    } else if (myPlayer.getState() == MovingState.HURT) {
       hurtCount ++;
       return true;
     }

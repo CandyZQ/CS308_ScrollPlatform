@@ -2,6 +2,8 @@ package ooga.controller.gamecontrol;
 
 import ooga.controller.ZeldaControlInterface;
 import ooga.game.GameZelda2DSingle;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.characters.ZeldaPlayer;
 import ooga.model.interfaces.movables.Movable1D;
 
 public interface NPCControlInterface extends ZeldaControlInterface {
@@ -15,7 +17,9 @@ public interface NPCControlInterface extends ZeldaControlInterface {
 
   void attack();
 
-  void getHurt();
+  void getHurt(ZeldaPlayer player);
 
   boolean isHurt();
+
+  ZeldaCharacter getCharacter();
 }

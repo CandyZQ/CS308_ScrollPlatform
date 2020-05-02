@@ -34,7 +34,7 @@ public class DisplayStatusView implements MenuView {
         life = new Label();
         life.setFont(Font.font("Ariel", 18));
         setUpVBox();
-        myScene = new Scene(vBox, 800, 800);
+        myScene = new Scene(vBox, 300, 300);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DisplayStatusView implements MenuView {
     public void updateLife(Map<Integer, Integer> list) {
         String s = "";
         for(int i:list.keySet()){
-            s+= "Player "+i+" score: "+list.get(i)+"; \n";
+            s+= "Player "+i+" life: "+list.get(i)+"; \n";
         }
         s+="\n\n";
         life.setText(s);

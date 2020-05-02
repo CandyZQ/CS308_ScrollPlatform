@@ -18,9 +18,7 @@ public class Vector3f {
 	}
 
 	public Vector3f(Vector3f other) {
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
+		set(other.getX(),other.getY(),other.getZ());
 	}
 	
 	public void set(float x, float y, float z) {

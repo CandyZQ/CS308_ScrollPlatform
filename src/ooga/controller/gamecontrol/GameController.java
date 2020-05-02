@@ -18,6 +18,7 @@ import ooga.game.GameZelda2DSingle;
 import ooga.model.Model;
 import ooga.model.characters.ZeldaCharacter;
 import ooga.model.characters.ZeldaPlayer;
+import ooga.model.enums.backend.MovingState;
 import ooga.model.enums.backend.PlayerParam;
 import ooga.model.interfaces.ModelInterface;
 import ooga.model.interfaces.movables.Movable1D;
@@ -97,6 +98,7 @@ public class GameController {
   }
 
   public void update() {
+    deathCheck();
     mydDsplayControl.update(getSScoreList(), getLifeList());
     for (MainNPCControl npc : myNPCControl) {
       if (!npc.isHurt()) {
@@ -119,8 +121,27 @@ public class GameController {
     if (myGameView.getView().isKeyDown(GLFW.GLFW_KEY_P)) {
       pause();
     }
-    distanceCheck();
-    attackCheck();
+
+    try {
+      distanceCheck();
+      attackCheck();
+    } catch (Exception ignored){}
+  }
+
+  private void deathCheck() {
+    for (MainNPCControl npc : myNPCControl) {
+      if (!npc.getCharacter().isAlive()) {
+        npc.getCharacter().setState(MovingState.DEATH);
+      }
+    }
+    for (MainPlayerControl playerControl : myMainPlayerController) {
+      if (!((ZeldaPlayer) playerControl.getPlayer()).isAlive()) {
+        playerControl.getPlayer().setState(MovingState.DEATH);
+      }
+    }
+    myNPCControl.removeIf(npc -> npc.getCharacter().getState() == MovingState.DEATH);
+    myMainPlayerController.removeIf(playerControl -> playerControl.getPlayer().getState() == MovingState.DEATH);
+
   }
 
   private void attackCheck() {
@@ -132,20 +153,23 @@ public class GameController {
 
     for (MainNPCControl npc : myNPCControl) {
       if (myGameView.isAttacked(npc.getID())) {
-        npc.getHurt();
+        System.out.println("attacked: " + npc.getID());
+        npc.getHurt((ZeldaPlayer) myMainPlayerController.get(0).getPlayer());
       }
     }
   }
 
   private void distanceCheck() {
-    for (MainPlayerControl mpc : myMainPlayerController) {
-      for (MainNPCControl npc : myNPCControl) {
-        if (Math.abs(myGameView.getXPos(mpc.getID()) - myGameView.getXPos(npc.getID())) < MIN_DIS &&
-            Math.abs(myGameView.getYPos(mpc.getID()) - myGameView.getYPos(npc.getID())) < MIN_DIS) {
-          npc.attack();
+      for (MainPlayerControl mpc : myMainPlayerController) {
+        for (MainNPCControl npc : myNPCControl) {
+          if (Math.abs(myGameView.getXPos(mpc.getID()) - myGameView.getXPos(npc.getID())) < MIN_DIS
+              &&
+              Math.abs(myGameView.getYPos(mpc.getID()) - myGameView.getYPos(npc.getID()))
+                  < MIN_DIS) {
+            npc.attack();
+          }
         }
       }
-    }
   }
 
   public void pause() {
@@ -164,12 +188,14 @@ public class GameController {
     this.dark = dark;
     myPauseControl.setMode(dark);
     myFinishControl.setMode(dark);
+    mydDsplayControl.setMode(dark);
   }
 
   public void setLanguage(String language) {
     this.language = language;
     myPauseControl.setLanguage(language);
     myFinishControl.setLanguage(language);
+    mydDsplayControl.setLanguage(language);
   }
 
   public void setView(GameZelda2DSingle view) {
@@ -235,6 +261,7 @@ public class GameController {
   public void setColor(Color color) {
     myPauseControl.setColor(color);
     myFinishControl.setColor(color);
+    mydDsplayControl.setColor(color);
   }
 
   public int getGameID() {

@@ -43,4 +43,9 @@ public class Vertex {
   public Vector2f getTextureCoord() {
     return textureCoord;
   }
+
+  public void setTextureCoord(Vector2f newTextureCoord){
+    textureCoord.setX(newTextureCoord.getX());
+    textureCoord.setY(newTextureCoord.getY());
+  }
 }

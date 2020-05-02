@@ -11,7 +11,6 @@ public class Tile3DView extends TileView {
   public Tile3DView(String type, Vector3f rot, Vector3f pos, Vector3f scale){
     Test.printVector3f(rot);
     this.mesh = LoadCyberpunkModels.getRotationalTileMesh(type, rot);
-   // this.object = new GameObject(pos, Vector3f.zeros(), scale, mesh);
     this.object = new GameObject(pos, rot, scale, mesh);
   }
 

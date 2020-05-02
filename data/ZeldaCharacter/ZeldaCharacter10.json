@@ -1,1 +1,1 @@
-{"cb":{"hp":1,"id":10,"characterType":"LOADSOLDIER"},"weaponBase":null,"y":-1.0,"ySpeed":0.3,"diagonalSpeed":0.0,"canMoveDiagonally":false,"x":-0.8,"xSpeed":5.0,"movingState":"ATTACK","movingDirection":"E"}
+{"cb":{"hp":1,"id":10,"characterType":"LOADSOLDIER"},"weaponBase":null,"y":-0.5,"ySpeed":0.3,"diagonalSpeed":0.0,"canMoveDiagonally":false,"x":-0.8,"xSpeed":5.0,"movingState":"ATTACK","movingDirection":"E"}

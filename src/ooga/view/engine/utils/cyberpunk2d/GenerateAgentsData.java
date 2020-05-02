@@ -293,6 +293,8 @@ public class GenerateAgentsData {
     data.setInitialDirection("E");
     data.setDefaultAction("IDLE");
     data.setMoveAction("SPRINT");
+    data.setNWAnimationAvail(true);
+    data.setNotGonnaDie(true);
 
     Map<Pair<Pair<String, Boolean>, String>, String> prevDict = new HashMap<>();
     prevDict.put(new Pair<>(new Pair<>("SPRINT",false), "SPRINT"), "PRESPRINT");

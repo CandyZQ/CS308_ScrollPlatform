@@ -147,7 +147,7 @@ public class GameZelda2DSingle implements Runnable {
   }
 
   public boolean isAttacked(int id) {
-//    return view.getHurtStatus(id);
-    return false;
+    return view.getHurtStatus(id);
+//    return false;
   }
 }

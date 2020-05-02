@@ -2,7 +2,6 @@ package ooga.view.game_view.map.map2d;
 
 import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.maths.Vector2f;
-import ooga.view.engine.utils.Test;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
 
@@ -19,10 +18,6 @@ public class Map2DView extends MapView {
     for (int i=0; i<mapReader.getMapHeight(); i++){
       for (int j=0; j<mapReader.getMapWidth(); j++){
         titles[idx++] = new Tile2DView(i, j, mapReader);
-        //Test.printVector2f(titles[idx - 1].getCenterLocation());
-        //Test.printThreeMeshVertices(titles[idx-1].getGameObject().getMesh());
-        //System.out.println(titles[idx-1].getGameObject().getMesh().getMaxHeight());
-        //System.out.println(titles[idx-1].getGameObject().getMesh().getMaxWidth());
       }
     }
 

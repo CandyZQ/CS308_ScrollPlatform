@@ -5,6 +5,7 @@ import ooga.view.engine.graphics.Material;
 import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.GameObject;
+import ooga.view.engine.utils.Test;
 import ooga.view.game_view.agent.interfaces.AgentController;
 import ooga.view.game_view.animation.dict2d.Animation2DDict;
 import ooga.view.game_view.game_state.state2d.BoundingBox;
@@ -23,6 +24,9 @@ public class Agent2DController extends AgentController {
   private BoundingBox box;
   private int id;
   private boolean isBullet;
+  private boolean isNSAnimationAvail;
+  private boolean isNotGonnaDie;
+  private boolean temp_switch=false;
 
   public Agent2DController(int id, Agent2DDataHolder data, BoundingBox box) {
     super();
@@ -34,11 +38,18 @@ public class Agent2DController extends AgentController {
     nextDict = data.getNextDict();
     initialPos = Vector3f
         .add(data.getPosition(), data.isBullet() ? Asset2D.getBulletDelta() : Vector3f.zeros());
+    if (data.isBullet()){
+      System.out.println("printing bullet initialization information");
+      Test.printVector3f(data.getPosition());
+      Test.printVector3f(Asset2D.getBulletDelta() );
+    }
     initialPos = Vector3f
         .add(initialPos, data.isSummon() ? Asset2D.getSummonDelta() : Vector3f.zeros());
     shouldConsumed = data.shouldConsumed();
     isBullet = data.isBullet();
     isSummon = data.isSummon();
+    isNSAnimationAvail = data.isNWAnimationAvail();
+    isNotGonnaDie = data.isNotGonnaDie();
     this.box = box;
     this.id = id;
     this.setCurrentAnimation(direction, action);
@@ -48,8 +59,12 @@ public class Agent2DController extends AgentController {
     this.agentView = view;
   }
 
+  public boolean isShouldTerminated() {
+    return shouldTerminated;
+  }
+
   public void setShouldTerminated(boolean shouldTerminated) {
-    this.shouldTerminated = shouldTerminated;
+    this.shouldTerminated = !isNotGonnaDie && shouldTerminated;
   }
 
   public String getAction() {
@@ -58,22 +73,34 @@ public class Agent2DController extends AgentController {
 
   public void setObject(GameObject object) {
     this.object = object;
-    //System.out.println("ddddd");
-    //Test.printVector3f(initialPos);
+    if (isBullet){
+      System.out.println("printing bullet translate information");
+      Test.printVector3f(initialPos);
+      Test.printVector3f(Asset2D.getBulletDelta() );
+    }
     translate(initialPos);
   }
 
   @Override
   public void setCurrentAnimation(String direction, String action) {
-    this.direction = direction;
+    if (Asset2D.isRightSystem(direction)){
+      if (object!=null) object.getMesh().setTextureCoords(Asset2D.getNormalTextureCoords());
+      this.direction = direction;
+    }
+    else if (Asset2D.isMirrorSystem(direction)){
+      if (object!=null) object.getMesh().setTextureCoords(Asset2D.getMirroredTextureCoords());
+      this.direction = Asset2D.getMirroredRightDirection(direction);
+    }
+    else {
+      this.direction = !isNSAnimationAvail?this.direction:direction;
+    }
     this.action = action;
-    //System.out.println(action);
-    //System.out.println(direction);
-    //System.out.println(DEFAULT_ACTION);
-    animationDict.setInUseAnimation(direction, action);
+    //System.out.println("action -"+action);
+    animationDict.setInUseAnimation(this.direction, action);
   }
 
   public Material getCurrentAnimatedMaterial() {
+
     Material frame = animationDict.getAnimation().getCurrentFrame();
     if (frame == null) {
 
@@ -90,33 +117,34 @@ public class Agent2DController extends AgentController {
     }
   }
 
-  public String getCurrentDirection() {
-    return animationDict.getDirection();
-  }
-
   public String getCurrentAction() {
     return animationDict.getCurrentAction();
   }
 
-  public void move(String direction) { //TODO if valid
-    System.out.println("it moves");
-    if (box.canMove(!isBullet, isBullet, agentView,
-        Asset2D.convertDirectionalSpeed(direction, speedScale))) {
-      System.out.println("it moves!");
+  public void move(String direction) {
+
+    if (canMove(direction)) {
       translate(Asset2D.convertDirectionalSpeed(direction, speedScale));
     }
-    //object.setPosition(Vector3f.add(object.getPosition(), Asset2D.convertDirectionalSpeed(direction, speedScale)));
   }
 
-  public void translate(Vector3f delta) {
+  public boolean canMove(String direction){
+    return box.canMove(!isBullet, isBullet, agentView,
+        Asset2D.convertDirectionalSpeed(direction, speedScale));
+  }
+
+  private void translate(Vector3f delta) {
+    if (!temp_switch && isBullet) System.out.println("before");
+    if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
+
     for (int i = 0; i < object.getMesh().getVertices().length; i++) {
-      object.getMesh().setVerticesPosition(i, Vector3f
-          .add(object.getMesh().getVertices()[i].getPosition(), delta));
+      object.getMesh().setVerticesPosition(i,
+          Vector3f.add(object.getMesh().getVertices()[i].getPosition(), delta));
     }
+
+    if (!temp_switch && isBullet) System.out.println("after");
+    if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
+    temp_switch = true;
   }
-
-
-
-
 
 }

@@ -46,13 +46,10 @@ public class Material {
 	/**
 	 * Read texture as titles
 	 */
-	public void createTitledTexture(int x, int y, int textureWidth, int textureHeight) {
-		//SpriteSheet palette = new SpriteSheet(ImageLoader.loadImage(path));
+	public void createTitledTexture(int x, int y) {
 		String imageName = String.format("%s/%s_%s.png", path, y, x);
 
 		try{
-				//System.out.println(imageName);
-				//System.out.println(path);
 				texture =  TextureLoader.getTexture(imageName.split("[.]")[1], Material.class.getResourceAsStream(imageName), GL11.GL_NEAREST);
 				width = texture.getWidth();
 				height = texture.getHeight();
@@ -71,7 +68,7 @@ public class Material {
 		int textureWidth = sheet.getWidth() / cnt;
 		int textureHeight = sheet.getHeight();
 		SpriteSheet Titles = new SpriteSheet(ImageLoader.loadImage(path));
-		createTitledTexture(0, y, textureWidth, textureHeight);
+		createTitledTexture(0, y);
 	}
 	
 	public void destroy() {

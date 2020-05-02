@@ -45,7 +45,7 @@ public class testAgent implements Runnable {
     try {
       init();
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("test failed to initiate");
     }
     while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
       update();
@@ -109,6 +109,7 @@ public class testAgent implements Runnable {
     shader.destroy();
   }
 
+  @org.junit.Test
   public static void main(String[] args) {
     new testAgent().start();
   }

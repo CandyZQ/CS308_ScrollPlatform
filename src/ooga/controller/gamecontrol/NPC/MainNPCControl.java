@@ -2,6 +2,8 @@ package ooga.controller.gamecontrol.NPC;
 
 import ooga.controller.gamecontrol.NPCControlInterface;
 import ooga.game.GameZelda2DSingle;
+import ooga.model.characters.ZeldaCharacter;
+import ooga.model.characters.ZeldaPlayer;
 import ooga.model.interfaces.movables.Movable1D;
 
 public class MainNPCControl implements NPCControlInterface {
@@ -45,12 +47,16 @@ public class MainNPCControl implements NPCControlInterface {
   }
 
   @Override
-  public void getHurt() {
-    myNPCControl.getHurt();
+  public void getHurt(ZeldaPlayer player) {
+    myNPCControl.getHurt(player);
   }
 
   @Override
   public boolean isHurt() {
     return myNPCControl.isHurt();
+  }
+
+  public ZeldaCharacter getCharacter() {
+    return myNPCControl.getCharacter();
   }
 }

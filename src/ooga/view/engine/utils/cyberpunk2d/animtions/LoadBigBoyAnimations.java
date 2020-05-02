@@ -34,7 +34,6 @@ public class LoadBigBoyAnimations {
     mapKey = "E_WALK";
     bigBoyDict.put(mapKey, new Animation2D(7, fps, DIR_PATH, WALK));
 
-    // TODO W ANIMATIONS
 
     return bigBoyDict;
   }

@@ -25,7 +25,7 @@ public class Mesh {
 		Mesh.normalize(this);
 	}
 
-	public Mesh(Vertex[] vertices, int[] indices, Material material, boolean isMap) {
+	public Mesh(Vertex[] vertices, int[] indices, Material material, boolean notNormalized) {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
@@ -47,9 +47,15 @@ public class Mesh {
 		return ret;
 	}
 
+	public void setTextureCoords(Vector2f[] newTextureCoords){
+		for(int idx=0; idx<newTextureCoords.length; idx++){
+			vertices[idx].setTextureCoord(newTextureCoords[idx]);
+		}
+	}
+
 	public void rotateVertices(Vector3f rotation){
-		for(int i=0; i<this.vertices.length; i++){
-			this.vertices[i].rotate(rotation);
+		for (Vertex vertex : this.vertices) {
+			vertex.rotate(rotation);
 		}
 	}
 
@@ -164,7 +170,7 @@ public class Mesh {
 	}
 
 	public Vector2f getCenter(){
-		return new Vector2f(getMinX() + (getMaxX()-getMaxX())/2.0f, getMinY() + (getMaxY() - getMinY())/2.0f);
+		return new Vector2f(getMinX() + (getMaxX()-getMinX())/2.0f, getMinY() + (getMaxY() - getMinY())/2.0f);
 	}
 
 	private float getMaxX(){

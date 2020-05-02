@@ -56,6 +56,8 @@ public class Model implements ModelInterface {
     }
 
     players = new HashMap<Integer, ZeldaPlayer>();
+    List<Double> positionX = List.of(-1d, -1.2);
+    int index = 0;
     List<PlayerStatus> playerStatuses = dataLoader.getCurrentPlayers();
     for (PlayerStatus p : playerStatuses) {
       ZeldaPlayer current = new ZeldaPlayer(
@@ -64,9 +66,10 @@ public class Model implements ModelInterface {
           p.getPlayerParam(PlayerParam.CURRENT_SCORE),
           p.getPlayerParam(PlayerParam.SCORE_GOAL),
           CharacterType.PLAYER);
-      current.setX(-1);
+      current.setX(positionX.get(index));
       current.setY(0);
       players.put(p.getPlayerID(), current);
+      index ++;
     }
   }
 
