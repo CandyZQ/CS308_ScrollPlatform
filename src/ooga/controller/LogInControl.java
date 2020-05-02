@@ -11,6 +11,11 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+/**
+ * COntrol for the login menu
+ *
+ * @author Lucy
+ */
 public class LogInControl {
 
     private Stage myStage;
