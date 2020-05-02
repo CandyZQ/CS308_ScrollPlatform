@@ -14,19 +14,20 @@ import ooga.view.game_view.game_state.state2d.GameState2DView;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Control for the finish screen
+ *
+ * @author Lucy
+ */
 public class FinishControl {
 
     private Stage myStage;
     private FinishScreen myFinishScreen;
-    private Button myResumeButton;
     private Button myBackButton;
-    private Button mySaveButton;
 
-    private List<Button> buttonList;
 
     private WindowControl myWindowControl;
 
-    private DataStorerAPI myStorer;
     private GameController myGameController;
 
     /**
@@ -54,15 +55,12 @@ public class FinishControl {
      */
     public void showMenu(boolean win, int id, int score){
         myFinishScreen.setWin(win, id, score);
-        //save();
         myStage.show();
     }
 
     private void setUpButton(){
         myBackButton = myFinishScreen.getBackToMenuButton();
         myBackButton.setOnAction(e->backToMenu());
-
-        //buttonList = List.of(myResumeButton, myBackButton, mySaveButton);
     }
 
     private void backToMenu(){

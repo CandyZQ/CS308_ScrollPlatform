@@ -12,6 +12,11 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+/**
+ * Control for the user profile view
+ *
+ * @author Lucy
+ */
 public class UserProfileControl {
 
     private Stage myStage;

@@ -21,6 +21,11 @@ import ooga.view.game_menu.SelectMenuView;
 import ooga.view.game_view.game_state.state2d.GameState2DView;
 
 
+/**
+ * COntrol for the main menu and basically everything else
+ *
+ * @author Lucy, Cady
+ */
 public class WindowControl {
 
   public static final int CURRENT_PLAYER_ID = 0;
@@ -95,42 +100,33 @@ public class WindowControl {
 
 
   private void initializeButtons() {
-    Button myStartButton = myMenuView.getNewGameButton();
-    //myStartButton.setOnAction(e->startGame(myStage));
-    myStartButton.setOnAction(e -> selectGameMenu());
-    Button myExitButton = myMenuView.getExitGameButton();
-    myExitButton.setOnAction(e -> myStage.close());
-    Button myChangeBackgroundButton = myMenuView.getBackgroundButton();
-    myChangeBackgroundButton.setOnAction(e -> switchMode());
-    Button myLoadButton = myMenuView.getLoadButton();
-    myLoadButton.setOnAction(e -> {
+    myMenuView.getNewGameButton().setOnAction(e -> selectGameMenu());
+    myMenuView.getExitGameButton().setOnAction(e -> myStage.close());
+    myMenuView.getBackgroundButton().setOnAction(e -> switchMode());
+    myMenuView.getLoadButton().setOnAction(e -> {
       try {
         loadlist();
       } catch (DataLoadingException | IOException ex) {
         System.out.println("WINDOW CONTROL LOAD LAST PLAYED");
       }
     });
-    Button myUserButton = myMenuView.getUserButton();
-    myUserButton.setOnAction(e -> showProfile());
+    myMenuView.getUserButton().setOnAction(e -> showProfile());
 
-    Button myGameButton1 = mySelectView.getGame1();
-    myGameButton1.setOnAction(e -> {
+    mySelectView.getGame1().setOnAction(e -> {
       try {
         startGame1();
       } catch (DataLoadingException | IOException ex) {
         System.out.println("WINDOW CONTROL STARTGAME1");
       }
     });
-    Button myGameButton2 = mySelectView.getGame2();
-    myGameButton2.setOnAction(e -> {
+    mySelectView.getGame2().setOnAction(e -> {
       try {
         startGame2();
       } catch (Exception ex) {
         System.out.println("WINDOW CONTROL STARTGAME2");
       }
     });
-    Button myGameButton3 = mySelectView.getGame3();
-    myGameButton3.setOnAction(e -> {
+    mySelectView.getGame3().setOnAction(e -> {
       try {
         startGame3();
       } catch (IOException|DataLoadingException ex) {
@@ -209,7 +205,6 @@ public class WindowControl {
     while (zelda2D.getView() == null);
     myGameController.setView(zelda2D);
     myGameController.startTimer();
-    //myStage.close();
     if (resetGame) {
       secondStage.close();
     }
@@ -287,8 +282,6 @@ public class WindowControl {
         break;
     }
 
-//    setUpController();
-//    myGameController.finishGame(myGameController.getMPC(0), true);
   }
 
   /**
@@ -310,15 +303,4 @@ public class WindowControl {
     }
   }
 
-  public boolean isLogIn(){
-    return isLogIn;
-  }
-
-  public String getUserName() {
-    return myUserName;
-  }
-
-  public LogInControl getLogInControl() {
-    return myLogIn;
-  }
 }
