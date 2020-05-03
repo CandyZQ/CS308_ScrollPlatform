@@ -1,6 +1,6 @@
 /**
  * this code is a helper class that is the universal handler for most of the data object processing.
- * It's very interesting because I used reflection, generic, and customed exceptions appropriately to resolve large amount of bad code or code repetition.
+ * It's very interesting because I used reflection, method creation, generic, and customed exceptions appropriately to resolve large amount of if statements and code repetition.
  */
 package ooga.data;
 
@@ -27,63 +27,74 @@ import static ooga.data.GameObjectConfiguration.FILE_PATH_DELIMITER;
  */
 public class DataObjectHandler {
     private Gson gson;
-    private Class dataHolder;
+    private GameObjectConfiguration dataHolder;
 
     /**
      * create a gson handler
      * @param gson the gson
      * @param dataHolder the class holding the data
      */
-    public DataObjectHandler(Gson gson, Class dataHolder) {
+    public DataObjectHandler(Gson gson, GameObjectConfiguration dataHolder) {
         this.gson = gson;
         this.dataHolder = dataHolder;
     }
 
     /**
-     *
-     * @param myDirectoryPath
-     * @param fileName
-     * @param field
-     * @param clazz
-     * @param type
-     * @param <T>
+     * @param <T> the type of the data in the data map.
+     * @param myDirectoryPath the directory path the Json file is under
+     * @param fileName the file name of the Json data file
+     * @param field the field that the data files stores data for
+     * @param clazz the class of the object holding the data
      */
-    public  <T> void loadFilesUnderDirectoryForList (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
-        List<T> tempList = (List<T>) field.get(dataHolder);
+    public  <T> void loadFilesUnderDirectoryForList(String myDirectoryPath, String fileName, Field field, Class clazz) throws IllegalAccessException {
+        List<T> tempList = getListField(field);
         tempList.add(loadJson(myDirectoryPath + fileName, clazz));
-        field.set(this, tempList);
+        field.set(dataHolder, tempList);
     }
 
     /**
      *
-     * @param myDirectoryPath
-     * @param fileName
-     * @param field
-     * @param clazz
-     * @param type
-     * @param <T>
+     * @param <T> the type of the data in the data map.
+     * @param myDirectoryPath the directory path the Json file is under
+     * @param fileName the file name of the Json data file
+     * @param field the field that the data files stores data for
+     * @param clazz the class of the object holding the data
      */
-    public <T> void loadFilesUnderDirectoryForMap (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
-        Map<String, T> tempMap = (Map<String, T>) field.get(dataHolder);
+    public <T> void loadFilesUnderDirectoryForMap(String myDirectoryPath, String fileName, Field field, Class clazz) throws IllegalAccessException {
+        Map<String, T> tempMap = getMapField(field);
         tempMap.put(fileName,
                 loadJson(myDirectoryPath + fileName, clazz));
-        field.set(this, tempMap);
+        field.set(dataHolder, tempMap);
     }
+
+    /**
+     * @param field the field the list belongs to.
+     * @param directoryPath the path the field stores to as Json
+     * @param <T> the type of the value in the Map
+     */
     public  <T> void storeMapToDisk(Field field, String directoryPath) throws IllegalAccessException {
-        Map<String, T> tempMap = (Map<String, T>) field.get(dataHolder);
+        Map<String, T> tempMap = getMapField(field);
         for (String j : tempMap.keySet()) {
             writeObjectTOJson(tempMap.get(j), directoryPath + j);
         }
     }
-    public  <E> void storeListToDisk(Field field, String directoryPath, String getfileNameIDMethod) throws IllegalAccessException {
-        List<E> tempList = (List<E>) field.get(dataHolder);
+
+    /**
+     *
+     * @param field the field the list belongs to.
+     * @param directoryPath the path the field stores to as Json
+     * @param getfieldIDMethod the method that gives the field's ID
+     * @param <E> the element type in the list
+     */
+    public  <E> void storeListToDisk(Field field, String directoryPath, String getfieldIDMethod) throws IllegalAccessException {
+        List<E> tempList = getListField(field);
         String[] pathArray = directoryPath.split(FILE_PATH_DELIMITER);
         String folderName = pathArray[pathArray.length - 1];
 
         for (E j : tempList) {
             Method methodcall = null;
             try {
-                methodcall = j.getClass().getDeclaredMethod(getfileNameIDMethod);
+                methodcall = j.getClass().getDeclaredMethod(getfieldIDMethod);
                 writeObjectTOJson(j, directoryPath + folderName + methodcall.invoke(j) + JSON_POSTFIX);
             } catch (NoSuchMethodException | InvocationTargetException e) {
                 throw new DataLoadingException(e.getMessage(), e);
@@ -138,5 +149,13 @@ public class DataObjectHandler {
             map.put(newkey, newValue);
         }
         return map;
+    }
+    // get the field that is in a Map
+    private <T> Map<String, T> getMapField(Field field) throws IllegalAccessException {
+        return (Map<String, T>) field.get(dataHolder);
+    }
+    //get the field that is in a list
+    private <E> List<E> getListField(Field field) throws IllegalAccessException {
+        return (List<E>) field.get(dataHolder);
     }
 }

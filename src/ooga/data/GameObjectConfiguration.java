@@ -69,7 +69,7 @@ public class GameObjectConfiguration {
     gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter(CELL_CLASS_NAME));
     gsonLoad = gsonBuilder.create();
 
-    dataObjectHandler = new DataObjectHandler(gsonLoad, this.getClass(), gsonStore);
+    dataObjectHandler = new DataObjectHandler(gsonLoad, this);
 
     resources = ResourceBundle.getBundle(PARAM_RESOURCES_PACKAGE);
     currentPlayerID = 1;
@@ -105,10 +105,10 @@ public class GameObjectConfiguration {
         for (File child : directoryListing) {
           if (type.equals(LIST_KEYWORD)) {
             dataObjectHandler.loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
-                Class.forName(instanceClass), type);
+                Class.forName(instanceClass));
           } else if (type.equals(MAP_KEYWORD)) {
             dataObjectHandler.loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
-                Class.forName(instanceClass), type);
+                Class.forName(instanceClass));
           } else {
             Type type2 = new TypeToken<Map<String, Animation2D>>() {
             }.getType();
@@ -122,7 +122,7 @@ public class GameObjectConfiguration {
       } catch (Exception e) {
         //this catch is used because some teammate's computer will run into errors without it. However, this problem is not displayed when I am running the program.
         System.out.println(EXCEPTION_KEYWORD + key);
-//        throw new DataLoadingException(EXCEPTION_KEYWORD + key, e);
+        throw new DataLoadingException(EXCEPTION_KEYWORD + key, e);
       }
     }
     window.destroy();
