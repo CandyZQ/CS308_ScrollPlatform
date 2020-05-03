@@ -26,19 +26,17 @@ import static ooga.data.GameObjectConfiguration.FILE_PATH_DELIMITER;
  * this is a helper class used to handle any object that needs to be handled in the gameObjectConfiguration class
  */
 public class DataObjectHandler {
-    private Gson gsonLoader;
+    private Gson gson;
     private Class dataHolder;
-    private Gson gsonStorer;
 
     /**
      * create a gson handler
-     * @param gsonLoader the gson
+     * @param gson the gson
      * @param dataHolder the class holding the data
      */
-    public DataObjectHandler(Gson gsonLoader, Class dataHolder, Gson gsonStorer) {
-        this.gsonLoader = gsonLoader;
+    public DataObjectHandler(Gson gson, Class dataHolder) {
+        this.gson = gson;
         this.dataHolder = dataHolder;
-        this.gsonStorer = gsonStorer;
     }
 
     /**
@@ -102,7 +100,7 @@ public class DataObjectHandler {
     public <clazz> clazz loadJson(String fileName, Type clazz) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileName));
-            return (clazz) gsonLoader.fromJson(reader, clazz);
+            return (clazz) gson.fromJson(reader, clazz);
         } catch (IOException e) {
             throw new DataLoadingException(EXCEPTION_KEYWORD, e);
         }
@@ -116,7 +114,7 @@ public class DataObjectHandler {
     private void writeObjectTOJson(Object object, String filePath) {
         try {
             FileWriter Writer1 = new FileWriter(filePath);
-            gsonStorer.toJson(object, Writer1);
+            gson.toJson(object, Writer1);
             Writer1.flush();
             Writer1.close();
         } catch (IOException e) {
