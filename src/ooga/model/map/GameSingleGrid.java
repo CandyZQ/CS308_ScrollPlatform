@@ -7,7 +7,9 @@ import ooga.data.DataLoaderAPI;
 import ooga.model.interfaces.gameMap.SingleGrid;
 
 /**
- * This class implements a single grid in a map
+ * This class implements a independent single grid. It is well encapsulated by using unmodifiable
+ * list. It can be used on its own for simple maps or further extended as shown in othet masterpiece
+ * classes.
  *
  * @author cady
  */
@@ -64,7 +66,7 @@ public class GameSingleGrid implements SingleGrid {
   /**
    * Loads the grid from an external file
    *
-   * @param id  the id of this grid
+   * @param id    the id of this grid
    * @param level the level in which this grid is in
    */
   @Override

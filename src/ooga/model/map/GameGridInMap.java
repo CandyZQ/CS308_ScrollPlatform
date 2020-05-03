@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class implements grids that holds relationship to other grids in a map
+ * This class implements grids that holds relationship to other grids in a map. It is well designed
+ * as extends from {@link GameSingleGrid} to adapt a larger map.
  *
  * @author cady
  */
@@ -18,12 +19,18 @@ public class GameGridInMap extends GameSingleGrid implements GridInMap {
   private int id;
   private Map<Direction, Integer> surroundingMaps = new HashMap<>();
 
+  /**
+   * Creats a new instance of a grid in a map
+   * @param loader  a data loader that loads a grid
+   * @param id  the id of this grid
+   */
   public GameGridInMap(DataLoaderAPI loader, int id) {
     super(loader);
     this.id = id;
     initializeSurrounding();
   }
 
+  // initializes all surrounding grids
   private void initializeSurrounding() {
     for (Direction d : Direction.values()) {
       int neighbor = loader.getNextSubMapID(d, id);

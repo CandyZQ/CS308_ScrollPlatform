@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The implementation of an entire game map
+ * The implementation of an entire game map, which holds multiple grids each know its relationship
+ * with surrounding grids. This class is designed to be called by the main model class or classes
+ * from other modules so that no individual grids need to be created. It well describes the idea of
+ * a "map".
  *
  * @author cady
  */
@@ -34,6 +37,8 @@ public class GameMapInstance implements GameMap {
     initialize();
   }
 
+  // initialize the map by assigning ids. Could be implemented better if read grid id from
+  // configuration files, but sadly data module does not support this feature
   private void initialize() {
     for (int i = 0; i < loader.loadGameParam(GameParam.GRID_NUM); i++) {
       GridInMap grid = new GameGridInMap(loader, i);
