@@ -101,10 +101,11 @@ public class GameMapInstance implements GameMap {
    *
    * @param gridID    the id of that grid
    * @param direction the direction in which the returned map is relative to that grid
-   * @return the gird on {@code direction} of that grid, -1 if not existed
+   * @return the gird on {@code direction} of that grid, null if not existed
    */
   @Override
   public GridInMap getGridOn(int gridID, Direction direction) {
+    if (!allGrids.containsKey(gridID)) return null;
     return allGrids.get(
         allGrids.get(gridID).getGridIDOn(direction));
   }
@@ -113,7 +114,7 @@ public class GameMapInstance implements GameMap {
    * Gets the grid on {@code direction} relative to the current grid
    *
    * @param direction the direction in which the returned map is relative to the current grid
-   * @return the gird on {@code direction} of the current grid, -1 if not existed
+   * @return the gird on {@code direction} of the current grid, null if not existed
    */
   @Override
   public GridInMap getGridOn(Direction direction) {
