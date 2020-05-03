@@ -54,29 +54,53 @@ public class GameMenuView implements GameMenu {
         return myScene;
     }
 
+    /**
+     *
+     * @return color picker
+     */
     @Override
     public ColorPicker getMyColorPicker(){return myColorPicker;}
 
+    /**
+     *
+     * @return game button
+     */
     @Override
     public Button getNewGameButton() {
         return myNewButton;
     }
 
+    /**
+     *
+     * @return exit button
+     */
     @Override
     public Button getExitGameButton() {
         return myExitButton;
     }
 
+    /**
+     *
+     * @return dark mode button
+     */
     @Override
     public Button getBackgroundButton(){
         return myMode;
     }
 
+    /**
+     *
+     * @return load last game button
+     */
     @Override
     public Button getLoadButton() {
         return myLoad;
     }
 
+    /**
+     *
+     * @return user profile/login button
+     */
     @Override
     public Button getUserButton() {
         return myUser;

@@ -12,6 +12,11 @@ import ooga.view.game_menu.pretty.PrettyButtons;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View of menu where one selects the game from three possibilities
+ *
+ * @author Lucy
+ */
 public class SelectMenuView implements SelectMenu {
     private PrettyButtons myGameButton1;
     private PrettyButtons myGameButton2;
@@ -42,43 +47,75 @@ public class SelectMenuView implements SelectMenu {
        
     }
 
+    /**
+     *
+     * @return game 1
+     */
     @Override
     public Button getGame1() {
         return myGameButton1;
     }
 
+    /**
+     *
+     * @return game 2
+     */
     @Override
     public Button getGame2() {
         return myGameButton2;
     }
 
+    /**
+     *
+     * @return game 3
+     */
     @Override
     public Button getGame3() {
         return myGameButton3;
     }
 
+    /**
+     *
+     * @return setting
+     */
     @Override
     public Button getSetting() {
         return mySettingButton;
     }
 
+    /**
+     *
+     * @return scene
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * change mode to dark or light
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark){
         this.dark = dark;
         setColor();
     }
 
+    /**
+     * change text of buttons to another language
+     * @param language name of language
+     */
     @Override
     public void setLanguage(String language) {
         myLanguage = language;
         for(PrettyButtons button:myButtonList) button.changeLanguage(myLanguage);
     }
 
+    /**
+     * change background color
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));

@@ -20,6 +20,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 
+/**
+ * User log in view. Contains password field, username field, and error message
+ *
+ * @author Lucy
+ */
 public class LogInView implements MenuView{
 
     private Scene myScene;
@@ -55,27 +60,51 @@ public class LogInView implements MenuView{
         myButtonList = List.of(LogInButton, SignUpButton);
     }
 
+    /**
+     *
+     * @return user input to name
+     */
     public String getNameInput(){
         return nameInput.getText();
     }
 
+    /**
+     *
+     * @return user input to password
+     */
     public String getPasswordInput(){
         return passwordInput.getText();
     }
 
+    /**
+     *
+     * @return log in button
+     */
     public Button getLogInButton(){
         return LogInButton;
     }
 
+    /**
+     *
+     * @return sign up button
+     */
     public Button getSignUpButton(){
         return SignUpButton;
     }
 
+    /**
+     *
+     * @return scene
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * change background to light or dark mode
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark) {
         this.dark = dark;
@@ -85,6 +114,10 @@ public class LogInView implements MenuView{
         userPassWord.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
     }
 
+    /**
+     * change text to use language of resource file
+     * @param language name of language
+     */
     public void setLanguage(String language){
         myLanguage = language;
         LogInButton.changeLanguage(myLanguage);
@@ -92,23 +125,35 @@ public class LogInView implements MenuView{
         changeLableText();
     }
 
+    /**
+     * change background color
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
 
-
+    /**
+     * message change when use name does not exist when trying to log in
+     */
     public void UserDNE(){
         var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("UserDNE"));
     }
 
+    /**
+     * message changes when user name does not match password when trying to log in
+     */
     public void logInFail(){
         var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("LogInFail"));
     }
 
+    /**
+     * message changes when user exists when trying to sign up
+     */
     public void signUpFail(){
         var resource = ResourceBundle.getBundle(resourcename, new Locale(myLanguage));
         Message.setText(resource.getString("SignUpFail"));
@@ -146,6 +191,9 @@ public class LogInView implements MenuView{
         Message.setText("");
     }
 
+    /**
+     * clears the input to username and password field
+     */
     public void clearInput() {
         nameInput.clear();
         passwordInput.clear();

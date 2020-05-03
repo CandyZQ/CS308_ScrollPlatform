@@ -7,6 +7,11 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * Class that contains all constants commonly used in game menu
+ *
+ * @author Lucy
+ */
 public abstract class Constants {
     public final static Background darkModebox = new Background(new BackgroundFill(new Color(0.15,0.15,0.15,1), CornerRadii.EMPTY, Insets.EMPTY));
     public final static Background lightModebox = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));

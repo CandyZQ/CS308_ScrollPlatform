@@ -11,6 +11,11 @@ import ooga.view.game_menu.pretty.PrettyButtons;
 
 import java.util.*;
 
+/**
+ * Display of life and score that updates simultaneously as the game is played
+ *
+ * @author Lucy
+ */
 public class DisplayStatusView implements MenuView {
 
     private List<PrettyButtons> myButtonList = new ArrayList<>();
@@ -34,29 +39,46 @@ public class DisplayStatusView implements MenuView {
         myScene = new Scene(vBox, ZIZE, ZIZE);
     }
 
+    /**
+     *
+     * @return the scene containing the vbox
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * change text based on language
+     * @param language name of language
+     */
     @Override
     public void setLanguage(String language) {
         myLanguage = language;
         for(PrettyButtons button:myButtonList) button.changeLanguage(myLanguage);
     }
 
+    /**
+     * change the background to color specified
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
+    /**
+     * change the color to dark mode/light mode
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark){
         this.dark = dark;
         setColor();
     }
 
-    public void setColor(){
+
+    private void setColor(){
         vBox.setBackground(dark? Constants.darkModebox: Constants.darkModebutton);
         scorelist.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
         life.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
@@ -68,6 +90,10 @@ public class DisplayStatusView implements MenuView {
         vBox.getChildren().addAll(scorelist, life);
     }
 
+    /**
+     * Update the text of score
+     * @param list list of id:score
+     */
     public void updateScore(Map<Integer, Integer> list){
         String s = "";
         for(int i:list.keySet()){
@@ -77,6 +103,10 @@ public class DisplayStatusView implements MenuView {
         scorelist.setText(s);
     }
 
+    /**
+     * Update the text of life
+     * @param list list of id:hp
+     */
     public void updateLife(Map<Integer, Integer> list) {
         String s = "";
         for(int i:list.keySet()){

@@ -7,6 +7,11 @@ import ooga.view.game_menu.Constants;
 
 import java.util.ResourceBundle;
 
+/**
+ * Custom combo box
+ *
+ * @author Lucy
+ */
 public class PrettyBox extends ComboBox {
     private static final int BUTTON_HEIGHT = 30, BUTTON_WIDTH = 200;
     private boolean dark = false;
@@ -30,11 +35,20 @@ public class PrettyBox extends ComboBox {
         this.setPromptText(myResource);
     }
 
+    /**
+     * change the size of the box
+     * @param x width
+     * @param y height
+     */
     public void setSize(int x, int y){
         setPrefHeight(y);
         setPrefWidth(x);
     }
 
+    /**
+     * change background and shadow color to light/dark mode
+     * @param dark true = dark mode
+     */
     public void switchMode(boolean dark){
         if(dark) setBackground(Constants.darkModebutton);
         else setBackground(Constants.lightModebutton);

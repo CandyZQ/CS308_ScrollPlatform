@@ -12,6 +12,12 @@ import ooga.view.game_menu.pretty.PrettyButtons;
 
 import java.util.*;
 
+
+/**
+ * Finish screen, displays win or lose and offers back to menu button
+ *
+ * @author Lucy
+ */
 public class FinishScreen implements MenuView {
 
     private PrettyButtons BackToMenuButton;
@@ -44,6 +50,12 @@ public class FinishScreen implements MenuView {
         scorelist.setFont(Constants.font);
     }
 
+    /**
+     * Change the text according to if the player won the game or not
+     * @param win true = win, false = dead
+     * @param id id of player that won
+     * @param score score of the player
+     */
     public void setWin(boolean win, int id, int score){
         this.win = win;
         this.id = id;
@@ -55,33 +67,51 @@ public class FinishScreen implements MenuView {
     }
 
 
+    /**
+     *
+     * @return back to menu button
+     */
     public Button getBackToMenuButton(){return BackToMenuButton;}
 
 
+    /**
+     *
+     * @return scene containing the box
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * change text based on language
+     * @param language name of language
+     */
     @Override
     public void setLanguage(String language) {
         myLanguage = language;
         for(PrettyButtons button:myButtonList) button.changeLanguage(myLanguage);
         setWin(win, id, score);
     }
-
+    /**
+     * change the background to color specified
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
-
+    /**
+     * change the color to dark mode/light mode
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark){
         this.dark = dark;
         setColor();
     }
 
-    public void setColor(){
+    private void setColor(){
         if(dark) vBox.setBackground(Constants.darkModebox);
         else vBox.setBackground(Constants.lightModebox);
         for(PrettyButtons button:myButtonList) button.switchMode(dark);
@@ -100,7 +130,10 @@ public class FinishScreen implements MenuView {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(finishText, scorelist, BackToMenuButton);
     }
-
+    /**
+     * Update the text of score
+     * @param list list of id:score
+     */
     public void updateScore(Map<Integer, Integer> list){
         var resource = ResourceBundle.getBundle(resourceName, new Locale(myLanguage));
         String s = "";

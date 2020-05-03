@@ -10,6 +10,11 @@ import ooga.view.game_menu.Constants;
 
 import java.util.ResourceBundle;
 
+/**
+ * custom button
+ *
+ * @author Lucy
+ */
 public class PrettyButtons extends Button
 {
     private static final int BOX_HEIGHT = 45, BOX_WIDTH = 300;
@@ -30,17 +35,30 @@ public class PrettyButtons extends Button
         mouseUpdateListener();
     }
 
+    /**
+     * change the  text of the button according to resource file
+     * @param language name of language/resource file
+     */
     public void changeLanguage(String language) {
         myLanguage = language;
         var resources = ResourceBundle.getBundle("menu", new Locale(myLanguage));
         setText(resources.getString(myWord));
     }
 
+    /**
+     * change size of button
+     * @param x width
+     * @param y height
+     */
     public void setSize(int x, int y){
         setPrefHeight(y);
         setPrefWidth(x);
     }
 
+    /**
+     * change background and shadow color to light/dark mode
+     * @param dark true = dark mode
+     */
     public void switchMode(boolean dark){
 
         if(dark) setBackground(Constants.darkModebutton);

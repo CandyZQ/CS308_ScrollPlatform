@@ -17,6 +17,11 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 
+/**
+ * View of user profile
+ *
+ * @author Lucy
+ */
 public class UserProfileView implements MenuView{
 
     private Scene myScene;
@@ -48,11 +53,19 @@ public class UserProfileView implements MenuView{
         myScene = new Scene(vBox, SIZE,SIZE);
     }
 
+    /**
+     *
+     * @return scene
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * change background to dark mode / light mode
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark) {
         this.dark = dark;
@@ -62,11 +75,20 @@ public class UserProfileView implements MenuView{
         LastPlayed.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
     }
 
+    /**
+     * change text based on resource file
+     * @param language name of language
+     */
+    @Override
     public void setLanguage(String language){
         myLanguage = language;
         changeLableText();
     }
 
+    /**
+     * change background
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -114,21 +136,33 @@ public class UserProfileView implements MenuView{
         changeLableText();
     }
 
-    public void changeLableText(){
+    private void changeLableText(){
         var resource1 = ResourceBundle.getBundle(resourceName, new Locale(myLanguage));
         Name.setText(resource1.getString("Name") + userName);
         HighestScore.setText(resource1.getString("HighScore") + tempHighest);
         LastPlayed.setText(resource1.getString("Last") + tempLast);
     }
 
+    /**
+     *
+     * @return the highest score as recorded by this view class
+     */
     public int getHighest(){
         return tempHighest;
     }
 
+    /**
+     * set highest to be h
+     * @param h integer score
+     */
     public void setHighest(int h){
-        tempHighest = h;
+        if(h>tempHighest)tempHighest = h;
     }
 
+    /**
+     * set last played score to be h
+     * @param h score
+     */
     public void setLast(int h){
         tempLast = h;
     }

@@ -12,13 +12,17 @@ import ooga.view.game_menu.pretty.PrettyButtons;
 
 import java.util.*;
 
+/**
+ * Menu for pause screen
+ *
+ * @author Lucy
+ */
 public class PauseMenu implements MenuView {
 
     private PrettyButtons ResumeButton;
     private PrettyButtons BackToMenuButton;
     private PrettyButtons SaveGameButton;
 
-    private int score = 0;
 
     private List<PrettyButtons> myButtonList = new ArrayList<>();
 
@@ -50,35 +54,63 @@ public class PauseMenu implements MenuView {
         currentScore.setText(resource.getString("currentScore"));
     }
 
+    /**
+     *
+     * @return resume game button
+     */
     public Button getResumeButton(){return ResumeButton;}
 
+    /**
+     *
+     * @return back to menu button
+     */
     public Button getBackToMenuButton(){return BackToMenuButton;}
 
+    /**
+     *
+     * @return save game button
+     */
     public Button getSaveGameButton(){return SaveGameButton;}
 
+    /**
+     *
+     * @return scene
+     */
     @Override
     public Scene getMenuView() {
         return myScene;
     }
 
+    /**
+     * set text to use resource file
+     * @param language name of language
+     */
     @Override
     public void setLanguage(String language) {
         myLanguage = language;
         for(PrettyButtons button:myButtonList) button.changeLanguage(myLanguage);
     }
 
+    /**
+     * change background color
+     * @param color input color
+     */
     @Override
     public void changColor(Color color) {
         vBox.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
+    /**
+     *
+     * @param dark true = dark mode
+     */
     @Override
     public void switchMode(boolean dark){
         this.dark = dark;
         setColor();
     }
 
-    public void setColor(){
+    private void setColor(){
         vBox.setBackground(dark? Constants.darkModebox: Constants.lightModebox);
 
         scorelist.setTextFill(dark?Color.DARKGRAY:Color.BLACK);
@@ -100,7 +132,10 @@ public class PauseMenu implements MenuView {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(scorelist, life, ResumeButton, BackToMenuButton, SaveGameButton);
     }
-
+    /**
+     * Update the text of score
+     * @param list list of id:score
+     */
     public void updateScore(Map<Integer, Integer> list){
         String s = "";
         for(int i:list.keySet()){
@@ -109,7 +144,10 @@ public class PauseMenu implements MenuView {
         s+="\n\n";
         scorelist.setText(s);
     }
-
+    /**
+     * Update the text of life
+     * @param list list of id:hp
+     */
     public void updateLife(Map<Integer, Integer> list) {
         String s = "";
         for(int i:list.keySet()){

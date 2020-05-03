@@ -5,6 +5,11 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import ooga.view.game_menu.Constants;
 
+/**
+ * Custom color picker
+ *
+ * @author Lucy
+ */
 public class PrettyColorPicker extends ColorPicker {
     private static final int BUTTON_HEIGHT = 30, BUTTON_WIDTH = 200;
     private boolean dark = false;
@@ -24,6 +29,10 @@ public class PrettyColorPicker extends ColorPicker {
         setPrefWidth(x);
     }
 
+    /**
+     * change background and shadow color to light/dark mode
+     * @param dark true = dark mode
+     */
     public void switchMode(boolean dark){
         if(dark) setBackground(Constants.darkModebutton);
         else setBackground(Constants.lightModebutton);
