@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ooga.data.DataLoaderAPI;
-import ooga.model.enums.backend.Direction;
 import ooga.model.interfaces.gameMap.SingleGrid;
 
 /**
@@ -16,10 +15,15 @@ public class GameSingleGrid implements SingleGrid {
 
   protected int width;
   protected int length;
-
-  protected List<List<GameCell>> grid;
   protected DataLoaderAPI loader;
 
+  private List<List<GameCell>> grid;
+
+  /**
+   * Creates a new instance of grid from loader
+   *
+   * @param loader the data loader that loads map from configuration file
+   */
   public GameSingleGrid(DataLoaderAPI loader) {
     grid = new ArrayList<>();
     this.loader = loader;
@@ -60,8 +64,8 @@ public class GameSingleGrid implements SingleGrid {
   /**
    * Loads the grid from an external file
    *
-   * @param id
-   * @param level
+   * @param id  the id of this grid
+   * @param level the level in which this grid is in
    */
   @Override
   public void loadGrid(int id, int level) {
@@ -96,20 +100,6 @@ public class GameSingleGrid implements SingleGrid {
   @Override
   public void setCellState(int row, int col, int state) {
     grid.get(row).get(col).setState(state);
-  }
-
-  /**
-   * Gets if a specific cell is connected to another grid on the same map
-   *
-   * @param row       the row number of that cell
-   * @param col       the col number of that cell
-   * @param direction the relative position in which the other grid is
-   * @return if that cell is a connected to another grid
-   */
-  // TODO: implement this if needed
-  @Override
-  public boolean isGateCell(int row, int col, Direction direction) {
-    return false;
   }
 
   /**
