@@ -13,7 +13,7 @@ import ooga.model.move.MovingObject2D;
 import java.beans.PropertyChangeListener;
 
 /**
- * This class is a specific implementation of zelda character, typically an npc.
+ * This class is a specific implementation of a character moves on a 2D space, typically an npc.
  *
  * @author Cady
  * @see CharacterBase
@@ -28,9 +28,8 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
   private WeaponBase weaponBase;
   protected transient PropertyChangeNotifier notifier;
 
-
   /**
-   * Creates a new instance of ZeldaCharacter
+   * Creates a new instance of ZeldaCharacter with {@code initialHp}, {@code id}, and {@code type}
    *
    * @param initialHp the initial
    * @param id        the id of this CharacterBase
@@ -41,7 +40,8 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
   }
 
   /**
-   * Creates a new instance of ZeldaCharacter
+   * Creates a new instance of ZeldaCharacter with {@code initialHp}, {@code weapon}, {@code id},
+   * and {@code type}
    *
    * @param initialHp the initial
    * @param weapon    the weapon that the character will use
@@ -53,7 +53,7 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
   }
 
   /**
-   * Creates a new instance of ZeldaCharacter
+   * Creates a new instance of ZeldaCharacter with all properties needed
    *
    * @param initialHp the initial
    * @param weapon    the weapon that the character will use
@@ -98,7 +98,7 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
   }
 
   /**
-   * Notifies the listeners that state has been changed
+   * Notifies the listeners that a state has been changed
    *
    * @param property the name of that property
    * @param oldState the old value of that property
@@ -200,32 +200,59 @@ public class ZeldaCharacter extends MovingObject2D implements Alive, Attacker, N
     return cb.getType();
   }
 
-
+  /**
+   * Sets the weapon id
+   *
+   * @param weapon the weapon id
+   */
   @Override
   public void setWeapon(int weapon) {
     weaponBase.setWeapon(weapon);
   }
 
+  /**
+   * Gets the attack id
+   *
+   * @return the attack id
+   */
   @Override
   public int getWeapon() {
     return weaponBase.getWeapon();
   }
 
+  /**
+   * Sets the attack id
+   *
+   * @param attack an int corresponds to this attack of the current weapon
+   */
   @Override
   public void setAttack(int attack) {
     weaponBase.setAttack(attack);
   }
 
+  /**
+   * Gets the attack id
+   *
+   * @return the attack id
+   */
   @Override
   public int getAttack() {
     return weaponBase.getAttack();
   }
 
+  /**
+   * Sets the direction of attack
+   *
+   * @param direction the direction in which the attack is performed
+   */
   @Override
   public void setFiringDirection(Direction direction) {
     weaponBase.setFiringDirection(direction);
   }
 
+  /**
+   * Actions to be performed once fired
+   */
   @Override
   public void fire() {
     weaponBase.fire();
