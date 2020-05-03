@@ -71,7 +71,7 @@ public interface DataLoaderAPI {
     /**
      * get the subMapID for the map in certain direction
      * @param direction direction of the next submap relative to the current submap
-     * @param current the current sumap
+     * @param current the current submap
      * @return the ID of the next submap at the specified direction
      */
     @Deprecated
@@ -86,70 +86,71 @@ public interface DataLoaderAPI {
     GameMapGraph loadMap(int level, int subMapID) throws DataLoadingException;
     /**
      * load buffered Image by providing the image category and ID
-     * @param ImageID
-     * @param category
-     * @return
-     * @throws DataLoadingException
+     * @param ImageID id of the image
+     * @param category the category of image
+     * @return the image in the type of the bufferred image
      */
     BufferedImage loadBufferImage(int ImageID, ImageCategory category) throws DataLoadingException;
 
     /**
-     * load text files from the database. Keyword specifies one piece of data out of a category. Category can be Dialog content
+     * load text
+     * @param keyword the keyword that maps the text in data file
+     * @param category the type of the text
+     * @return the string user requesting
      */
     String loadText(String keyword, String category) throws DataLoadingException;
     /**
      * load charcter's property using ID
-     * @param ID
-     * @param property
-     * @return
-     * @throws DataLoadingException
+     * @param ID character ID
+     * @param property charcter's property type
+     * @return charcter's property value
      */
     @Deprecated
     int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException;
+
     /**
      * load weapon's property using ID
-     * @param ID
-     * @param property
-     * @return
-     * @throws DataLoadingException
-     */
-    @Deprecated
+     * @param ID weapon ID
+     * @param property weapon property
+     * @return weapon attack value
+    */
+     @Deprecated
     int loadWeapon(int ID, int property) throws DataLoadingException;
     /**
      * load current level
-     * @return
+     * @return current level
      */
     int currentLevel();
     /**
      * keycode are stored in the player files.
      *
-     * @param playerID
-     * @return
+     * @param playerID id of player
+     * @return key code map
      */
     Map<Integer, String> loadKeyCode(int playerID) throws DataLoadingException;
     /**
      * in Json, <int, String> always returns <Stirng, String>
      *
-     * @param imageID
-     * @param category
-     * @return
+     * @param imageID id of image
+     * @param category category of image
+     * @return the path of the string
      */
     String loadImagePath(int imageID, ImageCategory category) throws DataLoadingException;
 
     /**
      * get the list of current available zelda characters
-     * @return
+     * @return list of current available zelda characters
      */
     List<ZeldaCharacter> getZeldaCharacters();
     /**
      * get the list of current available players
-     * @return
+     * @return list of current available players
      */
     List<PlayerStatus> getCurrentPlayers();
     /**
      * get certain type of animation
-     * @param animationType
-     * @return
+     * @param animationType type of animation
+     * @return <Animation Name, Animation Object> map
      */
     Map<String, Animation2D> loadAnimation(AnimationType animationType);
 

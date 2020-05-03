@@ -36,10 +36,10 @@ public class DataStorer implements DataStorerAPI {
     }
 
     /**
-     * store the text under certain category by using its reference keyword
-     * @param text
-     * @param keyword
-     * @param category
+     * store text files to the database.
+     * @param text text content
+     * @param keyword the keyword mapping the text
+     * @param category the category of the text
      */
     @Override
     public void StoreText(String text, String keyword, TextCategory category) {
@@ -48,8 +48,8 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * store Weapons with its ID as reference
-     * @param ID
-     * @param weapon
+     * @param ID weapon ID
+     * @param weapon weapon object
      */
     @Override
     public void storeWeapons(int ID, WeaponBase weapon) {
@@ -58,8 +58,8 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * store its character using specified ID
-     * @param characterID
-     * @param character
+     * @param characterID character ID
+     * @param character character objects
      */
     @Override
     public void storeCharacter(int characterID, ZeldaCharacter character) {
@@ -77,9 +77,9 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * set the param of playerstatus
-     * @param param
-     * @param value
-     * @param playerID
+     * @param param the enum identifying the param
+     * @param value the value of the param
+     * @param playerID the ID of the player
      */
     @Override
     public void setPlayerParam(PlayerParam param, int value, int playerID) {
@@ -92,7 +92,7 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * Add a player with the new ID
-     * @param playerID
+     * @param playerID player ID
      */
     @Override
     public void addPlayer(int playerID) {
@@ -101,8 +101,8 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * store user's key's setting
-     * @param keyCodeMap
-     * @param playerID
+     * @param keyCodeMap Map storing keycode
+     * @param playerID ID of player
      */
     @Override
     public void storeKeyCode(Map<Integer, String> keyCodeMap, int playerID) {
@@ -118,9 +118,9 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * Store images that belong to a specific category.
-     * @param imagePath
-     * @param ImageID
-     * @param
+     * @param imagePath the path of the image
+     * @param ImageID the ID of the image
+     * @param imageCategory the category of image
      */
     @Override
     public void storeImage(String imagePath, int ImageID, ImageCategory imageCategory) {
@@ -139,8 +139,8 @@ public class DataStorer implements DataStorerAPI {
     /**
      * level = current level; subMapID = next available ID;
      * store submap with assigning a random ID
-     * @param map
-     * @param level
+     * @param map collection of cells
+     * @param level level of the games
      */
     @Override
     public void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level) {
@@ -149,21 +149,20 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * store the submap for current game and level
-     * @param map
-     * @param level
-     * @param subMapID
+     * @param map collection of cells
+     * @param level Game level of the submap
+     * @param subMapID ID of the submap
      */
     @Override
     public void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID) {
         storeSubMap( map, level, subMapID, gameObjectConfiguration.getCurrentGameID());
     }
-
     /**
      * store the submap
-     * @param map
-     * @param level
-     * @param subMapID
-     * @param gameID
+     * @param map collection of cells
+     * @param level Game level of the submap
+     * @param subMapID ID of the submap
+     * @param gameID ID of the game
      */
     @Override
     public void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) {
@@ -208,17 +207,16 @@ public class DataStorer implements DataStorerAPI {
 
     /**
      * store the animation to disk
-     * @param animations
-     * @param animationType
+     * @param animations animation object
+     * @param animationType animation type
      */
     @Override
     public void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType) {
         gameObjectConfiguration.setAnimationMap(animationType.toString() + JSON_POSTFIX, animations);
     }
-
     /**
      * return the dataloader storer is using
-     * @return
+     * @return dataloader
      */
     public DataLoader getDataLoader(){
         return dataLoader;

@@ -16,70 +16,71 @@ public interface  DataStorerAPI {
 
     /**
      * store text files to the database.
-     * @return
+     * @param text text content
+     * @param keyword the keyword mapping the text
+     * @param category the category of the text
      */
-
     void StoreText(String text, String keyword, TextCategory category);
     /**
      * store Weapons with its ID as reference
-     * @param ID
-     * @param weapon
+     * @param ID weapon ID
+     * @param weapon weapon object
      */
     @Deprecated
     void storeWeapons(int ID, WeaponBase weapon);
 
     /**
      * store its character using specified ID
-     * @param characterID
-     * @param character
+     * @param characterID character ID
+     * @param character character objects
      */
     void storeCharacter(int characterID, ZeldaCharacter character);
     /**
      * set the param of playerstatus
-     * @param param
-     * @param value
-     * @param playerID
+     * @param param the enum identifying the param
+     * @param value the value of the param
+     * @param playerID the ID of the player
      */
     void setPlayerParam(PlayerParam param, int value, int playerID);
     /**
      * Add a player with the new ID
-     * @param playerID
+     * @param playerID player ID
      */
     void addPlayer(int playerID);
     /**
      * store user's key's setting
-     * @param keyCodeMap
-     * @param playerID
+     * @param keyCodeMap Map storing keycode
+     * @param playerID ID of player
      */
     void storeKeyCode(Map<Integer, String> keyCodeMap, int playerID);
     /**
      * Store images that belong to a specific category.
-     * @param imagePath
-     * @param ImageID
-     * @param
+     * @param imagePath the path of the image
+     * @param ImageID the ID of the image
+     * @param imageCategory the category of image
      */
     void storeImage(String imagePath, int ImageID, ImageCategory imageCategory);
     /**
      * level = current level; subMapID = next available ID;
      * store submap with assigning a random ID
-     * @param map
-     * @param level
+     * @param map collection of cells
+     * @param level level of the games
      */
     @Deprecated
     void storeSubMapWithSubmapIDRandom(Collection<Cell> map, int level);
     /**
      * store the submap for current game and level
-     * @param map
-     * @param level
-     * @param subMapID
+     * @param map collection of cells
+     * @param level Game level of the submap
+     * @param subMapID ID of the submap
      */
     void storeSubMapForCurrentGame(Collection<Cell> map, int level, int subMapID);
     /**
      * store the submap
-     * @param map
-     * @param level
-     * @param subMapID
-     * @param gameID
+     * @param map collection of cells
+     * @param level Game level of the submap
+     * @param subMapID ID of the submap
+     * @param gameID ID of the game
      */
     void storeSubMap(Collection<Cell> map, int level, int subMapID, int gameID) throws DataLoadingException;
     /**
@@ -93,13 +94,13 @@ public interface  DataStorerAPI {
     void writeAllDataIntoDisk();
     /**
      * store the animation to disk
-     * @param animations
-     * @param animationType
+     * @param animations animation object
+     * @param animationType animation type
      */
     void storeAnimations(Map<String, Animation2D> animations, AnimationType animationType);
     /**
      * return the dataloader storer is using
-     * @return
+     * @return dataloader
      */
     DataLoaderAPI getDataLoader();
 

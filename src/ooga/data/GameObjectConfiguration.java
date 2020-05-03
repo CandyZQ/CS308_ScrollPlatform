@@ -11,18 +11,10 @@ import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.engine.io.Window;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
-import static ooga.data.DataLoader.JSON_POSTFIX;
 import static ooga.game.GameMain.HEIGHT;
 import static ooga.game.GameMain.WIDTH;
 
@@ -35,9 +27,9 @@ public class GameObjectConfiguration {
   private static final String DELIMITER_PRAM_RESOURCE_FILE = ",";
   private static final String LIST_KEYWORD = "List";
   private static final String MAP_KEYWORD = "Map";
-  private static final String FILE_PATH_DELIMITER = "/";
-  private static final String EXCEPTION_KEYWORD = "Can't Load Data";
-  private static String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
+  public static final String FILE_PATH_DELIMITER = "/";
+  public static final String EXCEPTION_KEYWORD = "Can't Load Data";
+  private static final String PARAM_RESOURCES_PACKAGE = "Data/param_and_path";
 
   private List<GameInfo> gameInfoList;
   private Map<String, GameMapGraph> gameMapList;
@@ -48,7 +40,7 @@ public class GameObjectConfiguration {
   private com.google.gson.Gson gsonLoad;
   private com.google.gson.Gson gsonStore;
   private ResourceBundle resources;
-
+  private DataObjectHandler dataObjectHandler;
 
   private Map<String, Map<String, Animation2D>> animationMap;
   private List<Integer> currentPlayersID;
@@ -60,6 +52,7 @@ public class GameObjectConfiguration {
 
   /**
    * Static 'instance' method
+   * create an instance of the data storing object
    */
   public static GameObjectConfiguration getInstance() {
     if (gameObjectConfiguration == null) {
@@ -75,6 +68,8 @@ public class GameObjectConfiguration {
     gsonStore = gsonBuilder.create();
     gsonBuilder.registerTypeAdapter(Cell.class, new InterfaceAdapter(CELL_CLASS_NAME));
     gsonLoad = gsonBuilder.create();
+
+    dataObjectHandler = new DataObjectHandler(gsonLoad, this.getClass(), gsonStore);
 
     resources = ResourceBundle.getBundle(PARAM_RESOURCES_PACKAGE);
     currentPlayerID = 1;
@@ -109,16 +104,16 @@ public class GameObjectConfiguration {
       try {
         for (File child : directoryListing) {
           if (type.equals(LIST_KEYWORD)) {
-            loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
+            dataObjectHandler.loadFilesUnderDirectoryForList(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
           } else if (type.equals(MAP_KEYWORD)) {
-            loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
+            dataObjectHandler.loadFilesUnderDirectoryForMap(directoryPath, child.getName(), field,
                 Class.forName(instanceClass), type);
           } else {
             Type type2 = new TypeToken<Map<String, Animation2D>>() {
             }.getType();
 
-            Map<String, Animation2D> tempAgent = loadJson(directoryPath + child.getName(), type2);
+            Map<String, Animation2D> tempAgent = dataObjectHandler.loadJson(directoryPath + child.getName(), type2);
             createTextureToAnimation(tempAgent);
             animationMap.put(child.getName(), tempAgent);
 
@@ -133,17 +128,17 @@ public class GameObjectConfiguration {
     window.destroy();
   }
 
-  private <T> void loadFilesUnderDirectoryForList (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
-    List<T> tempList = (List<T>) field.get(this);
-    tempList.add(loadJson(myDirectoryPath + fileName, clazz));
-    field.set(this, tempList);
-  }
-  private <T> void loadFilesUnderDirectoryForMap (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
-    Map<String, T> tempMap = (Map<String, T>) field.get(this);
-    tempMap.put(fileName,
-            loadJson(myDirectoryPath + fileName, clazz));
-    field.set(this, tempMap);
-  }
+//  private <T> void loadFilesUnderDirectoryForList (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
+//    List<T> tempList = (List<T>) field.get(this);
+//    tempList.add(loadJson(myDirectoryPath + fileName, clazz));
+//    field.set(this, tempList);
+//  }
+//  private <T> void loadFilesUnderDirectoryForMap (String myDirectoryPath, String fileName, Field field, Class clazz, String type) throws IllegalAccessException {
+//    Map<String, T> tempMap = (Map<String, T>) field.get(this);
+//    tempMap.put(fileName,
+//            loadJson(myDirectoryPath + fileName, clazz));
+//    field.set(this, tempMap);
+//  }
 
   private void createTextureToAnimation(Map<String, Animation2D> meleeRobotAnimations) {
     for (Animation2D i : meleeRobotAnimations.values()) {
@@ -167,36 +162,36 @@ public class GameObjectConfiguration {
 
         if (type.equals(LIST_KEYWORD)) {
           String getfileNameIDMethod = value[3];
-          storeListToDisk(field, directoryPath, getfileNameIDMethod);
+          dataObjectHandler.storeListToDisk(field, directoryPath, getfileNameIDMethod);
         } else {
-          storeMapToDisk(field, directoryPath);
+          dataObjectHandler.storeMapToDisk(field, directoryPath);
         }
       } catch (IllegalAccessException | NoSuchFieldException e) {
         throw new DataLoadingException(e.getMessage(), e);
       }
     }
   }
-  private <T> void storeMapToDisk(Field field, String directoryPath) throws IllegalAccessException {
-    Map<String, T> tempMap = (Map<String, T>) field.get(this);
-    for (String j : tempMap.keySet()) {
-      writeObjectTOJson(tempMap.get(j), directoryPath + j);
-    }
-  }
-  private <E> void storeListToDisk(Field field, String directoryPath, String getfileNameIDMethod) throws IllegalAccessException {
-    List<E> tempList = (List<E>) field.get(this);
-    String[] pathArray = directoryPath.split(FILE_PATH_DELIMITER);
-    String folderName = pathArray[pathArray.length - 1];
-
-    for (E j : tempList) {
-      Method methodcall = null;
-      try {
-        methodcall = j.getClass().getDeclaredMethod(getfileNameIDMethod); //getFileNameID method has to be no-arg
-        writeObjectTOJson(j, directoryPath + folderName + methodcall.invoke(j) + JSON_POSTFIX);//naming convention of GameInfo is changed.
-      } catch (NoSuchMethodException | InvocationTargetException e) {
-        throw new DataLoadingException(e.getMessage(), e);
-      }
-    }
-  }
+//  private <T> void storeMapToDisk(Field field, String directoryPath) throws IllegalAccessException {
+//    Map<String, T> tempMap = (Map<String, T>) field.get(this);
+//    for (String j : tempMap.keySet()) {
+//      writeObjectTOJson(tempMap.get(j), directoryPath + j);
+//    }
+//  }
+//  private <E> void storeListToDisk(Field field, String directoryPath, String getfileNameIDMethod) throws IllegalAccessException {
+//    List<E> tempList = (List<E>) field.get(this);
+//    String[] pathArray = directoryPath.split(FILE_PATH_DELIMITER);
+//    String folderName = pathArray[pathArray.length - 1];
+//
+//    for (E j : tempList) {
+//      Method methodcall = null;
+//      try {
+//        methodcall = j.getClass().getDeclaredMethod(getfileNameIDMethod); //getFileNameID method has to be no-arg
+//        writeObjectTOJson(j, directoryPath + folderName + methodcall.invoke(j) + JSON_POSTFIX);//naming convention of GameInfo is changed.
+//      } catch (NoSuchMethodException | InvocationTargetException e) {
+//        throw new DataLoadingException(e.getMessage(), e);
+//      }
+//    }
+//  }
 
   private Field initializeFieldObject(String key) throws NoSuchFieldException {
     Class cls = this.getClass();
@@ -207,82 +202,130 @@ public class GameObjectConfiguration {
 
   /**
    * get the List of GameInfo object
-   * @return
+   * @return List of GameInfo object
    */
   public List<GameInfo> getGameInfoList() {
     return gameInfoList;
   }
 
+  /**
+   * @param gameInfoList the gameInfoList to be set
+   */
   public void setGameInfoList(List<GameInfo> gameInfoList) {
     this.gameInfoList = gameInfoList;
   }
 
+  /**
+   * @return the list of GameMap
+   */
   public Map<String, GameMapGraph> getGameMapList() {
     return gameMapList;
   }
 
+  /**
+   * @param gameMapList set the list of GameMap
+   */
   public void setGameMapList(Map<String, GameMapGraph> gameMapList) {
     this.gameMapList = gameMapList;
   }
 
+  /**
+   * @return ImageMap that maps the image category to the image MAP
+   */
   public Map<String, Map<String, String>> getImageMap() {
     return imageMap;
   }
 
+  /**
+   * @param imageMap SET THE IMAGE MAP
+   */
   public void setImageMap(Map<String, Map<String, String>> imageMap) {
     this.imageMap = imageMap;
   }
 
+  /**
+   * @return get the list of the players
+   */
   public List<PlayerStatus> getPlayerList() {
     return playerList;
   }
 
+  /**
+   *
+   * @param playerList set the list of player
+   */
   public void setPlayerList(List<PlayerStatus> playerList) {
     this.playerList = playerList;
   }
 
+  /**
+   *
+   * @return the list of zelda characters
+   */
   public List<ZeldaCharacter> getZeldaCharacterList() {
     return zeldaCharacterList;
   }
 
+  /**
+   *
+   * @param zeldaCharacterList the list of zelda characters
+   */
   public void setZeldaCharacterList(List<ZeldaCharacter> zeldaCharacterList) {
     this.zeldaCharacterList = zeldaCharacterList;
   }
 
-
+  /**
+   *
+   * @return get the map <text type, textMap>
+   */
   public Map<String, Map<String, String>> getTextMap() {
     return textMap;
   }
 
+  /**
+   *
+   * @param textMap set the map <text type, textMap>
+   */
   public void setTextMap(Map<String, Map<String, String>> textMap) {
     this.textMap = textMap;
   }
-
-  public <clazz> clazz loadJson(String fileName, Type clazz) {
-    try {
-      Reader reader = Files.newBufferedReader(Paths.get(fileName));
-      return (clazz) gsonLoad.fromJson(reader, clazz);
-    } catch (IOException e) {
-      throw new DataLoadingException(EXCEPTION_KEYWORD, e);
-    }
-  }
-
-
-  private void writeObjectTOJson(Object object, String filePath) {
-    try {
-      FileWriter Writer1 = new FileWriter(filePath);
-      gsonStore.toJson(object, Writer1);
-      Writer1.flush();
-      Writer1.close();
-    } catch (IOException e) {
-      throw new DataLoadingException(e.getMessage(), e);
-    }
-  }
+//
+//  /**
+//   * generic methods loading data from Json
+//   * @param fileName the data file we load from
+//   * @param clazz the class of the data
+//   * @param <clazz> the class of the data
+//   * @return the data in its appropriated class
+//   */
+//  public <clazz> clazz loadJson(String fileName, Type clazz) {
+//    try {
+//      Reader reader = Files.newBufferedReader(Paths.get(fileName));
+//      return (clazz) gsonLoad.fromJson(reader, clazz);
+//    } catch (IOException e) {
+//      throw new DataLoadingException(EXCEPTION_KEYWORD, e);
+//    }
+//  }
+//
+//  /**
+//   * write any random object into a Json file under a specific path
+//   * @param object any random object
+//   * @param filePath path where the Json file should locate
+//   */
+//  private void writeObjectTOJson(Object object, String filePath) {
+//    try {
+//      FileWriter Writer1 = new FileWriter(filePath);
+//      gsonStore.toJson(object, Writer1);
+//      Writer1.flush();
+//      Writer1.close();
+//    } catch (IOException e) {
+//      throw new DataLoadingException(e.getMessage(), e);
+//    }
+//  }
 
   /**
    * set the image map to corresponding values
-   * @param newImageMap
-   * @param imageCategory
+   * @param newImageMap imageMap
+   * @param imageCategory the type of the image
    */
   public void setImageMap(Map<String, String> newImageMap, ImageCategory imageCategory) {
     String newKey = imageCategory.toString();
@@ -291,7 +334,7 @@ public class GameObjectConfiguration {
 
   /**
    * get the player ID of the current player
-   * @return
+   * @return player ID of the current player
    */
   public int getCurrentPlayerID() {
     return currentPlayersID.get(0);
@@ -299,7 +342,7 @@ public class GameObjectConfiguration {
 
   /**
    * get the ID of the current game
-   * @return
+   * @return ID of the current game
    */
   public int getCurrentGameID() {
     return currentGameID;
@@ -307,8 +350,8 @@ public class GameObjectConfiguration {
 
   /**
    * set the current player and game using ID
-   * @param currentGameID
-   * @param currentPlayersID
+   * @param currentGameID ID of current game
+   * @param currentPlayersID id of current player
    */
   public void setCurrentPlayerAndGameID(int currentGameID, List<Integer> currentPlayersID) {
     this.currentPlayersID = currentPlayersID;
@@ -320,8 +363,8 @@ public class GameObjectConfiguration {
    * retrieve player with specific ID. If Player doesn't exist, returns null. Please handle all the
    * situations where player doesn't exist by the caller.
    *
-   * @param playerID
-   * @return
+   * @param playerID specific ID identifying players
+   * @return players with specific ID.
    */
   public List<PlayerStatus> getPlayersWithID(List<Integer> playerID) {
     List<PlayerStatus> playerStatuses = new ArrayList<>();
@@ -346,8 +389,8 @@ public class GameObjectConfiguration {
 
   /**
    * get the Player status using its ID
-   * @param playerID
-   * @return
+   * @param playerID Player status ID
+   * @return Player status
    */
   public PlayerStatus getPlayerWithID(int playerID) {
     for (PlayerStatus i : playerList) {
@@ -361,7 +404,7 @@ public class GameObjectConfiguration {
 
   /**
    * get the list of the current players in objects
-   * @return
+   * @return list of the current players in objects
    */
   public List<PlayerStatus> getCurrentPlayers() {
     return getPlayersWithID(currentPlayersID);
@@ -369,7 +412,7 @@ public class GameObjectConfiguration {
 
   /**
    * get the current player's player status
-   * @return
+   * @return current player's player status
    */
   public PlayerStatus getCurrentPlayer() {
     return getCurrentPlayers().get(0);
@@ -379,8 +422,8 @@ public class GameObjectConfiguration {
   /**
    * this method handles adding players.
    *
-   * @param playerID
-   * @param player
+   * @param playerID player ID
+   * @param player playter status object
    */
   public void setPlayerWithID(int playerID, PlayerStatus player) {
     List<PlayerStatus> tempList = new ArrayList<>();
@@ -395,14 +438,14 @@ public class GameObjectConfiguration {
 
   /**
    * set the text map
-   * @param text
-   * @param keyword
-   * @param category
+   * @param text text map
+   * @param keyword keyword that maps the text
+   * @param category the type of the textmap
    */
   public void setTextMap(String text, String keyword, TextCategory category) {
     Map<String, String> tempTextMap = textMap.get(category.toString());
     try {
-      tempTextMap = insertElementToMap(tempTextMap, keyword, text);
+      tempTextMap = dataObjectHandler.insertElementToMap(tempTextMap, keyword, text);
       textMap.replace(category.toString(), tempTextMap);
     } catch (Exception e) {
       throw new DataLoadingException(e.getMessage(), e);
@@ -412,7 +455,7 @@ public class GameObjectConfiguration {
 
   /**
    * get the game info and param of current game
-   * @return
+   * @return game info and param of current game
    */
   public GameInfo getCurrentGameInfo() {
     return getGameInfo(currentGameID, getCurrentPlayer().getPlayerParam(PlayerParam.CURRENT_LEVEL));
@@ -420,9 +463,9 @@ public class GameObjectConfiguration {
 
   /**
    * get the game information
-   * @param level
-   * @param id
-   * @return
+   * @param level game level
+   * @param id game type id
+   * @return the Game general info object
    */
   public GameInfo getGameInfo(int level, int id) {
     for (GameInfo i : gameInfoList) {
@@ -453,12 +496,12 @@ public class GameObjectConfiguration {
 
   /**
    * insert an element into the map
-   * @param map
-   * @param newkey
-   * @param newValue
-   * @param <K>
-   * @param <V>
-   * @return
+   * @param map the map we insert to
+   * @param newkey the new key of the inserted map element
+   * @param newValue the new value of the inserted map element
+   * @param <K> the type of the key of the inserted map element
+   * @param <V> the type of the value of the inserted map element
+   * @return the map after insertion is completed
    */
   public <K, V> Map<K, V> insertElementToMap(Map<K, V> map, K newkey, V newValue) {
     if (map.containsKey(newkey)) {

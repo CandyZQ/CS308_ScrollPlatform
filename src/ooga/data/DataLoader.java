@@ -19,15 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static ooga.model.map.GameGridInMap.ID_NOT_DEFINED;
-
 /**
  * Data Loader class responsible for loading all data
  * @author Guangyu Feng
  */
 public class DataLoader implements DataLoaderAPI {
   public static String ERROR_MESSAGE_RESOURCES_PACKAGE = "Data/Error_Message";
-  public static final int SubMapPerMap = 4;
   public static final String JSON_POSTFIX = ".json";
   private static GameObjectConfiguration gameObjectConfiguration;
   private ResourceBundle errorMessageResources;
@@ -73,7 +70,6 @@ public class DataLoader implements DataLoaderAPI {
    * load the param of current player
    * @param playerParam the parameter of player
    * @return the value of the player's property
-   * @throws DataLoadingException
    */
   @Override
   public int loadCurrentPlayerPara(PlayerParam playerParam) throws DataLoadingException {
@@ -126,66 +122,58 @@ public class DataLoader implements DataLoaderAPI {
   /**
    * get the subMapID for the map in certain direction
    * @param direction direction of the next submap relative to the current submap
-   * @param current the current sumap
+   * @param current the current submap
    * @return the ID of the next submap at the specified direction
    */
   @Override
   public int getNextSubMapID(Direction direction, int current) {
-    return ID_NOT_DEFINED;
+    throw new DataLoadingException("nextSubMapID");
   }
 
   /**
    * get the whole gameMapGraph object from data
-   * @param level
-   * @param subMapID
+   * @param level the level the map is in
+   * @param subMapID the id of the submap the character is in
    * @return
-   * @throws DataLoadingException
    */
   @Override
   public GameMapGraph loadMap(int level, int subMapID) throws DataLoadingException {
 
-    GameMapGraph map = new GameMapGraph();
+    GameMapGraph map;
     GameInfo gameInfo = gameObjectConfiguration.getCurrentGameInfo();
     String keyOfSubmap = gameInfo.getSubMapInfo().get(level).get(subMapID) + JSON_POSTFIX;
-    try {
-      Map<String, GameMapGraph> tempMap = gameObjectConfiguration.getGameMapList();
-      if (tempMap.containsKey(keyOfSubmap)) {
-        map = tempMap.get(keyOfSubmap);
-        map.addBufferImage2D(this);//only works for 2D
-      } else {
-        throw new DataLoadingException(String.format(errorMessageResources.getString("loadMap"), keyOfSubmap));
-      }
 
-    } catch (Exception e) {
-      throw new DataLoadingException(e.getMessage(), e);
+    Map<String, GameMapGraph> tempMap = gameObjectConfiguration.getGameMapList();
+    if (tempMap.containsKey(keyOfSubmap)) {
+      map = tempMap.get(keyOfSubmap);
+      map.addBufferImage2D(this);//only works for 2D
+    } else {
+      throw new DataLoadingException(String.format(errorMessageResources.getString("loadMap"), keyOfSubmap));
     }
     return map;
   }
 
   /**
    * load buffered Image by providing the image category and ID
-   * @param ImageID
-   * @param category
-   * @return
-   * @throws DataLoadingException
-   */
+   * @param ImageID id of the image
+   * @param category the category of image
+   * @return the image in the type of the bufferred image
+  */
   @Override
-  public BufferedImage loadBufferImage(int ImageID, ImageCategory category) throws DataLoadingException {
+  public BufferedImage loadBufferImage(int ImageID, ImageCategory category) {
     String imagePath = loadImagePath(ImageID, category);
     try {
       return ImageIO.read(new File(imagePath));
     } catch (IOException e) {
       throw new DataLoadingException(imagePath + errorMessageResources.getString("loadBufferImage"), e);
     }
-
   }
 
   /**
    * load text
-   * @param keyword
-   * @param category
-   * @return
-   * @throws DataLoadingException
+   * @param keyword the keyword that maps the text in data file
+   * @param category the type of the text
+   * @return the string user requesting
    */
   @Override
   public String loadText(String keyword, String category) throws DataLoadingException {
@@ -195,10 +183,9 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * load charcter's property using ID
-   * @param ID
-   * @param property
-   * @return
-   * @throws DataLoadingException
+   * @param ID character ID
+   * @param property charcter's property type
+   * @return charcter's property value
    */
   @Override
   public int loadCharacter(int ID, CharacterProperty property) throws DataLoadingException {
@@ -207,10 +194,9 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * load weapon's property using ID
-   * @param ID
-   * @param property
-   * @return
-   * @throws DataLoadingException
+   * @param ID weapon ID
+   * @param property weapon property
+   * @return weapon attack value
    */
   @Override
   public int loadWeapon(int ID, int property) throws DataLoadingException {
@@ -219,7 +205,7 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * load current level
-   * @return
+   * @return current level
    */
   @Override
   public int currentLevel() {
@@ -228,12 +214,11 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * keycode are stored in the player files.
-   *
-   * @param playerID
-   * @return
+   * @param playerID id of player
+   * @return key code map
    */
   @Override
-  public Map<Integer, String> loadKeyCode(int playerID) throws DataLoadingException {
+  public Map<Integer, String> loadKeyCode(int playerID) {
     PlayerStatus player;
     try {
       player = gameObjectConfiguration.getPlayerWithID(playerID);
@@ -247,39 +232,32 @@ public class DataLoader implements DataLoaderAPI {
   /**
    * in Json, <int, String> always returns <Stirng, String>
    *
-   * @param imageID
-   * @param category
-   * @return
+   * @param imageID id of image
+   * @param category category of image
+   * @return the path of the string
    */
   @Override
-  public String loadImagePath(int imageID, ImageCategory category) throws DataLoadingException {
+  public String loadImagePath(int imageID, ImageCategory category) {
     Map<String, String> imageMap = gameObjectConfiguration.getImageMap().get(category.toString());
     String key = String.valueOf(imageID);
     return loadValueOfMap(imageMap, key);
   }
-
-  /**
-   * load value of the map
-   *
-   * @param map
-   * @param key
-   * @return
-   */
-  private String loadValueOfMap(Map<String, String> map, String key) throws DataLoadingException {
+  //using the key to load the value of the <String, String> map
+  private String loadValueOfMap(Map<String, String> map, String key) {
     if (map != null && checkKeyExist(map, key)) {
       return map.get(key);
     } else {
       throw new DataLoadingException(errorMessageResources.getString("loadValueOfMap"));
     }
   }
-
+  //check whether a key exists in a map
   private <K, V> boolean checkKeyExist(Map<K, V> map, K key) {
     return (map.get(key) != null);
   }
 
   /**
    * get the object that stores all loaded data
-   * @return
+   * @return  object that stores all loaded data
    */
   public static GameObjectConfiguration getGameObjectConfiguration() {
     return gameObjectConfiguration;
@@ -287,7 +265,7 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * get the list of current available zelda characters
-   * @return
+   * @return list of current available zelda characters
    */
   @Override
   public List<ZeldaCharacter> getZeldaCharacters() {
@@ -296,7 +274,7 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * get the list of current available players
-   * @return
+   * @return list of current available players
    */
   @Override
   public List<PlayerStatus> getCurrentPlayers() {
@@ -305,8 +283,8 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * get certain type of animation
-   * @param animationType
-   * @return
+   * @param animationType type of animation
+   * @return <Animation Name, Animation Object> map
    */
   @Override
   public Map<String, Animation2D> loadAnimation(AnimationType animationType) {
@@ -315,7 +293,7 @@ public class DataLoader implements DataLoaderAPI {
 
   /**
    * get the resource bundle that fetches the error message property file.
-   * @return
+   * @return the error message from the resource
    */
   public ResourceBundle getErrorMessageResources() {
     return errorMessageResources;

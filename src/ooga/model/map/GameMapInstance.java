@@ -65,7 +65,7 @@ public class GameMapInstance implements GameMap {
   public List<GridInMap> getGameMap() {
     List<GridInMap> ret = (List) allGrids.values();
     return Collections.unmodifiableList(ret);
-  }n
+  }
   /**
    * Gets the cell state at a specific location
    *

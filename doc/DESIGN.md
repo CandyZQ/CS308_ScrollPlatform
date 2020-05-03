@@ -26,6 +26,9 @@ The design goal is to create a bridge to connect front end, backend, and data ma
 ### Model
 The design goal is to create a model that is able to support 2D and 3D games. Specifically, we need to be able to record and update player and characters' states and positional information. As an extension, information for weapons, scoring, lives, inventory, dialogue, etc. should also be stored in the model. The model should also notify whenever its state got changed. 
 
+### DataManagement
+The design goal is to create data management system to support 2D and 3D games. We need to save the data file of the ongoing game and update the data accordingly. Those data has to be stored and read from the disk whenever the game terminates or saving to disk action is taken place.
+
 
 # High-level Design
 
@@ -33,7 +36,10 @@ Controller: The structure of the control is to have a large control that contain
 
 Frontend: The main external APIs are GameState2DView and GameState3DView, both extending GameStateView class. Model and Controller could call this API to generate OpenGL window, update the animation state of agents, and render game scenes. The _engine_ package implements the infrastructure of OpenGL piplines from animating sprites to building basic mesh objects, from to fragment/vertex shaders. The _view_ package contains internal APIs that are specific to the game. For example, the AgentView class, with its children Agent2DView and Agent3DView classes, that animates agent and allows others to modify its animation states.
 
-Model: The model should contain a great amount of APIs, whether they are needed to suuport current design or to future ones. Specifically, several interfaces including Movable1D, Movable2D, and Jumpable support all kinds of movement for players and characters, all interfaces underneath /gameMap supports map loading and storing, and other interfaces, including Alive, Attacker, Notifier, Scroable, etc, that are able to add additional features to this game. 
+Model: The model should contain a great amount of APIs, whether they are needed to suuport current design or to future ones. Specifically, several interfaces including Movable1D, Movable2D, and Jumpable support all kinds of movement for players and characters, all interfaces underneath /gameMap supports map loading and storing, and other interfaces, including Alive, Attacker, Notifier, Scroable, etc, that are able to add additional features to this game.
+
+DataManagement: 
+DataManagement is composed of a loader, a storer, and an object physically holding all the available data. Other parts of the code interact with data through the loader and storer only. All the data are stored in the data holding object. Loader and storer access the data objects and are the interface between data and the rest of all code.
 
 # Assumptions
 
