@@ -24,7 +24,8 @@ import static ooga.data.GameObjectConfiguration.FILE_PATH_DELIMITER;
 
 /**
  * this is a helper class used to handle any object that needs to be handled in the gameObjectConfiguration class
- */
+ * @author Guangyu Feng
+ * */
 public class DataObjectHandler {
     private Gson gson;
     private GameObjectConfiguration dataHolder;
