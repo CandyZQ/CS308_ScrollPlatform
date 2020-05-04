@@ -1,8 +1,12 @@
 package ooga.view.engine.maths;
 
+/**
+ * a class that implements the basic math operations of vector 2f
+ * @author codingAP
+ */
 public class Vector2f {
 	private float x, y;
-	
+
 	public Vector2f(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -17,32 +21,72 @@ public class Vector2f {
 		this.x=other.getX();
 		this.y=other.getY();
 	}
-	
+
+	/**
+	 * addition of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the added
+	 */
 	public static Vector2f add(Vector2f vector1, Vector2f vector2) {
 		return new Vector2f(vector1.getX() + vector2.getX(), vector1.getY() + vector2.getY());
 	}
-	
+
+	/**
+	 * subtraction of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the added
+	 */
 	public static Vector2f subtract(Vector2f vector1, Vector2f vector2) {
 		return new Vector2f(vector1.getX() - vector2.getX(), vector1.getY() - vector2.getY());
 	}
-	
+
+	/**
+	 * multiplication of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the multiplied
+	 */
 	public static Vector2f multiply(Vector2f vector1, Vector2f vector2) {
 		return new Vector2f(vector1.getX() * vector2.getX(), vector1.getY() * vector2.getY());
 	}
-	
+
+	/**
+	 * division of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the divided
+	 */
 	public static Vector2f divide(Vector2f vector1, Vector2f vector2) {
 		return new Vector2f(vector1.getX() / vector2.getX(), vector1.getY() / vector2.getY());
 	}
-	
+
+	/**
+	 * gets the length of vector
+	 * @param vector vector
+	 * @return the length
+	 */
 	public static float length(Vector2f vector) {
 		return (float) Math.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY());
 	}
-	
+
+	/**
+	 * normalizes the vector
+	 * @param vector vector
+	 * @return normalized vector
+	 */
 	public static Vector2f normalize(Vector2f vector) {
 		float len = Vector2f.length(vector);
 		return Vector2f.divide(vector, new Vector2f(len, len));
 	}
-	
+
+	/**
+	 * dot multiplication
+	 * @param vector1 vector 1
+	 * @param vector2 vector 2
+	 * @return the multiplied
+	 */
 	public static float dot(Vector2f vector1, Vector2f vector2) {
 		return vector1.getX() * vector2.getX() + vector1.getY() * vector2.getY();
 	}

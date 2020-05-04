@@ -11,6 +11,10 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+/**
+ * a class that implements window
+ * @author codingAP
+ */
 public class Window {
 	private static final float fov = 80.0f;
 	private static final float near_plane = 0.1f;
@@ -27,14 +31,23 @@ public class Window {
 	private boolean isFullscreen;
 	private int[] windowPosX = new int[1], windowPosY = new int[1];
 	private Matrix4f projection;
-	
+
+	/**
+	 * constructor
+	 * @param width window width
+	 * @param height window height
+	 * @param title window title
+	 */
 	public Window(int width, int height, String title) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
 		projection = Matrix4f.projection(fov, getPerspectiveAspect(), near_plane, far_plane);
 	}
-	
+
+	/**
+	 * create the window
+	 */
 	public void create() {
 		if (!GLFW.glfwInit()) {
 			System.err.println("ERROR: GLFW wasn't initializied");
@@ -84,7 +97,10 @@ public class Window {
 		GLFW.glfwSetScrollCallback(window, input.getMouseScrollCallback());
 		GLFW.glfwSetWindowSizeCallback(window, sizeCallback);
 	}
-	
+
+	/**
+	 * update the window
+	 */
 	public void update() {
 		if (isResized) {
 			GL11.glViewport(0, 0, width, height);
@@ -100,15 +116,25 @@ public class Window {
 			frames = 0;
 		}
 	}
-	
+
+	/**
+	 * swap buffers
+	 */
 	public void swapBuffers() {
 		GLFW.glfwSwapBuffers(window);
 	}
-	
+
+	/**
+	 * returns whether the window should close
+	 * @return tf
+	 */
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(window);
 	}
-	
+
+	/**
+	 * destroy the window
+	 */
 	public void destroy() {
 		input.destroy();
 		sizeCallback.free();
@@ -116,15 +142,29 @@ public class Window {
 		GLFW.glfwDestroyWindow(window);
 		GLFW.glfwTerminate();
 	}
-	
+
+	/**
+	 * sets the background color
+	 * @param r red
+	 * @param g green
+	 * @param b blue
+	 */
 	public void setBackgroundColor(float r, float g, float b) {
 		background.set(r, g, b);
 	}
 
+	/**
+	 * returns true if the screen is full
+	 * @return tf
+	 */
 	public boolean isFullscreen() {
 		return isFullscreen;
 	}
 
+	/**
+	 * sets the screen full
+	 * @param isFullscreen
+	 */
 	public void setFullscreen(boolean isFullscreen) {
 		this.isFullscreen = isFullscreen;
 		isResized = true;
@@ -140,26 +180,50 @@ public class Window {
 		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, lock ? GLFW.GLFW_CURSOR_DISABLED : GLFW.GLFW_CURSOR_NORMAL);
 	}
 
+	/**
+	 * get the window width
+	 * @return width
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	/**
+	 * get the window height
+	 * @return height
+	 */
 	public int getHeight() {
 		return height;
 	}
 
+	/**
+	 * get the window title
+	 * @return title
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * get the window
+	 * @return window
+	 */
 	public long getWindow() {
 		return window;
 	}
 
+	/**
+	 * gets the projection matrix of the window
+	 * @return projection matrix
+	 */
 	public Matrix4f getProjectionMatrix() {
 		return projection;
 	}
 
+	/**
+	 * gets the perspective
+	 * @return width/height
+	 */
 	private float getPerspectiveAspect(){
 		return (float) width / (float) height;
 	}

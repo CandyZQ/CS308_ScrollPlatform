@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
 
+/**
+ * a temporary class that loads the animation for the melee bot
+ * @author qiaoyi fang
+ */
 public class LoadMeleeBotAnimations {
 
   private static int fps = 18;

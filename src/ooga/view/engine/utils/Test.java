@@ -6,6 +6,10 @@ import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 
+/**
+ * for testing
+ * @author qiaoyi fang
+ */
 public class Test {
 
   public static void printVector3f(Vector3f vec){

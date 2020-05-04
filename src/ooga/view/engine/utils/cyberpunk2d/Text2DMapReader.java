@@ -2,6 +2,10 @@ package ooga.view.engine.utils.cyberpunk2d;
 
 import ooga.view.engine.utils.FileUtils;
 
+/**
+ * a temporary util class that reads 2D map
+ * @author qiaoyi fang
+ */
 public class Text2DMapReader {
   private String path;
   private String separator = ",";

@@ -10,6 +10,10 @@ import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.game_view.animation.dict2d.Animation2DDict;
 
+/**
+ * a class that holds the data needed to initialize a 2D agent
+ * @author qiaoyi fang
+ */
 public class Agent2DDataHolder {
 
   private String type;
@@ -24,9 +28,6 @@ public class Agent2DDataHolder {
   private float speedScale = 10f;
   private Map<String, String> nextDict = new LinkedHashTreeMap<>();
   private Map<Pair<Pair<String, Boolean>, String>, String> prevDict = new LinkedHashTreeMap<>();
-  // what would come next to the current animation
-  // if returns null -> default, no need to notify backend
-  // if not, notifies backend
   private Map<String, Agent2DDataHolder> spawnerDict = new LinkedHashTreeMap<>();
   private Animation2DDict agentAnimationDict;
 
@@ -42,6 +43,10 @@ public class Agent2DDataHolder {
   public Agent2DDataHolder() {
   }
 
+  /**
+   * A clone constructor
+   * @param other the data holder to be cloned
+   */
   public Agent2DDataHolder(Agent2DDataHolder other) {
     this.type = other.type;
     this.isBullet = other.isBullet;

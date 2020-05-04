@@ -2,22 +2,27 @@ package ooga.view.engine.graphics;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
-import ooga.view.engine.utils.Test;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
+/**
+ * a class that construct mesh
+ * @author codingAP, qiaoyi fang
+ */
 public class Mesh {
 	private Vertex[] vertices;
 	private int[] indices;
 	private Material material;
 	private int vao, pbo, ibo, cbo, tbo;
-	
+
+	/*
+	 an	constructor class that normalizes the vertices location
+	 */
 	public Mesh(Vertex[] vertices, int[] indices, Material material) {
 		this.vertices = vertices;
 		this.indices = indices;
@@ -25,12 +30,18 @@ public class Mesh {
 		Mesh.normalize(this);
 	}
 
+	/*
+	 an	constructor class that preserve the original vertices location
+	 */
 	public Mesh(Vertex[] vertices, int[] indices, Material material, boolean notNormalized) {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
 	}
 
+	/*
+	 an	constructor class that normalizes the vertices location and rotates it
+	 */
 	public Mesh(Mesh mesh, Vector3f rotation){
 		this.vertices = verticesCopy(mesh.vertices);
 		this.indices = mesh.getIndices().clone();
@@ -39,6 +50,11 @@ public class Mesh {
 		Mesh.normalize(this);
 	}
 
+	/**
+	 * return a clone of vertices
+	 * @param v original vertices
+	 * @return cloned vertices
+	 */
 	public static Vertex[] verticesCopy(Vertex[] v) {
 		Vertex[] ret = new Vertex[v.length];
 		for (int i = 0; i < ret.length; i++) {
@@ -47,18 +63,29 @@ public class Mesh {
 		return ret;
 	}
 
+	/**
+	 * sets the new uv
+	 * @param newTextureCoords uv
+	 */
 	public void setTextureCoords(Vector2f[] newTextureCoords){
 		for(int idx=0; idx<newTextureCoords.length; idx++){
 			vertices[idx].setTextureCoord(newTextureCoords[idx]);
 		}
 	}
 
+	/**
+	 * rotates the vertices
+	 * @param rotation rotation vector
+	 */
 	public void rotateVertices(Vector3f rotation){
 		for (Vertex vertex : this.vertices) {
 			vertex.rotate(rotation);
 		}
 	}
 
+	/**
+	 * creates the mesh
+	 */
 	public void create() {
 		material.createTexture();
 		
@@ -103,7 +130,10 @@ public class Mesh {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		return bufferID;
 	}
-	
+
+	/**
+	 * destroy the mesh
+	 */
 	public void destroy() {
 		GL15.glDeleteBuffers(pbo);
 		GL15.glDeleteBuffers(cbo);
@@ -115,60 +145,117 @@ public class Mesh {
 		material.destroy();
 	}
 
+	/**
+	 * get the mesh vertices
+	 * @return vertices
+	 */
 	public Vertex[] getVertices() {
 		return vertices;
 	}
 
+	/**
+	 * set vertex position
+	 * @param i index
+	 * @param newPos the new vertex position
+	 */
 	public void setVerticesPosition(int i, Vector3f newPos){
 		vertices[i].setPosition(newPos);
 		destroy();
 		create();
 	}
 
+	/**
+	 * get indices
+	 * @return indices
+	 */
 	public int[] getIndices() {
 		return indices;
 	}
 
+	/**
+	 * get vertex array object
+	 * @return vao
+	 */
 	public int getVAO() {
 		return vao;
 	}
 
+	/**
+	 * get positional array object
+	 * @return pbo
+	 */
 	public int getPBO() {
 		return pbo;
 	}
-	
+
+	/**
+	 * get color buffer object
+	 * @return cbo
+	 */
 	public int getCBO() {
 		return cbo;
 	}
-	
+
+	/**
+	 * get texture buffer object
+	 * @return tbo
+	 */
 	public int getTBO() {
 		return tbo;
 	}
 
+	/**
+	 * get index buffer object
+	 * @return ibo
+	 */
 	public int getIBO() {
 		return ibo;
 	}
-	
+
+	/**
+	 * get texture material
+	 * @return material
+	 */
 	public Material getMaterial() {
 		return material;
 	}
 
+	/**
+	 * set texture material
+	 * @param material material
+	 */
 	public void setMaterial(Material material) {
 		this.material = material;
 	}
 
+	/**
+	 * get max width of the vertex structure
+	 * @return width
+	 */
 	public float getMaxWidth(){
 		return getMaxX() - getMinX();
 	}
 
+	/**
+	 * get max height of the vertex structure
+	 * @return height
+	 */
 	public float getMaxHeight(){
 		return getMaxY() - getMinY();
 	}
 
+	/**
+	 * fet max depth of the vertex structure
+	 * @return depth
+	 */
 	public float getMaxDepth(){
 		return getMaxZ() - getMinZ();
 	}
 
+	/**
+	 * get the center
+	 * @return center position
+	 */
 	public Vector2f getCenter(){
 		return new Vector2f(getMinX() + (getMaxX()-getMinX())/2.0f, getMinY() + (getMaxY() - getMinY())/2.0f);
 	}
@@ -233,6 +320,11 @@ public class Mesh {
 		return positionBuffer;
 	}
 
+	/**
+	 * normalize the vertices of the mesh
+	 * @param mesh the mesh needed to normalized
+	 * @return should be void
+	 */
 	public static Mesh normalize(Mesh mesh){
 		float deltaX = mesh.getVertices()[0].getPosition().getX();
 		float deltaY = mesh.getVertices()[0].getPosition().getY();
@@ -255,14 +347,6 @@ public class Mesh {
 		}
 
 		return mesh;
-	}
-
-	public static Vector3f getAgentBackViewpoint(Mesh agentMesh){
-		return null;
-	}
-
-	public static Vector3f getAgentFront(Mesh agentMesh){
-		return null;
 	}
 
 }

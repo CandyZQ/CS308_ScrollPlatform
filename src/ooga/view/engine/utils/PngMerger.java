@@ -8,9 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+/**
+ * a util class that merges two png images (stack one image onto the other)
+ * @author qiaoyi fang
+ */
 public class PngMerger {
   public PngMerger(){}
 
+  /**
+   * merges the list of images
+   * @param dir image directory
+   * @param paths relative image paths
+   * @param newpath where the merged image is to be stored
+   * @return the absolute stored path
+   * @throws IOException
+   */
   public static String mergePngPics(String dir, List<String> paths, String newpath)
       throws IOException {
 
@@ -36,6 +48,14 @@ public class PngMerger {
     return newImagePath;
   }
 
+  /**
+   * merge the image to the center of canvas
+   * @param canvasPath the path of the transparent background
+   * @param pic the relative path to the picture
+   * @param newpath the relative image path to be stored
+   * @return the absolute newpath
+   * @throws IOException
+   */
   public static String mergeCanvasPic(String canvasPath, String pic, String newpath)
       throws IOException {
 

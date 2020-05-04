@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * a util class that loads file content as string
+ * @author qiaoyi fang
+ */
 public class FileUtils {
 	public static String loadAsString(String path, String separator) {
 		StringBuilder result = new StringBuilder();

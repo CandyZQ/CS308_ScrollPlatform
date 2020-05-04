@@ -2,11 +2,20 @@ package ooga.view.engine.graphics.animation;
 
 import ooga.view.engine.graphics.Material;
 
+/**
+ * an class that implements 2D animation
+ * @author qiaoyi fang
+ */
 public class Animation2D extends Animation{
 
   private Material[] animatedFrames;
-  private boolean is2D = true;
 
+  /**
+   * constructor
+   * @param cnt total amount of frames
+   * @param fps frame per second
+   * @param dir directory
+   */
   public Animation2D(int cnt, int fps, String dir) {
     super(cnt,fps);
     this.animatedFrames = new Material[cnt];
@@ -18,6 +27,13 @@ public class Animation2D extends Animation{
     }
   }
 
+  /**
+   * constructor
+   * @param cnt total amount of frames
+   * @param fps frame per second
+   * @param dir directory
+   * @param action animation state
+   */
   public Animation2D(int cnt, int fps, String dir, String action) {
     super(cnt,fps);
     this.animatedFrames = new Material[cnt];
@@ -29,11 +45,22 @@ public class Animation2D extends Animation{
     }
   }
 
+  /**
+   * empty constructor
+   * @param cnt total amount of frame
+   * @param fps frame per second
+   */
   public Animation2D(int cnt, int fps) {
     super(cnt, fps);
     this.animatedFrames = new Material[cnt];
   }
 
+  /**
+   * combines two animations
+   * @param animation_1 the first animation
+   * @param animation_2 the second animation
+   * @return the combined animation
+   */
   public static Animation2D combineAnimations(Animation2D animation_1, Animation2D animation_2){
 
     int totalFrames = animation_1.getFrameAmount()+animation_2.getFrameAmount();
@@ -51,19 +78,31 @@ public class Animation2D extends Animation{
     return combined;
   }
 
+  /**
+   * sets the content of an animation frame
+   * @param idx index
+   * @param frame frame content (texture)
+   */
   public void setAnimatedFrame(int idx, Material frame){
     this.animatedFrames[idx] = frame;
   }
 
+  /**
+   * gets the content of an animation frame
+   * @param idx index
+   * @return frame content (texture)
+   */
   public Material getAnimatedFrame(int idx){
     return this.animatedFrames[idx];
   }
 
+  /**
+   * gets the current frame
+   * @return frame content (texture)
+   */
   public Material getCurrentFrame(){
+    boolean is2D = true;
     int framePointer = updateFramePointer(is2D);
     return framePointer==-1?null: animatedFrames[framePointer];
   }
-
-
-
 }

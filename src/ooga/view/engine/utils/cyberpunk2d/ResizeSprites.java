@@ -8,6 +8,10 @@ import javax.imageio.ImageIO;
 import ooga.view.engine.utils.ImageLoader;
 import ooga.view.engine.utils.PngMerger;
 
+/**
+ * a temporary util class that resizes the sprites (to center the character )
+ * @author qiaoyi fang
+ */
 public class ResizeSprites {
 
   // E sprintsheet

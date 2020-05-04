@@ -1,8 +1,11 @@
 package ooga.view.engine.graphics.animation;
 
-import ooga.view.engine.graphics.Material;
 import ooga.view.engine.utils.Timer;
 
+/**
+ * An abstract class that implements the frame control mechanism and structure the framework for 2D and 3D animation
+ * @author qiaoyi fang
+ **/
 abstract public class Animation {
 
   protected final static int DEFAULT_FPS_2D = 18;
@@ -24,6 +27,9 @@ abstract public class Animation {
     this.frameAmount = cnt;
   }
 
+  /**
+   * resets the animation
+   */
   public void resetAnimation(){
     this.framePointer = 0;
     this.elapsedTime = 0;
@@ -31,8 +37,17 @@ abstract public class Animation {
     this.lastTime = Timer.getTime();
   }
 
+  /**
+   * get the amount of frames
+   * @return total amount of frames
+   */
   public int getFrameAmount(){return frameAmount;}
 
+  /**
+   * updates the current frame pointer
+   * @param is2D whether the animation is 2D (determines the FPS)
+   * @return the pointer to the current frame
+   */
   public int updateFramePointer(boolean is2D){
     this.currentTime = Timer.getTime();
     this.elapsedTime += currentTime - lastTime;
@@ -52,6 +67,9 @@ abstract public class Animation {
     return framePointer;
   }
 
+  /**
+   * for testing
+   */
   public void printStatus(){
     System.out.println(framePointer);
     System.out.println(frameAmount);

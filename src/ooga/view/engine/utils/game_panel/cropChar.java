@@ -1,10 +1,11 @@
 package ooga.view.engine.utils.game_panel;
 
 import ooga.view.engine.maths.Vector3f;
-import ooga.view.engine.utils.SpriteCropper;
-import ooga.view.engine.utils.cyberpunk3d.MeasureMapModel;
-import org.lwjglx.test.spaceinvaders.Sprite;
 
+/**
+ * an unfinished class that were supposed crop the alphabet palette
+ * @author qiaoyi fang
+ */
 public class cropChar implements Runnable {
 
   @Override

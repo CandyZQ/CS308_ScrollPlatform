@@ -10,6 +10,10 @@ import ooga.view.engine.io.ModelLoader;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.utils.Test;
 
+/**
+ * a temporary util class that loads 3d map models
+ * @author qiaoyi fang
+ */
 public class LoadCyberpunkModels {
 
   private static String DIR_MAP_PATH = "resources/view/models/3d/map/EnvironmentPack/Models/";

@@ -6,6 +6,10 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
+/**
+ * a class that implements input to the window
+ * @author codingAP
+ */
 public class Input {
 	private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
@@ -44,15 +48,28 @@ public class Input {
 			}
 		};
 	}
-	
+
+	/**
+	 * returns if the key is pressed
+	 * @param key key id in lwjgl
+	 * @return true if the key is down
+	 */
 	public static boolean isKeyDown(int key) {
 		return keys[key];
 	}
-	
+
+	/**
+	 * returns if the mouse button is pressed
+	 * @param button button id in lwjgl
+	 * @return true if the button is down
+	 */
 	public static boolean isButtonDown(int button) {
 		return buttons[button];
 	}
-	
+
+	/**
+	 * destroy the input
+	 */
 	public void destroy() {
 		keyboard.free();
 		mouseMove.free();
@@ -60,18 +77,34 @@ public class Input {
 		mouseScroll.free();
 	}
 
+	/**
+	 * get the mouse X location
+	 * @return mouse X
+	 */
 	public static double getMouseX() {
 		return mouseX;
 	}
 
+	/**
+	 * get the mouse Y location
+	 * @return mouse Y
+	 */
 	public static double getMouseY() {
 		return mouseY;
 	}
-	
+
+	/**
+	 * get the mouse X scroll
+	 * @return mouse X
+	 */
 	public static double getScrollX() {
 		return scrollX;
 	}
 
+	/**
+	 * get the mouse Y scroll
+	 * @return mouse Y
+	 */
 	public static double getScrollY() {
 		return scrollY;
 	}

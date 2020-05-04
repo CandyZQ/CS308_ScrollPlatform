@@ -4,6 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+ * a class that loads image
+ * @author qiaoyi fang
+ */
 public class ImageLoader {
   /**
    * This method tries to load in the selected image from the path given.
@@ -22,10 +26,20 @@ public class ImageLoader {
     return null;
   }
 
+  /**
+   * get the image width
+   * @param path image path
+   * @return width
+   */
   public static int getImageWidth(String path){
     return loadImage(path).getWidth();
   }
 
+  /**
+   * get the image height
+   * @param path image path
+   * @return height
+   */
   public static int getImageHeight(String path){
     return loadImage(path).getHeight();
   }

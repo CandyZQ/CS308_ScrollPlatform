@@ -4,6 +4,10 @@ import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
 import com.google.gson.internal.LinkedHashTreeMap;
 
+/**
+ * a temporary class that loads the animation for the turret
+ * @author qiaoyi fang
+ */
 public class LoadTurretAnimations {
   final private static int fps = 18;
 

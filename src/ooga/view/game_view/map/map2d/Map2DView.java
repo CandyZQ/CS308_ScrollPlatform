@@ -5,11 +5,18 @@ import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
 
+/**
+ * a class that implements the view for 2D map
+ * @author qiaoyi fang
+ */
 public class Map2DView extends MapView {
   private Text2DMapReader mapReader;
   private Tile2DView[] titles;
-  private Map2DController controller;
 
+  /**
+   * constructor that receives the map file path
+   * @param path map file path (should have been replaced by the data API)
+   */
   public Map2DView(String path) {
     this.mapReader = new Text2DMapReader(path);
     titles = new Tile2DView[mapReader.getMapWidth()*mapReader.getMapHeight()];
@@ -20,9 +27,12 @@ public class Map2DView extends MapView {
         titles[idx++] = new Tile2DView(i, j, mapReader);
       }
     }
-
   }
 
+  /**
+   * create map mesh
+   */
+  @Override
   public void createMesh(){
     int idx = 0;
     for (int i=0; i<mapReader.getMapHeight(); i++){
@@ -32,6 +42,9 @@ public class Map2DView extends MapView {
     }
   }
 
+  /**
+   * destroy map mesh
+   */
   @Override
   public void destroyMesh(){
     int idx = 0;
@@ -42,6 +55,9 @@ public class Map2DView extends MapView {
     }
   }
 
+  /**
+   * render map mesh
+   */
   public void renderMesh(Renderer2D renderer){
 
     int idx = 0;

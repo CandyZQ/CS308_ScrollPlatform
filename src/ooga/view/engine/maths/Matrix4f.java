@@ -2,10 +2,17 @@ package ooga.view.engine.maths;
 
 import java.util.Arrays;
 
+/**
+ * a class that implements basic math operations of matrix4f
+ * @author codingAP
+ */
 public class Matrix4f {
 	public static final int SIZE = 4;
 	private float[] elements = new float[SIZE * SIZE];
-	
+
+	/**
+	 * @return an identity matrix
+	 */
 	public static Matrix4f identity() {
 		Matrix4f result = new Matrix4f();
 		
@@ -22,7 +29,11 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * @param translate translate in vector3f
+	 * @return translate in matrix4f
+	 */
 	public static Matrix4f translate(Vector3f translate) {
 		Matrix4f result = Matrix4f.identity();
 		
@@ -32,7 +43,12 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * @param angle angle to be rotated
+	 * @param axis axis to be rotated
+	 * @return rotation in matrix4f
+	 */
 	public static Matrix4f rotate(float angle, Vector3f axis) {
 		Matrix4f result = Matrix4f.identity();
 		
@@ -53,6 +69,11 @@ public class Matrix4f {
 		return result;
 	}
 
+	/**
+	 * rotate the three axis
+	 * @param rotation rotation in vector3f
+	 * @return rotation in matrix4f
+	 */
 	public static Matrix4f rotateAllAxis(Vector3f rotation){
 		Matrix4f rotationMatrix;
 
@@ -63,7 +84,11 @@ public class Matrix4f {
 
 		return rotationMatrix;
 	}
-	
+
+	/**
+	 * @param scalar scale in vector3f
+	 * @return scale in matrix4f
+	 */
 	public static Matrix4f scale(Vector3f scalar) {
 		Matrix4f result = Matrix4f.identity();
 		
@@ -73,7 +98,14 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * gets the transformation matrix
+	 * @param position position to be translated
+	 * @param rotation rotation to be rotated
+	 * @param scale scale to be scaled
+	 * @return the transformation matrix
+	 */
 	public static Matrix4f transform(Vector3f position, Vector3f rotation, Vector3f scale) {
 		Matrix4f result;
 		
@@ -85,7 +117,15 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * gets the projection matrix from the window
+	 * @param fov field of view
+	 * @param aspect perspective aspect
+	 * @param near the closest that could be rendered
+	 * @param far the farthest  that could be rendered
+	 * @return the projection matrix
+	 */
 	public static Matrix4f projection(float fov, float aspect, float near, float far) {
 		Matrix4f result = Matrix4f.identity();
 		
@@ -101,7 +141,13 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * gets the view matrix from the camera
+	 * @param position camera position
+	 * @param rotation camera rotation
+	 * @return the view matrix
+	 */
 	public static Matrix4f view(Vector3f position, Vector3f rotation) {
 		Matrix4f result;
 		
@@ -117,7 +163,13 @@ public class Matrix4f {
 		
 		return result;
 	}
-	
+
+	/**
+	 * matrix multiplication
+	 * @param matrix matrix x
+	 * @param other matrix y
+	 * @return the multiplied
+	 */
 	public static Matrix4f multiply(Matrix4f matrix, Matrix4f other) {
 		Matrix4f result = Matrix4f.identity();
 		

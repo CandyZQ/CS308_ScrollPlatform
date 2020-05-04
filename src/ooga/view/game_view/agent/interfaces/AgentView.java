@@ -1,11 +1,13 @@
 package ooga.view.game_view.agent.interfaces;
 
 import ooga.view.engine.graphics.Mesh;
-import ooga.view.engine.graphics.render.Renderer2D;
 import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.objects.GameObject;
-import ooga.view.game_view.agent.agent2d.Agent2DController;
 
+/**
+ * an abstract class that structure the framework for 2D and 3D agent rendering
+ * @author qiaoyi fang
+ */
 abstract public class AgentView {
 
   protected String MOVE_ACTION;
@@ -18,18 +20,31 @@ abstract public class AgentView {
 
   public AgentView(String moveAction){MOVE_ACTION = moveAction;}
 
+  /**
+   * create mesh
+   */
   public void createMesh() {
     object.getMesh().create();
   }
 
+  /**
+   * destroy mesh
+   */
   public void destroyMesh() {
     mesh.destroy();
   }
 
-  //abstract public void renderMesh(Renderer2D renderer);
-
+  /**
+   * update the state of the current agent
+   * @param direction the new direction
+   * @param action the new action state
+   */
   abstract public void update(String direction, String action);
 
+  /**
+   * get vertices
+   * @return the vertex array of the mesh of the game object
+   */
   public Vertex[] getVertices(){return vertices;}
 
 }

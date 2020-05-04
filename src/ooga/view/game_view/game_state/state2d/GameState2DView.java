@@ -19,6 +19,13 @@ import ooga.view.game_view.game_state.interfaces.GameStateView;
 import ooga.view.game_view.map.map2d.Map2DView;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * a class the implements 2D game state view, as the main class of the 2D view API
+ * 1) allows the generation and rendering of opengl window
+ * 2) updates the characters, map, bullets and summoning new agents
+ * 3) retrieves the info on whether a certain agent is hurt
+ * @author qiaoyi fang
+ */
 public class GameState2DView extends GameStateView {
 
   final private static double elapsedInterval = 1.0 / 20.0;
@@ -50,14 +57,27 @@ public class GameState2DView extends GameStateView {
     this.isHurt = new HashMap<>();
   }
 
+  /**
+   * get the center X position of the agent
+   * @param id id
+   * @return the X position
+   */
   public float getCenterPositionX(int id) {
     return agentMap.get(id).getCenterPosition().getX();
   }
 
+  /**
+   * get the center Y position of the agent
+   * @param id id
+   * @return the Y position
+   */
   public float getCenterPositionY(int id) {
     return agentMap.get(id).getCenterPosition().getY();
   }
 
+  /**
+   * reset the hurt status
+   */
   public void resetHurtStatus(){
     for(int id:agentMap.keySet())
     {
@@ -66,11 +86,20 @@ public class GameState2DView extends GameStateView {
     }
   }
 
+  /**
+   * update the hurt status of the agent
+   * @param id id of the character
+   * @return returns whether the agent is hurt
+   */
   public boolean getHurtStatus(int id){
     System.out.println(isHurt.keySet().size());
     return isHurt.get(id);
   }
 
+  /**
+   * creates the window
+   * @throws IOException
+   */
   @Override
   public void createWindow() throws IOException {
 
@@ -96,10 +125,14 @@ public class GameState2DView extends GameStateView {
     shader.create();
   }
 
-  @Override
-  public void updateAgent(int id, String direction, String state) {
-  }
 
+  /**
+   * updates the agent
+   * @param id id of the agent
+   * @param direction the new direction
+   * @param state the new state
+   * @throws IOException
+   */
   public void updateAgent(int id, String direction, String state, boolean isAttack)
       throws IOException {
 
@@ -164,6 +197,9 @@ public class GameState2DView extends GameStateView {
     isHurt.replace(id, true);
   }
 
+  /**
+   * update bullets
+   */
   public void updateBullets() {
 
     for (int key : new HashSet<>(bulletMap.keySet())) {
@@ -227,6 +263,12 @@ public class GameState2DView extends GameStateView {
     return idx + 1;
   }
 
+  /**
+   * render the agents:
+   * automatically generate new triggered agents (bullets, summoned agents)
+   * delete dead agents
+   * @throws IOException
+   */
   @Override
   public void renderAgents() throws IOException { // get rid of dead agents
 
@@ -261,6 +303,10 @@ public class GameState2DView extends GameStateView {
     }
   }
 
+  /**
+   * render all components in the opengl window (map, agents, bullets, window)
+   * @throws IOException
+   */
   @Override
   public void renderAll() throws IOException {
     renderMap();
@@ -269,6 +315,9 @@ public class GameState2DView extends GameStateView {
     renderWindow();
   }
 
+  /**
+   * renders the bullets
+   */
   public void renderBullets() {
     for (int id : bulletMap.keySet()) {
       System.out.println("rendering bulletid");
@@ -278,27 +327,36 @@ public class GameState2DView extends GameStateView {
     }
   }
 
+  /**
+   * deletes the agent
+   * @param id id
+   */
   @Override
   public void deleteAgent(int id) {
     agentMap.get(id).destroyMesh();
     agentMap.remove(id);
   }
 
+  /**
+   * deletes the bullet
+   * @param id id
+   */
   public void deleteBullet(int id) {
     bulletMap.get(id).destroyMesh();
     bulletMap.remove(id);
   }
 
+  /**
+   * render the map
+   */
   @Override
   public void renderMap() {
     map.renderMesh(renderer);
   }
 
-
-  @Override
-  public void updateMap() {
-  }
-
+  /**
+   * render the window
+   */
   @Override
   public void closeWindow() {
     window.destroy();
@@ -311,6 +369,9 @@ public class GameState2DView extends GameStateView {
     shader.destroy();
   }
 
+  @Override
+  public void updateAgent(int id, String direction, String state) {}
 
-
+  @Override
+  public void updateMap() {}
 }

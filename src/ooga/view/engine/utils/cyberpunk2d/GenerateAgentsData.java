@@ -20,6 +20,10 @@ import ooga.view.engine.utils.cyberpunk2d.animtions.LoadWatcherBotAnimations;
 import ooga.view.game_view.agent.agent2d.Agent2DDataHolder;
 import ooga.view.game_view.animation.dict2d.Animation2DDict;
 
+/**
+ * a temporary class that generates the data for each character
+ * @author qiaoyi fang
+ */
 public class GenerateAgentsData {
 
   final static private float Z_POSITION = 0f;
@@ -27,13 +31,14 @@ public class GenerateAgentsData {
   final static private float Y_PLACEHOLDER = -550f;
   final static private String DIR_PLACEHOLDER = "P";
 
-  public static float getXPlaceholder(){return X_PLACEHOLDER;}
-
-  public static float getYPlaceholder(){return Y_PLACEHOLDER;}
-
-  public static String getDirectionPlaceholder(){return DIR_PLACEHOLDER;}
-
-  public static Agent2DDataHolder createBigBoy(float x, float y, String initialDirection) throws IOException {
+  /**
+   * generates the data holder needed for creating a big boy
+   * @param x initial position x
+   * @param y initial position y
+   * @param initialDirection initial facing direction
+   * @return the data holder for 2d character
+   */
+  public static Agent2DDataHolder createBigBoy(float x, float y, String initialDirection) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
     // create initial params
@@ -55,8 +60,14 @@ public class GenerateAgentsData {
   }
 
 
-  public static Agent2DDataHolder createBullet(float x, float y, String initialDirection)
-      throws IOException {
+  /**
+   * generates the data holder needed for creating a bullet
+   * @param x initial position x
+   * @param y initial position y
+   * @param initialDirection initial facing direction
+   * @return the data holder for 2d character
+   */
+  public static Agent2DDataHolder createBullet(float x, float y, String initialDirection) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
     data.setSpeedScale(Asset2D.getBulletSpeed());
@@ -82,6 +93,12 @@ public class GenerateAgentsData {
     return data;
   }
 
+  /**
+   * generates the data holder needed for creating a turret
+   * @param x initial position x
+   * @param y initial position y
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createTurret(float x, float y) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -111,6 +128,13 @@ public class GenerateAgentsData {
     return data;
   }
 
+  /**
+   * generates the data holder needed for creating a turret bullet
+   * @param x initial position x
+   * @param y initial position y
+   * @param initialDirection initial facing direction
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createTurretBullet(float x, float y, String initialDirection) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -136,6 +160,13 @@ public class GenerateAgentsData {
 
     return data;}
 
+  /**
+   * generates the data holder needed for creating a watcher
+   * @param x initial position x
+   * @param y initial position y
+   * @param initialDirection initial facing direction
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createWatcher(float x, float y, String initialDirection) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -156,7 +187,13 @@ public class GenerateAgentsData {
 
     return data;}
 
-  public static Agent2DDataHolder createSoldier(float x, float y)throws IOException {
+  /**
+   * generates the data holder needed for creating a soldier
+   * @param x initial position x
+   * @param y initial position y
+   * @return the data holder for 2d character
+   */
+  public static Agent2DDataHolder createSoldier(float x, float y) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
     // create initial params
@@ -188,6 +225,12 @@ public class GenerateAgentsData {
 
   }
 
+  /**
+   * generates the data holder needed for creating a engineer
+   * @param x initial position x
+   * @param y initial position y
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createEngineer(float x, float y) throws IOException {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -224,6 +267,13 @@ public class GenerateAgentsData {
     return data;
   }
 
+  /**
+   * generates the data holder needed for creating a summoning effect
+   * @param x initial position x
+   * @param y initial position y
+   * @param initialDirection initial facing direction
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createSummon(float x, float y, String initialDirection, String initialAction)
       throws IOException {
     Agent2DDataHolder data = new Agent2DDataHolder();
@@ -255,6 +305,12 @@ public class GenerateAgentsData {
     return data;
   }
 
+  /**
+   * generates the data holder needed for creating a shieldman
+   * @param x initial position x
+   * @param y initial position y
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createShieldman(float x, float y) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -284,6 +340,12 @@ public class GenerateAgentsData {
 
   }
 
+  /**
+   * generates the data holder needed for creating a melee bot
+   * @param x initial position x
+   * @param y initial position y
+   * @return the data holder for 2d character
+   */
   public static Agent2DDataHolder createMeleeBot(float x, float y) {
     Agent2DDataHolder data = new Agent2DDataHolder();
 
@@ -316,6 +378,10 @@ public class GenerateAgentsData {
 
   }
 
+  /**
+   * loads the animation in the data holder
+   * @param data agentDataHolder
+   */
   public static void loadAnimations(Agent2DDataHolder data) throws IOException {
     Animation2DDict animationDict;
     if (data.getType().equals("BigBoy")){

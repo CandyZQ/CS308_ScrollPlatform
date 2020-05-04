@@ -4,10 +4,13 @@ import java.util.Map;
 import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
-import ooga.view.engine.utils.Test;
 import ooga.view.game_view.agent.agent2d.Agent2DView;
 import ooga.view.game_view.map.map2d.Map2DView;
 
+/**
+ * a class that implements the bounding box to check the validity of a move and an attack (melee and shooting)
+ * @author qiaoyi fang
+ */
 public class BoundingBox  {
   private Map2DView map;
   private Map<Integer, Agent2DView> agents;
@@ -16,11 +19,24 @@ public class BoundingBox  {
   private float png_eps = 0.01f;
   private final static int NON_ID = -17;
 
+  /**
+   * a constructor that receives the map and agents
+   * @param map map
+   * @param agents agents
+   */
   public BoundingBox(Map2DView map, Map<Integer, Agent2DView> agents){
     this.map = map;
     this.agents = agents;
   }
 
+  /**
+   * return true if the movement is valid
+   * @param isAgent is the agent moving
+   * @param isBullet is the bullet moving
+   * @param object the moving object
+   * @param delta the moving delta
+   * @return boolean status
+   */
   public boolean canMove(boolean isAgent, boolean isBullet, Agent2DView object, Vector3f delta){
 
     if (isAgent) return canAgentMove(object, delta);
@@ -31,7 +47,10 @@ public class BoundingBox  {
     return true;
   }
 
-
+  /**
+   * gets the default id of no agent
+   * @return NON_ID
+   */
   public int getNonId(){return NON_ID;}
 
   private boolean canAgentMove(Agent2DView agent, Vector3f delta){
@@ -56,6 +75,12 @@ public class BoundingBox  {
     return Vector2f.add(currentPos, new Vector2f(delta));
   }
 
+  /**
+   * checks if the object will hit the wall by moving delta
+   * @param object object
+   * @param delta moving delta
+   * @return boolean status
+   */
   public boolean isHitWall(Agent2DView object, Vector3f delta){
     boolean isValid = true;
 
@@ -86,6 +111,11 @@ public class BoundingBox  {
     return isHitWall(bullet, delta);
   }
 
+  /**
+   * returns the id that the bullet is attacking
+   * @param bullet the bullet object
+   * @return the attacked agent id
+   */
   public int isBulletAttack(Agent2DView bullet){
 
     for(int agentId:agents.keySet()){
@@ -109,6 +139,11 @@ public class BoundingBox  {
     return (!(distanceX - boundsX < dis) || !(distanceY - boundsY < dis));
   }
 
+  /**
+   * returns true if the attack is effective
+   * @param attacker the attacker object
+   * @return the attacked agent id
+   */
   public int isAttackEffective(Agent2DView attacker){
     for (int agentId:agents.keySet()){
       if (agentId!=attacker.getId() &&
@@ -123,7 +158,7 @@ public class BoundingBox  {
     return NON_ID;
   }
 
-  public boolean isAgentDirection(Vector2f agentX, Vector2f agentY, String direction){
+  private boolean isAgentDirection(Vector2f agentX, Vector2f agentY, String direction){
     //System.out.println("attacker");
     //Test.printVector2f(agentX);
     //System.out.println("the attacked");

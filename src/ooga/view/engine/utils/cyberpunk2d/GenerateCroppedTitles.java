@@ -3,6 +3,10 @@ package ooga.view.engine.utils.cyberpunk2d;
 import ooga.view.engine.utils.ImageLoader;
 import ooga.view.engine.utils.SpriteSheet;
 
+/**
+ * a temporary util class that crops tiles
+ * @author qiaoyi fang
+ */
 public class GenerateCroppedTitles {
   String path = "/view/textures/2d/cyberpunk/map/Itch_release_raw_tileset_01.png";
 

@@ -4,6 +4,10 @@ import ooga.view.engine.graphics.assets.Asset3D;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.utils.FileUtils;
 
+/**
+ * a temporary util class that reads 3D map
+ * @author qiaoyi fang
+ */
 public class Text3DMapReader {
 
   private TitleDataHolder[] tiles;

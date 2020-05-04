@@ -10,6 +10,10 @@ import ooga.view.game_view.agent.interfaces.AgentController;
 import ooga.view.game_view.animation.dict2d.Animation2DDict;
 import ooga.view.game_view.game_state.state2d.BoundingBox;
 
+/**
+ * a class that control the animation state and the moving of the character
+ * @author qiaoyi fang
+ */
 public class Agent2DController extends AgentController {
 
   private Animation2DDict animationDict;
@@ -26,8 +30,13 @@ public class Agent2DController extends AgentController {
   private boolean isBullet;
   private boolean isNSAnimationAvail;
   private boolean isNotGonnaDie;
-  private boolean temp_switch=false;
 
+  /**
+   * constructor that receives the character id, data holder to initialize the character, and the bounding box
+   * @param id id
+   * @param data data holder
+   * @param box bounding box
+   */
   public Agent2DController(int id, Agent2DDataHolder data, BoundingBox box) {
     super();
     DEFAULT_ACTION = data.getDefaultAction();
@@ -55,22 +64,42 @@ public class Agent2DController extends AgentController {
     this.setCurrentAnimation(direction, action);
   }
 
+  /**
+   * set the agent view
+   * @param view view
+   */
   public void setAgentView(Agent2DView view) {
     this.agentView = view;
   }
 
+  /**
+   * returns if the character should be terminated
+   * @return true if the character should be terminated
+   */
   public boolean isShouldTerminated() {
     return shouldTerminated;
   }
 
+  /**
+   * set the terminated status
+   * @param shouldTerminated boolean status
+   */
   public void setShouldTerminated(boolean shouldTerminated) {
     this.shouldTerminated = !isNotGonnaDie && shouldTerminated;
   }
 
+  /**
+   * get the current action status
+   * @return action status
+   */
   public String getAction() {
     return action;
   }
 
+  /**
+   * set the game object of the character
+   * @param object object
+   */
   public void setObject(GameObject object) {
     this.object = object;
     if (isBullet){
@@ -81,6 +110,11 @@ public class Agent2DController extends AgentController {
     translate(initialPos);
   }
 
+  /**
+   * updates the current animation
+   * @param direction the new direction
+   * @param action the new action status
+   */
   @Override
   public void setCurrentAnimation(String direction, String action) {
     if (Asset2D.isRightSystem(direction)){
@@ -99,6 +133,10 @@ public class Agent2DController extends AgentController {
     animationDict.setInUseAnimation(this.direction, action);
   }
 
+  /**
+   * gets the animated texture material at the current frame
+   * @return texture material
+   */
   public Material getCurrentAnimatedMaterial() {
 
     Material frame = animationDict.getAnimation().getCurrentFrame();
@@ -117,10 +155,10 @@ public class Agent2DController extends AgentController {
     }
   }
 
-  public String getCurrentAction() {
-    return animationDict.getCurrentAction();
-  }
-
+  /**
+   * move the character
+   * @param direction the moving direction
+   */
   public void move(String direction) {
 
     if (canMove(direction)) {
@@ -128,23 +166,24 @@ public class Agent2DController extends AgentController {
     }
   }
 
+  /**
+   * return if the character can move
+   * @param direction the moving direction
+   * @return boolean status
+   */
   public boolean canMove(String direction){
     return box.canMove(!isBullet, isBullet, agentView,
         Asset2D.convertDirectionalSpeed(direction, speedScale));
   }
 
+
   private void translate(Vector3f delta) {
-    if (!temp_switch && isBullet) System.out.println("before");
-    if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
 
     for (int i = 0; i < object.getMesh().getVertices().length; i++) {
       object.getMesh().setVerticesPosition(i,
           Vector3f.add(object.getMesh().getVertices()[i].getPosition(), delta));
     }
 
-    if (!temp_switch && isBullet) System.out.println("after");
-    if (!temp_switch && isBullet) Test.printThreeMeshVertices(object.getMesh());
-    temp_switch = true;
   }
 
 }

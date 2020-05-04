@@ -1,9 +1,16 @@
 package ooga.view.engine.maths;
 
+/**
+ * a class that implements the math operations of vector 4f
+ * @author codingAP, qiaoyi fang
+ */
 public class Vector4f {
   public static final int SIZE = 4;
   private float[] elements = new float[SIZE];
 
+  /**
+   * @return the ones vector
+   */
   public static Vector4f ones() {
     Vector4f result = new Vector4f();
 
@@ -14,14 +21,12 @@ public class Vector4f {
     return result;
   }
 
-  public float get(int index){
-    return elements[index];
-  }
-
-  public void set(int index, float value){
-    elements[index] = value;
-  }
-
+  /**
+   * multiplication of the matrix with vector
+   * @param matrix matrix
+   * @param vector vector
+   * @return the multiplied
+   */
   public static Vector4f multiply(Matrix4f matrix, Vector4f vector){
 
     Vector4f result = Vector4f.ones();
@@ -37,6 +42,11 @@ public class Vector4f {
     return result;
   }
 
+  /**
+   * convert vector3f to vector4f
+   * @param vector3f the vector3f
+   * @return the vector4f
+   */
   public static Vector4f increaseDim(Vector3f vector3f){
     Vector4f result = Vector4f.ones();
 
@@ -47,6 +57,11 @@ public class Vector4f {
     return result;
   }
 
+  /**
+   * convert vector4f to vector3f
+   * @param vector4f the vector4f
+   * @return the vector4f
+   */
   public static Vector3f reduceDim(Vector4f vector4f){
     return new Vector3f(vector4f.get(0), vector4f.get(1), vector4f.get(2));
   }
@@ -77,6 +92,14 @@ public class Vector4f {
         return false;
     }
     return true;
+  }
+
+  public float get(int index){
+    return elements[index];
+  }
+
+  public void set(int index, float value){
+    elements[index] = value;
   }
 
 }

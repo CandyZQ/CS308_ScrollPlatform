@@ -1,7 +1,9 @@
 package ooga.view.engine.maths;
 
-import org.lwjglx.util.vector.Vector;
-
+/**
+ * a class that implements the basic operations of vector3f
+ * @author codingAP, qiaoyi fang
+ */
 public class Vector3f {
 	private float x, y, z;
 	
@@ -20,46 +22,98 @@ public class Vector3f {
 	public Vector3f(Vector3f other) {
 		set(other.getX(),other.getY(),other.getZ());
 	}
-	
+
+	/**
+	 * sets the value of the vector
+	 * @param x x value
+	 * @param y y value
+	 * @param z z value
+	 */
 	public void set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * @return the zeros vector
+	 */
 	public static Vector3f zeros(){
 		return new Vector3f(0f,0f,0f);
 	}
 
+	/**
+	 * @return the ones vector
+	 */
 	public static Vector3f ones(){
 		return new Vector3f(1f,1f,1f);
 	}
-	
+
+	/**
+	 * addition of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the added
+	 */
 	public static Vector3f add(Vector3f vector1, Vector3f vector2) {
 		return new Vector3f(vector1.getX() + vector2.getX(), vector1.getY() + vector2.getY(), vector1.getZ() + vector2.getZ());
 	}
-	
+
+	/**
+	 * subtraction of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the added
+	 */
 	public static Vector3f subtract(Vector3f vector1, Vector3f vector2) {
 		return new Vector3f(vector1.getX() - vector2.getX(), vector1.getY() - vector2.getY(), vector1.getZ() - vector2.getZ());
 	}
-	
+
+	/**
+	 * multiplication of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the multiplied
+	 */
 	public static Vector3f multiply(Vector3f vector1, Vector3f vector2) {
 		return new Vector3f(vector1.getX() * vector2.getX(), vector1.getY() * vector2.getY(), vector1.getZ() * vector2.getZ());
 	}
-	
+
+	/**
+	 * division of two vector2f
+	 * @param vector1 vector x
+	 * @param vector2 vector y
+	 * @return the divided
+	 */
 	public static Vector3f divide(Vector3f vector1, Vector3f vector2) {
 		return new Vector3f(vector1.getX() / vector2.getX(), vector1.getY() / vector2.getY(), vector1.getZ() / vector2.getZ());
 	}
-	
+
+	/**
+	 * gets the length of vector
+	 * @param vector vector
+	 * @return the length
+	 */
 	public static float length(Vector3f vector) {
 		return (float) Math.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
 	}
-	
+
+	/**
+	 * normalizes the vector
+	 * @param vector vector
+	 * @return normalized vector
+	 */
 	public static Vector3f normalize(Vector3f vector) {
 		float len = Vector3f.length(vector);
 		return Vector3f.divide(vector, new Vector3f(len, len, len));
 	}
-	
+
+	/**
+	 * dot multiplication
+	 * @param vector1 vector 1
+	 * @param vector2 vector 2
+	 * @return the multiplied
+	 */
 	public static float dot(Vector3f vector1, Vector3f vector2) {
 		return vector1.getX() * vector2.getX() + vector1.getY() * vector2.getY() + vector1.getZ() * vector2.getZ();
 	}

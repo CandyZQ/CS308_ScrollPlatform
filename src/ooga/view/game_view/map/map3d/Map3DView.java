@@ -3,12 +3,14 @@ package ooga.view.game_view.map.map3d;
 import ooga.view.engine.graphics.render.Renderer3D;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.Camera;
-import ooga.view.engine.objects.GameObject;
 import ooga.view.engine.utils.cyberpunk3d.LoadCyberpunkModels;
 import ooga.view.engine.utils.cyberpunk3d.Text3DMapReader;
 import ooga.view.game_view.map.interfaces.MapView;
 
-
+/**
+ * a class that implements view for 3D map
+ * @author qiaoyi fang
+ */
 public class Map3DView extends MapView {
   private static final Vector3f MAP_SCALE_MODEL = new Vector3f(1.0f, 1.0f, 1.0f);
   private static final float INITIAL_X_POS = 0f;
@@ -19,6 +21,10 @@ public class Map3DView extends MapView {
   private Text3DMapReader mapReader;
   private Tile3DView[] tiles;
 
+  /**
+   * constructor
+   * @param path map file
+   */
   public Map3DView(String path){
 
     LoadCyberpunkModels.loadTileDict();
@@ -47,42 +53,31 @@ public class Map3DView extends MapView {
     return currentPosition;
   }
 
+  /**
+   * render the map
+   * @param renderer renderer
+   * @param camera camera view
+   */
   public void renderMesh(Renderer3D renderer, Camera camera) {
     for (int i=0; i<mapReader.getTileAmounts(); i++){
       renderer.renderMesh(tiles[i].getGameObject(), camera);
     }
   }
 
+  /**
+   * create mesh
+   */
   @Override
   public void createMesh() {
     LoadCyberpunkModels.createUsedRotationalTileMeshes();
   }
 
+  /**
+   * destroy mesh
+   */
   @Override
   public void destroyMesh() {
     LoadCyberpunkModels.destroyUsedRotationalTileMeshes();
   }
 
-  private Vector3f adjustRot(Vector3f pos, Vector3f shape){
-    Vector3f res = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
-    if (pos.getX() > 0){ res.setY(res.getY() - shape.getY());}
-    if (pos.getY() > 0){res.setX(res.getX() - shape.getX());}
-    if (pos.getZ() == 1) {res.setY(res.getY() - shape.getY());}
-    else if (pos.getZ() == 2){res.setY(res.getY() - shape.getY()); res.setX(res.getX() + shape.getX());}
-    else if (pos.getZ() == 3){res.setY(res.getY() + shape.getY() - shape.getX()); res.setX(res.getX() + shape.getX());}
-    return res;
-  }
-
-  private void printVector3f(Vector3f vec){
-    System.out.println(String.format("(%s, %s, %s)", vec.getX(), vec.getY(), vec.getZ()));
-  }
-
-  public GameObject[] getTileObjects(){
-    GameObject[] tileObjects = new GameObject[tiles.length];
-    int idx = 0;
-    for(Tile3DView tile:tiles){
-      tileObjects[idx++] = tile.getGameObject();
-    }
-    return tileObjects;
-  }
 }

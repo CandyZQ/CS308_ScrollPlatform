@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import ooga.view.engine.utils.PngMerger;
 
+/**
+ * a temporary util class tha merge sprites
+ * @author qiaoyi fang
+ */
 public class GenerateMergedSprites {
 
   // E sprintsheet

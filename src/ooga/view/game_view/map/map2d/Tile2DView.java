@@ -1,24 +1,31 @@
 package ooga.view.game_view.map.map2d;
 
-import java.io.IOException;
-import ooga.view.engine.graphics.assets.Asset2D;
-import ooga.view.engine.graphics.Material;
 import ooga.view.engine.graphics.Mesh;
 import ooga.view.engine.graphics.Vertex;
+import ooga.view.engine.graphics.assets.Asset2D;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 import ooga.view.engine.objects.GameObject;
-import ooga.view.engine.utils.Test;
 import ooga.view.engine.utils.cyberpunk2d.Text2DMapReader;
 import ooga.view.game_view.map.interfaces.TileView;
 
+/**
+ * a class that implements the view for 2D tile
+ * @author qiaoyi fang
+ */
 public class Tile2DView extends TileView {
-  private static final float delta = 17;
+  private static final float delta = 17; // adjustment to the window
   private Tile2DController controller;
 
   private Vertex[] vertices;
   private int[] indices;
 
+  /**
+   * constructor
+   * @param map_x location x in the map
+   * @param map_y location y in the map
+   * @param mapReader map reader
+   */
   public Tile2DView(int map_x, int map_y, Text2DMapReader mapReader) {
     this.vertices = Mesh.verticesCopy(Asset2D.getTileVertices());
     this.indices = Asset2D.getTileIndices();
@@ -27,6 +34,18 @@ public class Tile2DView extends TileView {
     mesh = new Mesh( setLocation(map_x, map_y, vertices), this.indices, controller.getMaterial(), true);
     object = new GameObject(Asset2D.getMapPosition(), Asset2D.getMapRotation(), Asset2D.getMapScale(), mesh);
   }
+
+  /**
+   * returns the center location of the tile
+   * @return location vector2f
+   */
+  public Vector2f getCenterLocation(){return mesh.getCenter();}
+
+  /**
+   * returns true if the tile is walkable
+   * @return if walkable
+   */
+  public boolean isWalkable(){return controller.isWalkable();}
 
   private Vertex[] setLocation(int x, int y, Vertex[] originalVertices){
 
@@ -38,9 +57,5 @@ public class Tile2DView extends TileView {
     }
     return newVertices;
   }
-
-  public Vector2f getCenterLocation(){return mesh.getCenter();}
-
-  public boolean isWalkable(){return controller.isWalkable();}
 
 }

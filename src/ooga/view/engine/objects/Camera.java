@@ -5,6 +5,10 @@ import org.lwjgl.glfw.GLFW;
 import ooga.view.engine.io.Input;
 import ooga.view.engine.maths.Vector3f;
 
+/**
+ * a class that implements camera
+ * @author codingAP, qiaoyi fang
+ */
 public class Camera {
 	private Vector3f position, rotation;
 	private float moveSpeed = 0.05f, mouseSensitivity = 0.15f, distance = 20.0f, horizontalAngle = 0, verticalAngle = 0;
@@ -15,30 +19,51 @@ public class Camera {
 		this.rotation = rotation;
 	}
 
+	/**
+	 * move the camera forward on the x axis
+	 */
 	public void moveXForward(){
 		position.setX(position.getX()+moveSpeed*200);
 	}
 
+	/**
+	 * move the camera forward on the y axis
+	 */
 	public void moveYForward(){
 		position.setY(position.getY()+moveSpeed*200);
 	}
 
+	/**
+	 * move the camera forward on the z axis
+	 */
 	public void moveZForward(){
 		position.setZ(position.getZ()+moveSpeed*200);
 	}
 
+	/**
+	 * move the camera backward on the x axis
+	 */
 	public void moveXBackward(){
 		position.setX(position.getX()-moveSpeed*200);
 	}
 
+	/**
+	 * move the camera backward on the y axis
+	 */
 	public void moveYBackward(){
 		position.setY(position.getY()-moveSpeed*200);
 	}
 
+	/**
+	 * move the camera backward on the z axis
+	 */
 	public void moveZBackward(){
 		position.setZ(position.getZ()-moveSpeed*200);
 	}
-	
+
+	/**
+	 * updates the camera
+	 */
 	public void update() {
 		newMouseX = Input.getMouseX();
 		newMouseY = Input.getMouseY();
@@ -62,16 +87,11 @@ public class Camera {
 		oldMouseY = newMouseY;
 	}
 
-	public void trackThirdPerson(GameObject object){
-		//put camera behind the back of the person
-		rotation.set(object.getRotation().getX(), object.getRotation().getY(), object.getRotation().getZ());
-
-	}
-
-	public void trackFirstPerson(GameObject object){
-		// put camera in the front of the person
-	}
-	
+	/**
+	 * update the camera based on object
+	 * @param object game object
+	 * @param translateDelta translate delta to the object
+	 */
 	public void update(GameObject object, Vector3f translateDelta) {
 		newMouseX = Input.getMouseX();
 		newMouseY = Input.getMouseY();

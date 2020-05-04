@@ -1,8 +1,11 @@
 package ooga.view.engine.utils.cyberpunk3d;
 
-import ooga.view.engine.graphics.assets.Asset3D;
 import ooga.view.engine.maths.Vector3f;
 
+/**
+ * a temporary util class that holds the data for 3d tile
+ * @author qiaoyi fang
+ */
 public class TitleDataHolder {
 
   int id;

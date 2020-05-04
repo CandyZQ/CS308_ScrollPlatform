@@ -4,6 +4,10 @@ import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
 import com.google.gson.internal.LinkedHashTreeMap;
 
+/**
+ * a temporary class that loads the animation for the shieldman
+ * @author qiaoyi fang
+ */
 public class LoadShieldAnimations {
 
   final private static int fps = 18;

@@ -12,6 +12,10 @@ import ooga.view.engine.graphics.Vertex;
 import ooga.view.engine.maths.Vector2f;
 import ooga.view.engine.maths.Vector3f;
 
+/**
+ * a class that loads obj model
+ * @author codingAP
+ */
 public class ModelLoader {
 	public static Mesh loadModel(String filePath, String texturePath) {
 		AIScene scene = Assimp.aiImportFile(filePath, Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate);

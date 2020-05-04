@@ -5,6 +5,12 @@ import javafx.util.Pair;
 import ooga.view.engine.graphics.animation.Animation2D;
 import ooga.view.game_view.animation.interfaces.AnimationDict;
 
+/**
+ * a class that implements the dictionary for 2D animations so as to
+ * 1) establish mapping between state string and animation
+ * 2) direct the dependency of animations (such as combo effects and pre-sprint)
+ * @author qiaoyi fang
+ */
 public class Animation2DDict extends AnimationDict {
 
   private Map<String, Animation2D> animationDict;
@@ -18,12 +24,9 @@ public class Animation2DDict extends AnimationDict {
     this.prevDict = prevDict;
   }
 
-  public Animation2DDict(Animation2DDict other){
-    super(other.initialDirection, other.initialAction);
-    this.animationDict = Map.copyOf(other.animationDict);
-    this.prevDict = Map.copyOf(other.prevDict);
-  }
-
+  /**
+   * resets the frame pointers of the animations in the dictionary
+   */
   @Override
   protected void resetAnimationDict(){
     for(String key: animationDict.keySet()){
@@ -31,7 +34,10 @@ public class Animation2DDict extends AnimationDict {
     }
   }
 
-
+  /**
+   * gets the animation of the current direction and state
+   * @return
+   */
   public Animation2D getAnimation(){
     for (Pair<Pair<String, Boolean>, String> key: prevDict.keySet()){
       if (currentAction.equals(key.getValue()) && ((key.getKey().getValue() && previousAction.equals(key.getKey().getKey())) ||

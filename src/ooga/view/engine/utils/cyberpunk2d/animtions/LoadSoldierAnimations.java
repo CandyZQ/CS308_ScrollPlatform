@@ -1,11 +1,13 @@
 package ooga.view.engine.utils.cyberpunk2d.animtions;
 
-import ooga.view.engine.graphics.animation.Animation2D;
-
+import com.google.gson.internal.LinkedHashTreeMap;
 import java.util.Map;
 import ooga.view.engine.graphics.animation.Animation2D;
-import com.google.gson.internal.LinkedHashTreeMap;
 
+/**
+ * a temporary class that loads the animation for soldier
+ * @author qiaoyi fang
+ */
 public class LoadSoldierAnimations {
 
   final private static int fps = 18;

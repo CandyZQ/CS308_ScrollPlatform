@@ -2,6 +2,10 @@ package ooga.view.engine.utils.cyberpunk2d;
 
 import ooga.view.engine.utils.SpriteCropper;
 
+/**
+ * a temporary util class that crops sprites
+ * @author qiaoyi fang
+ */
 public class GenerateCroppedSprites {
 
   // E_spritesheet

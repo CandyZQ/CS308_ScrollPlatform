@@ -13,6 +13,12 @@ import ooga.view.game_view.game_state.interfaces.GameStateView;
 import ooga.view.game_view.map.map3d.Map3DView;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * a class the implements 3D game state view, as the main class of the 3D view API
+ * 1) allows the generation and rendering of opengl window
+ * 2) updates the characters and map
+ * @author qiaoyi fang
+ */
 public class GameState3DView extends GameStateView {
 
   public Thread game;
@@ -26,6 +32,10 @@ public class GameState3DView extends GameStateView {
   public Camera camera = new Camera(new Vector3f(1020.0f, -220.0f, 270.0f), new Vector3f(0f, 0f, 0));
 
 
+  /**
+   * creates the window
+   * @throws IOException
+   */
   @Override
   public void createWindow() throws IOException {
     window = new Window(WIDTH, HEIGHT, "Game");
@@ -47,6 +57,9 @@ public class GameState3DView extends GameStateView {
     shader.create();
   }
 
+  /**
+   * updates all
+   */
   public void updateAll(){
     update3DAgent();
     updateCamera();
@@ -88,16 +101,25 @@ public class GameState3DView extends GameStateView {
     }
   }
 
+  /**
+   * renders agents
+   */
   @Override
   public void renderAgents() {
     agentView.renderMesh(renderer, camera);
   }
 
+  /**
+   * render map
+   */
   @Override
   public void renderMap() {
     mapView.renderMesh(renderer, camera);
   }
 
+  /**
+   * renders all
+   */
   @Override
   public void renderAll(){
     renderAgents();
@@ -105,6 +127,9 @@ public class GameState3DView extends GameStateView {
     renderWindow();
   }
 
+  /**
+   * closes the window
+   */
   @Override
   public void closeWindow() {
     window.destroy();
