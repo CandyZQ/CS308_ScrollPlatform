@@ -40,7 +40,7 @@ public class GameState2DView extends GameStateView {
   public Renderer2D renderer;
   public Shader shader;
   public BoundingBox box;
-  String mapPath = "/view/textures/2d/cyberpunk/map/map_1.txt";
+  String mapPath = "/view/textures/2d/cyberpunk/map/map_2.txt";
   private Map2DView map;
   private Map<Integer, Agent2DView> agentMap;
   private Map<Integer, Agent2DView> bulletMap;

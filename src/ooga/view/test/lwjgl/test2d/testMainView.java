@@ -31,7 +31,7 @@ public class testMainView implements Runnable {
     //dataHolderMap.put(1, GenerateAgentsData.createSoldier(-1.5f, -0.5f));
     //dataHolderMap.put(2, GenerateAgentsData.createEngineer(-1.5f, 0f));
     dataHolderMap.put(2, GenerateAgentsData.createMeleeBot(0f, -0.5f));
-    dataHolderMap.put(3, GenerateAgentsData.createSoldier(-1.5f, -0.5f));
+    dataHolderMap.put(3, GenerateAgentsData.createSoldier(-1.9f, 1.5f));
 
     view = new GameState2DView(dataHolderMap);
     view.createWindow();
